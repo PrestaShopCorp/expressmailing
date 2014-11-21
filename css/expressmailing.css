@@ -1,0 +1,96 @@
+.l-table {
+	display: table;
+}
+.l-table > * {
+	display: table-row;
+}
+.l-table > * > * {
+	display: table-cell;
+	padding: .3em;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+div#mymodule_block_left p {
+	font-size: 150%;
+	font-style:italic;
+}
+
+.datetimepicker, .icon-calendar-empty {
+	margin-left: 5px;
+}
+
+.checkbox {
+	float: left; margin-right: 8px;
+}
+
+.checkbox>label {
+	padding-top: 1px;
+}
+
+.checkbox-inline {
+	position: relative; top: 2px;
+}
+
+.hotline-bottom {
+	padding-bottom: 3px;
+}
+
+#footer div:nth-child(2),
+#footer .col-sm-5 {
+	display: none;
+}
+
+#footer {
+	background-color: transparent;
+}
+
+.mce-last {
+	margin-right: 5px;
+}
+
+.mce-menubtn.mce-fixed-width span {
+	width: 115px;
+}
+
+.mce-fullscreen {
+	background-color: #FCFDFE; padding: 40px 0 0 0; margin: 0; overflow: hidden; height: 100%; z-index: 999
+}
+
+.mce-i-charmap:before {
+    content: "\f11c";
+}
+
+.mce-i-hr:before {
+	content: "\f068";
+}
+
+.mce-i-searchreplace:before {
+	content: "\f002";
+}
+
+.mce-i-visualchars:before {
+	content: "\f05b";
+}
+
+.mce-i-visualblocks:before {
+	content: "\f05b";
+}
+
+.mce-i-rtl:before {
+	content: "\f0ec";
+}
+
+.mce-i-forecolor:before {
+	content: "__";
+	color: transparent;
+}
+
+.mce-i-forecolor {
+	background-image: url(/js/tiny_mce/plugins/colorpicker/color.png);
+	background-repeat: no-repeat;
+	background-position: center; 
+	text-align: right;
+}
