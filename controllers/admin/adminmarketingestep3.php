@@ -1,19 +1,22 @@
 <?php
 /**
-* 2014 (c) Axalone France - Express-Mailing
-*
-* This file is a commercial module for Prestashop
-* Do not edit or add to this file if you wish to upgrade PrestaShop or
-* customize PrestaShop for your needs please refer to
-* http://www.express-mailing.com for more information.
-*
-* @author    Axalone France <info@express-mailing.com>
-* @copyright 2014 (c) Axalone France
-* @license   http://www.express-mailing.com
-*/
+ * 2014-2015 (c) Axalone France - Express-Mailing
+ *
+ * This file is a commercial module for Prestashop
+ * Do not edit or add to this file if you wish to upgrade PrestaShop or
+ * customize PrestaShop for your needs please refer to
+ * http://www.express-mailing.com for more information.
+ *
+ * @author    Axalone France <info@express-mailing.com>
+ * @copyright 2014-2015 (c) Axalone France
+ * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
+ */
 
 include_once 'html_cleaner.php';
 
+/**
+ * Step 3 : Provide HTML content & Images upload
+ */
 class AdminMarketingEStep3Controller extends ModuleAdminController
 {
 	private $campaign_id = null;
@@ -28,24 +31,27 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		$this->lang = false;
 		$this->default_form_language = $this->context->language->id;
 
-		$this->campaign_id = Tools::getValue('campaign_id');
+		$this->campaign_id = (int)Tools::getValue('campaign_id');
 
 		if (empty($this->campaign_id))
 		{
-			Tools::redirectAdmin('index.php?controller=AdminMarketingE&token='.Tools::getAdminTokenLite('AdminMarketingE'));
+			Tools::redirectAdmin('index.php?controller=AdminMarketing&token='.Tools::getAdminTokenLite('AdminMarketing'));
 			exit;
 		}
 
 		parent::__construct();
 	}
 
+	public function initToolbarTitle()
+	{
+		parent::initToolbarTitle();
+		$this->toolbar_title = Translate::getModuleTranslation('expressmailing', 'Send an e-mailing', 'adminmarketingestep1');
+	}
+
 	public function setMedia()
 	{
-		// Ne pas mettre tinymce.inc.js dans "setMedia()"
-
 		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css');
-		$this->addJS(_PS_MODULE_DIR_.'expressmailing/js/tinymce.inc.js');
-
+		$this->addJS(_PS_MODULE_DIR_.'expressmailing/js/tinymce.js');
 		parent::setMedia();
 	}
 
@@ -78,23 +84,20 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		if (Tools::isSubmit('importEmailingStep3'))
 		{
 			$this->html_file = isset($_FILES['html_file']) ? $_FILES['html_file'] : false;
-			$this->html_url = Tools::getValue('html_url');
+			$this->html_url = (string)Tools::getValue('html_url');
 
 			if (!empty($this->html_file) && !empty($this->html_file['tmp_name']))
 			{
 				if (!$this->importFile($_FILES['html_file']))
-					$this->errors[] = Tools::displayError('Unable to import this file');
+					$this->errors[] = $this->module->l('Unable to import this file', 'adminmarketingestep3');
 			}
 			elseif (!empty($this->html_url))
 			{
 				if (!$this->importURL($this->html_url))
-					$this->errors[] = Tools::displayError('Unable to import this URL', false);
+					$this->errors[] = $this->module->l('Unable to import this URL', 'adminmarketingestep3');
 			}
 			else
-			{
-				// [VALIDATOR => Laisser cette ligne de commentaire]
-				$this->errors[] = Tools::displayError('Please verify the required fields');
-			}
+				$this->errors[] = $this->module->l('Please verify the required fields', 'adminmarketingestep3');
 		}
 
 		if (Tools::isSubmit('uploadImagesEmailingStep3'))
@@ -107,7 +110,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 		if (Tools::isSubmit('saveEmailingStep3') || Tools::isSubmit('nextEmailingStep3'))
 		{
-			$this->html_content = Tools::getValue('campaign_html');
+			$this->html_content = (string)Tools::getValue('campaign_html');
 
 			if (!empty($this->html_content))
 			{
@@ -120,15 +123,12 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				{
 					Tools::redirectAdmin('index.php?controller=AdminMarketingEStep4&campaign_id='.
 						$this->campaign_id.
-						'&token='.Tools::getAdminTokenLite('AdminMarketingEStep4'));  /* [VALIDATOR MAX 150 CAR] */
+						'&token='.Tools::getAdminTokenLite('AdminMarketingEStep4'));
 					exit;
 				}
 			}
 			else
-			{
-				// [VALIDATOR => Laisser cette ligne de commentaire]
-				$this->errors[] = Tools::displayError('Please verify the required fields');
-			}
+				$this->errors[] = $this->module->l('Please verify the required fields', 'adminmarketingestep3');
 		}
 	}
 
@@ -144,7 +144,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				'icon' => 'icon-beaker'
 			),
 			'input' => array(
-				array(
+				array (
 					'type' => _PS_MODE_DEV_ ? 'text' : 'hidden',
 					'lang' => false,
 					'label' => 'Ref :',
@@ -152,15 +152,15 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 					'col' => 1,
 					'readonly' => 'readonly'
 				),
-				array(
+				array (
 					'type' => 'file',
-					'label' => $this->module->l('html_file', 'adminmarketingestep3'),
+					'label' => $this->module->l('Import HTML page from your hard drive :', 'adminmarketingestep3'),
 					'name' => 'html_file',
 					'required' => false
 				),
-				array(
+				array (
 					'type' => 'text',
-					'label' => $this->module->l('html_url', 'adminmarketingestep3'),
+					'label' => $this->module->l('Import from web page :', 'adminmarketingestep3'),
 					'name' => 'html_url',
 					'prefix' => 'http://',
 					'col' => 6,
@@ -168,9 +168,9 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				)
 			),
 			'submit' => array(
-				'title' => $this->module->l('Start analysis', 'adminmarketingestep3'),
+				'title' => $this->module->l('Start analysis ...', 'adminmarketingestep3'),
 				'name' => 'importEmailingStep3',
-				'icon' => 'process-icon-configure'
+				'icon' => 'process-icon-cogs'
 			)
 		);
 		return parent::renderForm();
@@ -183,16 +183,18 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	 */
 	private function generateImagesUploadForm(Array $images_to_upload)
 	{
+		$desc = $this->module->l('Your uploaded file contains %d picture(s) that refer to your hard drive', 'adminmarketingestep3');
+		$desc = sprintf($desc, count($images_to_upload));
+		$desc .= $this->module->l(', you need to upload them on your Prestashop newsletter storage directory.', 'adminmarketingestep3');
+
 		$this->fields_form = array(
 			'legend' => array(
 				'title' => $this->module->l('Images upload', 'adminmarketingestep3'),
 				'icon' => 'icon-beaker'
 			),
-			'description' => sprintf($this->module->l('Your uploaded file contains %d referenced pictures on your hard drive', 'adminmarketingestep3'),
-				count($images_to_upload)).
-			$this->module->l(', you need to upload them on your Prestashop newsletter storage directory.', 'adminmarketingestep3'), /* [VALIDATOR] */
+			'description' => $desc,
 			'input' => array(
-				array(
+				array (
 					'type' => _PS_MODE_DEV_ ? 'text' : 'hidden',
 					'lang' => false,
 					'label' => 'Ref :',
@@ -202,13 +204,13 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				)
 			),
 			'submit' => array(
-				'title' => sprintf($this->module->l('Upload this %d image%s', 'adminmarketingestep3'), count($images_to_upload),
-					(count($images_to_upload) > 1) ? 's' : ''),
+				'title' => sprintf($this->module->l('Upload this %d image%s', 'adminmarketingestep3'),
+					count($images_to_upload), (count($images_to_upload) > 1) ? 's' : ''),
 				'name' => 'uploadImagesEmailingStep3',
 				'icon' => 'process-icon-configure'
 			),
 			'buttons' => array(
-				array(
+				array (
 					'type' => 'submit',
 					'title' => $this->module->l('Ignore', 'adminmarketingestep3'),
 					'name' => 'ignoreImagesEmailingStep3',
@@ -243,7 +245,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				'icon' => 'icon-edit'
 			),
 			'input' => array(
-				array(
+				array (
 					'type' => _PS_MODE_DEV_ ? 'text' : 'hidden',
 					'lang' => false,
 					'label' => 'Ref :',
@@ -251,9 +253,9 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 					'col' => 1,
 					'readonly' => 'readonly'
 				),
-				array(
+				array (
 					'type' => 'textarea',
-					'label' => $this->module->l('html_content', 'adminmarketingestep3'),
+					'label' => $this->module->l('HTML body of your emailing :', 'adminmarketingestep3'),
 					'name' => 'campaign_html',
 					'lang' => false,
 					'autoload_rte' => true,
@@ -266,17 +268,17 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				'icon' => 'process-icon-next'
 			),
 			'buttons' => array(
-				array(
+				array (
 					'type' => 'submit',
 					'title' => $this->module->l('Save only', 'adminmarketingestep3'),
 					'name' => 'saveEmailingStep3',
 					'class' => 'pull-right',
 					'icon' => 'process-icon-save'
 				),
-				array(
+				array (
 					'href' => 'index.php?controller=AdminMarketingEStep2&campaign_id='.
 					$this->campaign_id.'&token='.
-					Tools::getAdminTokenLite('AdminMarketingEStep2'), /* [VALIDATOR MAX 150 CAR] */
+					Tools::getAdminTokenLite('AdminMarketingEStep2'),
 					'title' => $this->module->l('Back', 'adminmarketingestep3'),
 					'icon' => 'process-icon-back'
 				)
@@ -343,8 +345,8 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 	/**
 	 * Get the html content of the current campaign from database
-	 * If HTML is empty, we use views/templates/admin/marketinge_step3/email.tpl
-	 * @return string The HTML content of the current campaign or email.tpl
+	 * If HTML is empty, we use views/templates/admin/marketinge_step3/marketinge_template.tpl
+	 * @return string The HTML content of the current campaign or marketinge_template.tpl
 	 */
 	private function getHTMLContentDB()
 	{
@@ -357,8 +359,10 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		if (empty($result['campaign_html']))
 		{
 			$domain_name = Tools::getShopDomain(false, true);
-			if ($domain_name) $domain_name = Tools::getHttpHost(false, true, true);
-			if ($pos = strpos($domain_name, ':')) $domain_name = Tools::substr($domain_name, 0, $pos);
+			if (empty($domain_name))
+				$domain_name = Tools::getHttpHost(false, true, true);
+			if ($pos = strpos($domain_name, ':'))
+				$domain_name = Tools::substr($domain_name, 0, $pos);
 
 			$this->context->smarty->assign('base_url', Tools::getShopDomainSsl(true, true));
 			$this->context->smarty->assign('domain_name', $domain_name);
@@ -366,7 +370,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			$this->context->smarty->assign('logo_width', Configuration::get('SHOP_LOGO_WIDTH'));
 			$this->context->smarty->assign('logo_height', Configuration::get('SHOP_LOGO_HEIGHT'));
 
-			$template = $this->getTemplatePath().'marketinge_step3/email.tpl';
+			$template = $this->getTemplatePath().'marketinge_step3/marketinge_template.tpl';
 			Tools::clearCache();
 			$this->html_content = $this->context->smarty->fetch($template);
 			return true;
@@ -401,7 +405,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 	/**
 	 * Parse $html_content and updates all relative links to absolute links
-	 * @param string $html_content 
+	 * @param string $html_content
 	 * @param string $imported_url
 	 * @return string
 	 */
@@ -446,7 +450,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	 * Copy images included in html_content to local campaign storage and update html with new links
 	 * @param string $html_content
 	 * @param string $imported_url
-	 * @param Array $files 
+	 * @param Array $files
 	 * @return string
 	 */
 	private function copyImagesAndUpdateHTML($html_content, $imported_url = null, Array $files = null)
@@ -492,7 +496,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				}
 			}
 
-			if (!empty($image_url) && $this->copyCampaignToStorage($image_url, $filename))
+			if (!empty($image_url) && $this->copyFileToStorage($image_url, $filename))
 			{
 				$final_img_url = _PS_BASE_URL_.__PS_BASE_URI__.'expressmailing/'.$this->campaign_id.'/';
 				if ($filename)
@@ -545,11 +549,11 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 	/**
 	 * Copy a remote or local file to the local campaign storage
-	 * @param string $url 
+	 * @param string $url
 	 * @param string $filename The name of the resulting file
-	 * @return mixed Null if fail or a string containing the path of the resulting image. 
+	 * @return mixed Null if fail or a string containing the path of the resulting image.
 	 */
-	private function copyCampaignToStorage($url, $filename = null)
+	private function copyFileToStorage($url, $filename = null)
 	{
 		$dest = $this->module->getPreviewFolder();
 		$dest .= $this->campaign_id.DIRECTORY_SEPARATOR;
@@ -577,11 +581,10 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	private function saveHTML()
 	{
 		$this->cleanHTML();
-		Db::getInstance()->update('expressmailing_email',
-			array(
-				'campaign_html' => pSQL($this->html_content, true)
-			),
-			'campaign_id = '.pSQL($this->campaign_id)
+
+		Db::getInstance()->update('expressmailing_email', array(
+			'campaign_html' => pSQL($this->html_content, true)
+			), 'campaign_id = '.pSQL($this->campaign_id)
 		);
 	}
 

@@ -1,16 +1,16 @@
 <?php
 /**
-* 2014 (c) Axalone France - Express-Mailing
-*
-* This file is a commercial module for Prestashop
-* Do not edit or add to this file if you wish to upgrade PrestaShop or
-* customize PrestaShop for your needs please refer to
-* http://www.express-mailing.com for more information.
-*
-* @author    Axalone France <info@express-mailing.com>
-* @copyright 2014 (c) Axalone France
-* @license   http://www.express-mailing.com
-*/
+ * 2014-2015 (c) Axalone France - Express-Mailing
+ *
+ * This file is a commercial module for Prestashop
+ * Do not edit or add to this file if you wish to upgrade PrestaShop or
+ * customize PrestaShop for your needs please refer to
+ * http://www.express-mailing.com for more information.
+ *
+ * @author    Axalone France <info@express-mailing.com>
+ * @copyright 2014-2015 (c) Axalone France
+ * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
+ */
 
 class HtmlCleaner
 {
@@ -19,18 +19,18 @@ class HtmlCleaner
 
 	public function __construct()
 	{
-		// Initialisation de l'API
-		// -----------------------
+		// API initialization
+		// ------------------
 		include 'session_api.php';
 		$this->session_api = new SessionApi();
 
-		// Si l'utilisateur est d�j� connect� � un compte Express-Mailing
-		// alors on t�l�charge les Regex depuis l'api
+		// Si l'utilisateur est déjà connecté à un compte Express-Mailing
+		// alors on télécharge les Regex depuis l'api
 		// sinon, on utilise les Regex locales
 		// --------------------------------------------------------------
-		if ($this->session_api->connectFromCredentials('email'))
-			$this->regexps_filters = $this->getRegexpFiltersFromAPI();
-		else
+		// if ($this->session_api->connectFromCredentials('email'))
+		// 	$this->regexps_filters = $this->getRegexpFiltersFromAPI();
+		// else
 			$this->regexps_filters = $this->getRegexpFiltersFromLocal();
 	}
 
@@ -132,15 +132,15 @@ class HtmlCleaner
 
 		$regexp_filters[] = array('type' => 'chr', 'pattern' => '194,8211', 'replacement' => '-');
 		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,63', 'replacement' => '');
-		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,160', 'replacement' => 'à ');
-		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,168', 'replacement' => 'è');
-		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,169', 'replacement' => 'é');
-		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,170', 'replacement' => 'ê');
-		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,180', 'replacement' => 'ô');
+		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,160', 'replacement' => '&agrave; ');
+		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,168', 'replacement' => '&egrave;');
+		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,169', 'replacement' => '&eacute;');
+		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,170', 'replacement' => '&ecirc;');
+		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,180', 'replacement' => '&ocirc;');
 		$regexp_filters[] = array('type' => 'chr', 'pattern' => '226,8218,172', 'replacement' => '&euro;');
 		$regexp_filters[] = array('type' => 'chr', 'pattern' => '239,187,191', 'replacement' => '');
-		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,131,194,160', 'replacement' => 'à');
-		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,131,194,169', 'replacement' => 'é');
+		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,131,194,160', 'replacement' => '&agrave;');
+		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,131,194,169', 'replacement' => '&eacute;');
 
 		$regexp_filters[] = array('type' => 'regexp', 'pattern' => '#<title>.*?</title>#i', 'replacement' => '');
 		$regexp_filters[] = array('type' => 'regexp', 'pattern' => '#<head>\S*?</head>#i', 'replacement' => '');
@@ -198,6 +198,7 @@ class HtmlCleaner
 			$type = $filter['type'];
 			$pattern = $filter['pattern'];
 			$replacement = $filter['replacement'];
+			$tmp_html = null;
 
 			switch ($type)
 			{
@@ -222,7 +223,8 @@ class HtmlCleaner
 					break;
 			}
 
-			if ($tmp_html !== null) $html = $tmp_html;
+			if ($tmp_html !== null)
+				$html = $tmp_html;
 		}
 
 		return $html;

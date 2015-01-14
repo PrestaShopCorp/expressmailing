@@ -1,6 +1,6 @@
 <?php
 /**
- * 2014 (c) Axalone France - Express-Mailing
+ * 2014-2015 (c) Axalone France - Express-Mailing
  *
  * This file is a commercial module for Prestashop
  * Do not edit or add to this file if you wish to upgrade PrestaShop or
@@ -8,25 +8,25 @@
  * http://www.express-mailing.com for more information.
  *
  * @author    Axalone France <info@express-mailing.com>
- * @copyright 2014 (c) Axalone France
- * @license   http://www.express-mailing.com
+ * @copyright 2014-2015 (c) Axalone France
+ * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
  */
 
+include_once 'db_marketing.php';
+
 /**
- * Description of AdminMarketingEStep7Controller
- *
- * @author ThierryA
+ * Step 7 : Receive a test
  */
 class AdminMarketingEStep7Controller extends ModuleAdminController
 {
+	private $campaign_id = null;
 	private $session_api = null;
+	private $campaign_infos = array();
 	private $checked_groups = array();
 	private $checked_langs = array();
 	private $checked_campaign_optin = null;
 	private $checked_campaign_newsletter = null;
 	private $checked_campaign_active = null;
-	private $campaign_infos = array();
-	private $campaign_sended = false;
 
 	public function __construct()
 	{
@@ -37,228 +37,215 @@ class AdminMarketingEStep7Controller extends ModuleAdminController
 		$this->lang = false;
 		$this->default_form_language = $this->context->language->id;
 
-		$this->campaign_id = Tools::getValue('campaign_id');
+		$this->campaign_id = (int)Tools::getValue('campaign_id');
 
 		if (empty($this->campaign_id))
 		{
-			Tools::redirectAdmin('index.php?controller=AdminMarketingE&token='.Tools::getAdminTokenLite('AdminMarketingE'));
+			Tools::redirectAdmin('index.php?controller=AdminMarketing&token='.Tools::getAdminTokenLite('AdminMarketing'));
 			exit;
 		}
 
 		parent::__construct();
 
-		// On retrouve les informations de la campagne
-		// -------------------------------------------
-		$this->campaign_infos = $this->getCampaignInfos();
-
-		// Initialisation de l'API
-		// -----------------------
+		// API initialization
+		// ------------------
 		include _PS_MODULE_DIR_.$this->module->name.'/controllers/admin/session_api.php';
 		$this->session_api = new SessionApi();
 
-		// V�rification de la session
-		// --------------------------
+		// Checking the session
+		// --------------------
 		if (!$this->session_api->connectFromCredentials('email'))
 		{
 			Tools::redirectAdmin('index.php?controller=AdminMarketingEStep5&token='.Tools::getAdminTokenLite('AdminMarketingEStep5'));
 			exit;
 		}
+
+		// Puis on retrouve les informations de la campagne
+		// ------------------------------------------------
+		$this->campaign_infos = $this->getCampaignInfos();
 	}
 
-	public function setMedia()
+	public function initToolbarTitle()
 	{
-		parent::setMedia();
-		$this->addJS(_PS_MODULE_DIR_.'expressmailing/js/emcharts.js', 'all');
+		parent::initToolbarTitle();
+		$this->toolbar_title = Translate::getModuleTranslation('expressmailing', 'Send an e-mailing', 'adminmarketingestep1');
 	}
 
 	public function renderList()
 	{
-		if ($this->campaign_sended == false)
-		{
-			$this->initFilters();
-			$this->syncCustomersAPI();
-			$this->setSmartyVars();
+		// 1er bloc : Tests avant envoi
+		// ----------------------------
+		$this->fields_form = array(
+			'legend' => array(
+				'title' => $this->module->l('Test your e-mailing before his validation (7)', 'adminmarketingestep7'),
+				'icon' => 'icon-envelope-alt'
+			),
+			'input' => array(
+				array(
+					'type' => _PS_MODE_DEV_ ? 'text' : 'hidden',
+					'lang' => false,
+					'label' => 'Ref :',
+					'name' => 'campaign_id',
+					'col' => 1,
+					'readonly' => 'readonly'
+				),
+				array(
+					'type' => 'text',
+					'lang' => false,
+					'label' => $this->module->l('Your email address', 'adminmarketingestep7'),
+					'name' => 'campaign_last_tester',
+					'prefix' => '<i class="icon-envelope-o"></i>',
+					'required' => true
+				)
+			),
+			'submit' => array(
+				'title' => $this->module->l('Send a test', 'adminmarketingestep7'),
+				'name' => 'submitEmailingTest',
+				'icon' => 'process-icon-envelope'
+			)
+		);
 
-			$diplay = $this->getTemplatePath().'marketinge_step7/display.tpl';
-			$footer = $this->getTemplatePath().'footer.tpl';
+		$this->getFieldsValues();
 
-			$output = $this->context->smarty->fetch($diplay);
-			$output .= $this->context->smarty->fetch($footer);
+		$output = parent::renderForm();
 
-			return $output;
-		}
+		// 2eme bloc : Apercu du HTML
+		// --------------------------
+		$this->context->smarty->assign('campaign_id', $this->campaign_id);
+		$email_preview = $this->getTemplatePath().'marketinge_step7/email_preview.tpl';
+		$output .= $this->context->smarty->fetch($email_preview);
+
+		// Puis on renvoi la fusion des 2 blocs + le footer
+		// ------------------------------------------------
+		$footer = $this->getTemplatePath().'footer.tpl';
+		$output .= $this->context->smarty->fetch($footer);
+
+		return $output;
 	}
 
 	public function postProcess()
 	{
-		if (Tools::isSubmit('sendCampaign'))
+		// ---------------------------------------------------
+		// Nota : La session est vérifiée dans le constructeur
+		// donc ici la session est déjà établie !
+		// ---------------------------------------------------
+
+		if (Tools::isSubmit('submitEmailingTest'))
 		{
-			$yes = (string)Tools::getValue('YES', '');
-			$yes = Tools::strtoupper($yes);
+			// On vérifie l'adresse email saisie
+			// ---------------------------------
+			$campaign_last_tester = (string)Tools::getValue('campaign_last_tester', Configuration::get('PS_SHOP_EMAIL'));
 
-			if ($yes == Tools::strtoupper($this->module->l('YES', 'adminmarketingestep7')))
+			if (!Validate::isEmail($campaign_last_tester))
 			{
-				if ($this->sendCampaignAPI())
-				{
-					$this->confirmations[] = $this->module->l('The campaign is now sending', 'adminmarketingestep7');
-					$this->campaign_sended = true;
-					return true;
-				}
-			}
-
-			$this->errors[] =	sprintf(Tools::displayError('Please fill the %s field'),
-								'&laquo;&nbsp;'.$this->module->l('YES', 'adminmarketingestep7').'&nbsp;&raquo;'); 	/* [VALIDATOR 160 CAR MAX] */
-			return false;
-		}
-	}
-
-	private function syncCustomersAPI()
-	{
-		$response_array = array();
-		$parameters = array(
-			'account_id' => $this->session_api->account_id,
-			'list_id' => $this->campaign_infos['campaign_api_list_id']
-		);
-
-		if ($this->session_api->call('email', 'list', 'clear', $parameters, $response_array))
-		{
-			$customers = $this->getCustomers();
-			$recipients = array();
-			foreach ($customers as $customer)
-			{
-				$recipients[] = array(
-					'target' => $customer['email'],
-					'lastname' => $customer['lastname'],
-					'firstname' => $customer['firstname']
-				);
-			}
-
-			$parameters = array(
-				'account_id' => $this->session_api->account_id,
-				'list_id' => $this->campaign_infos['campaign_api_list_id'],
-				'recipients' => $recipients
-			);
-
-			if ($this->session_api->call('email', 'recipients', 'add', $parameters, $response_array))
-				return true;
-			else
-			{
-				$this->errors[] = sprintf(Tools::displayError('Error during communication with Express-Mailing API : %s'), $this->session_api->getError());
+				$this->errors[] = $this->module->l('Please verify your email address', 'adminmarketingestep7');
 				return false;
 			}
+
+			// On mémorise le dernier email de test dans la bdd locale
+			// -------------------------------------------------------
+			Db::getInstance()->update('expressmailing_email', array(
+				'campaign_last_tester' => $campaign_last_tester
+				), 'campaign_id = '.$this->campaign_id
+			);
+
+			// Puis on appele la fonction d'envoi de test
+			// ------------------------------------------
+			return $this->sendTest($campaign_last_tester);
 		}
-		else
+		elseif (Tools::isSubmit('submitEmailingValidate'))
 		{
-			$this->errors[] = sprintf(Tools::displayError('Error during communication with Express-Mailing API : %s'), $this->session_api->getError());
-			return false;
+			Tools::redirectAdmin('index.php?controller=AdminMarketingEStep8&campaign_id='.
+				$this->campaign_id.
+				'&token='.Tools::getAdminTokenLite('AdminMarketingEStep8'));
+			exit;
 		}
 	}
 
-	private function getValidationStatisticsAPI()
+	public function displayAjax()
 	{
-		$response_array = array();
-		$parameters = array(
-			'account_id' => $this->session_api->account_id,
-			'campaign_id' => $this->campaign_infos['campaign_api_message_id']
-		);
+		// On retrouve l'aperçu html du mailing
+		// ------------------------------------
+		$sql = new DbQuery();
+		$sql->select('campaign_html');
+		$sql->from('expressmailing_email');
+		$sql->where('campaign_id = '.$this->campaign_id);
+		die(Db::getInstance()->getValue($sql));
+	}
 
-		if ($this->session_api->call('email', 'campaign', 'get_validation_statistics', $parameters, $response_array))
-			return $response_array;
+	private function getFieldsValues()
+	{
+		// Campaign_id
+		// -----------
+		$this->fields_value['campaign_id'] = $this->campaign_id;
 
-		$this->errors[] = sprintf(Tools::displayError('Error during communication with Express-Mailing API : %s'), $this->session_api->getError());
+		// On retrouve l'aperçu html du mailing
+		// ------------------------------------
+		$sql = new DbQuery();
+		$sql->select('*');
+		$sql->from('expressmailing_email');
+		$sql->where('campaign_id = '.$this->campaign_id);
+		$result = Db::getInstance()->getRow($sql);
+
+		$this->fields_value['preview_html'] = '<div class="panel" style="height: 300px; overflow: scroll; border: 1px solid grey">'.
+												$result['campaign_html'].
+												'</div>';
+
+		if (!empty($result['campaign_last_tester']))
+			$this->fields_value['campaign_last_tester'] = $result['campaign_last_tester'];
+		else
+			$this->fields_value['campaign_last_tester'] = Configuration::get('PS_SHOP_EMAIL');
+
+		return true;
+	}
+
+	private function sendTest($recipient)
+	{
+		if (!empty($this->session_api->account_id) && ($this->session_api->account_id > 0))
+		{
+			$last_tester = new Customer();
+
+			// 1 - On ajoute le destinataire du test dans la liste du mailing en cours
+			// -----------------------------------------------------------------------
+			if ($last_tester->getByEmail((string)$recipient))
+			{
+				$response_array = array();
+				$parameters = array(
+					'account_id' => $this->session_api->account_id,
+					'list_id' => $this->campaign_infos['campaign_api_list_id'],
+					'recipients' => array(
+						array(
+							'target' => $last_tester->email,
+							'lastname' => $last_tester->lastname,
+							'firstname' => $last_tester->firstname
+						)
+					)
+				);
+
+				$this->session_api->call('email', 'recipients', 'add', $parameters, $response_array);
+			}
+
+			// 2 - On envoi un test au destinataire
+			/// -----------------------------------
+			$response_array = array();
+			$parameters = array(
+				'account_id' => $this->session_api->account_id,
+				'campaign_id' => $this->campaign_infos['campaign_api_message_id'],
+				'list_id' => $this->campaign_infos['campaign_api_list_id'],
+				'recipient' => $recipient
+			);
+
+			if ($this->session_api->call('email', 'campaign', 'send_test', $parameters, $response_array))
+			{
+				$this->confirmations[] = sprintf($this->module->l('An email as been sent to : %s', 'adminmarketingestep7'), $recipient);
+				return true;
+			}
+		}
+
+		$this->errors[] = sprintf($this->module->l('Error during communication with Express-Mailing API : %s', 'adminmarketingestep7'),
+			$this->session_api->getError());
+
 		return false;
-	}
-
-	private function sendCampaignAPI()
-	{
-		$response_array = null;
-		$parameters = array(
-			'account_id' => $this->session_api->account_id,
-			'campaign_id' => $this->campaign_infos['campaign_api_message_id']
-		);
-
-		if ($this->session_api->call('email', 'campaign', 'send', $parameters, $response_array))
-			return true;
-		else
-		{
-			$this->errors[] = sprintf(Tools::displayError('Error during communication with Express-Mailing API : %s'), $this->session_api->getError());
-			return false;
-		}
-	}
-
-	private function initFilters()
-	{
-		$sql = new DbQuery();
-		$sql->select('group_id');
-		$sql->from('expressmailing_email_groups');
-		$sql->where('campaign_id = '.$this->campaign_id);
-
-		if ($result = Db::getInstance()->ExecuteS($sql))
-		{
-			foreach ($result as $row)
-			{
-				$this->checked_groups[] = $row['group_id'];
-				$this->fields_value['groups[]_'.$row['group_id']] = '1';
-			}
-		}
-
-		$sql = new DbQuery();
-		$sql->select('lang_id');
-		$sql->from('expressmailing_email_langs');
-		$sql->where('campaign_id = '.$this->campaign_id);
-
-		if ($result = Db::getInstance()->ExecuteS($sql))
-		{
-			foreach ($result as $row)
-			{
-				$this->checked_langs[] = $row['lang_id'];
-				$this->fields_value['langs[]_'.$row['lang_id']] = '1';
-			}
-		}
-
-		$req = new DbQuery();
-		$req->select('campaign_optin, campaign_newsletter, campaign_active');
-		$req->from('expressmailing_email');
-		$req->where('campaign_id = '.$this->campaign_id);
-
-		$result = Db::getInstance()->getRow($req->build());
-
-		$this->checked_campaign_optin = $result['campaign_optin'];
-		$this->checked_campaign_newsletter = $result['campaign_newsletter'];
-		$this->checked_campaign_active = $result['campaign_active'];
-	}
-
-	private function getCustomers()
-	{
-		$req = new DbQuery();
-		$req->select('SQL_CALC_FOUND_ROWS customer.id_customer, customer.id_lang, customer.firstname, customer.lastname, customer.email');
-		$req->from('customer', 'customer');
-		$req->leftJoin('customer_group', 'customer_group', 'customer_group.id_customer = customer.id_customer');
-
-		$where = array();
-
-		if (isset($this->checked_langs) && !empty($this->checked_langs))
-			$where[] = 'customer.id_lang IN('.implode(', ', $this->checked_langs).')';
-
-		if (isset($this->checked_groups) && !empty($this->checked_groups))
-			$where[] = 'customer_group.id_group IN('.implode(', ', $this->checked_groups).')';
-
-		if ($this->checked_campaign_optin)
-			$where[] = 'customer.optin = 1';
-
-		if ($this->checked_campaign_newsletter)
-			$where[] = 'customer.newsletter = 1';
-
-		if ($this->checked_campaign_active)
-			$where[] = 'customer.active = 1';
-
-		$req->where(implode(' AND ', $where));
-		$req->orderby('id_customer');
-		$req->limit(20);
-
-		$user_list = Db::getInstance()->executeS($req->build());
-		$this->list_total = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
-		return $user_list;
 	}
 
 	private function getCampaignInfos()
@@ -272,27 +259,77 @@ class AdminMarketingEStep7Controller extends ModuleAdminController
 		return $result;
 	}
 
-	private function setSmartyVars()
+	private function initFilters()
 	{
-		$validation_stats = $this->getValidationStatisticsAPI();
+		$sql = new DbQuery();
+		$sql->select('group_id');
+		$sql->from('expressmailing_email_groups');
+		$sql->where('campaign_id = '.$this->campaign_id);
 
-		$this->context->smarty->assign(array(
-			'campaign_id' => $this->campaign_id,
-			'nb_total' => $validation_stats['count_total_recipients'],
-			'nb_redlist' => $validation_stats['count_recipients_on_personnal_redlist'],
-			'nb_suspended' => $validation_stats['count_cancelled_recipients'],
-			'nb_already_sent' => $validation_stats['count_sent_recipients'],
-			'nb_to_send' => $validation_stats['count_recipients_to_send'],
-			'mail_weight' => $this->humanFilesize($validation_stats['email_weight']),
-			'mail_cost' => $validation_stats['email_cost']
-		));
-	}
+		$this->checked_groups = array();
+		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
+		{
+			foreach ($result as $row)
+			{
+				$this->checked_groups[] = $row['group_id'];
+				$this->fields_value['groups[]_'.$row['group_id']] = '1';
+			}
+		}
 
-	private function humanFilesize($bytes, $decimals = 2)
-	{
-		$size = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-		$factor = floor((Tools::strlen($bytes) - 1) / 3);
-		return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)).' '.$size[$factor];
+		$sql = new DbQuery();
+		$sql->select('lang_id');
+		$sql->from('expressmailing_email_langs');
+		$sql->where('campaign_id = '.$this->campaign_id);
+
+		$this->checked_langs = array();
+		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
+		{
+			foreach ($result as $row)
+			{
+				$this->checked_langs[] = $row['lang_id'];
+				$this->fields_value['langs[]_'.$row['lang_id']] = '1';
+			}
+		}
+
+		$sql = new DbQuery();
+		$sql->select('product_id');
+		$sql->from('expressmailing_email_products');
+		$sql->where('campaign_id = '.$this->campaign_id);
+
+		$this->checked_products = array();
+		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
+		{
+			foreach ($result as $row)
+			{
+				$this->checked_products[] = $row['product_id'];
+				$this->fields_value['products[]_'.$row['product_id']] = '1';
+			}
+		}
+
+		$sql = new DbQuery();
+		$sql->select('category_id');
+		$sql->from('expressmailing_email_categories');
+		$sql->where('campaign_id = '.$this->campaign_id);
+
+		$this->checked_categories = array();
+		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
+		{
+			foreach ($result as $row)
+			{
+				$this->checked_categories[] = $row['category_id'];
+				$this->fields_value['categories[]_'.$row['category_id']] = '1';
+			}
+		}
+
+		$req = new DbQuery();
+		$req->select('campaign_optin, campaign_newsletter, campaign_active');
+		$req->from('expressmailing_email');
+		$req->where('campaign_id = '.$this->campaign_id);
+
+		$result = Db::getInstance()->getRow($req->build());
+		$this->checked_campaign_optin = $result['campaign_optin'];
+		$this->checked_campaign_newsletter = $result['campaign_newsletter'];
+		$this->checked_campaign_active = $result['campaign_active'];
 	}
 
 }

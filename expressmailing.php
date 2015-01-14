@@ -1,275 +1,553 @@
 <?php
 /**
-* 2014 (c) Axalone France - Express-Mailing
-*
-* This file is a commercial module for Prestashop
-* Do not edit or add to this file if you wish to upgrade PrestaShop or
-* customize PrestaShop for your needs please refer to
-* http://www.express-mailing.com for more information.
-*
-* @author    Axalone France <info@express-mailing.com>
-* @copyright 2014 (c) Axalone France
-* @license   http://www.express-mailing.com
-*/
+ * 2014-2015 (c) Axalone France - Express-Mailing
+ *
+ * This file is a commercial module for Prestashop
+ * Do not edit or add to this file if you wish to upgrade PrestaShop or
+ * customize PrestaShop for your needs please refer to
+ * http://www.express-mailing.com for more information.
+ *
+ * @author    Axalone France <info@express-mailing.com>
+ * @copyright 2014-2015 (c) Axalone France
+ * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
+ */
 
 if (!defined('_PS_VERSION_'))
 	exit;
 
+include_once 'controllers/admin/adminmarketing.php';
+
 class ExpressMailing extends Module
 {
 	private $html_preview_folder = null;
+	private $ids_tabs = array ();
 
 	public function __construct()
 	{
+		$this->bootstrap = true;
 		$this->name = 'expressmailing';
-		$this->displayName = 'Express-Mailing';
 		$this->tab = 'emailing';
 		$this->version = '1.0.0';
-		$this->need_instance = 0;
-		$this->bootstrap = true;
-		$this->ps_versions_compliancy = array('min' => '1.5', 'max' => _PS_VERSION_);
 		$this->author = 'Axalone France';
-		$this->limited_countries = array('fr', 'pl');
-		$this->description = /* [VALIDATOR MAX 150 CAR] */
-		$this->l('Marketing Module from Express-Mailing, including emailing (100% free), sending faxes and sms at low price (mass or unitarily)');
-		$this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
-		$this->html_preview_folder = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.'expressmailing'.DIRECTORY_SEPARATOR;
+		$this->need_instance = 0;
+		$this->ps_versions_compliancy = array ('min' => '1.5', 'max' => _PS_VERSION_);
+		$this->limited_countries = array ('fr', 'pl');
 
 		parent::__construct();
 
-		// Custom des displayError
-		// -----------------------
-		$iso_code = $this->context->language->iso_code;
-		include_once(_PS_TRANSLATIONS_DIR_.$iso_code.DIRECTORY_SEPARATOR.'errors.php');
-		include(_PS_MODULE_DIR_.'expressmailing'.DIRECTORY_SEPARATOR.'translations'.DIRECTORY_SEPARATOR.$iso_code.DIRECTORY_SEPARATOR.'errors.php');
+		$this->author = $this->l('Axalone France');
+		$this->displayName = 'Express-Mailing';
+		$this->description = $this->l('Marketing Module from Express-Mailing, including e-mailing (100% free), sending faxes and sms at low price');
+		$this->confirmUninstall = $this->l('Are you sure you want to uninstall ?');
+		$this->html_preview_folder = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.'expressmailing'.DIRECTORY_SEPARATOR;
+
+		Tools::addCSS(_PS_MODULE_DIR_.'expressmailing/css/icon-marketing.css');
 	}
 
 	public function reset()
 	{
-		if (!$this->uninstall(false)) return false;
-		if (!$this->install(false))   return false;
-
-		return true;
+		return $this->uninstall(false)
+			&& $this->install(false);
 	}
 
 	public function install($alter_db = true)
 	{
-		if (Shop::isFeatureActive())
-			Shop::setContext(Shop::CONTEXT_ALL);
-
-		if (!parent::install())
-			return false;
-
-		if ((bool)$alter_db)
-			if (!$this->installDB())
-				return false;
-
-		if (!$this->installAdminTab('AdminMarketing', true, $this->l('Marketing'), 0))
-			return false;
-
-		$id_marketing = Tab::getIdFromClassName('AdminMarketing');
-
-		// On ajoute les 3 médias
-		// ----------------------
-		if (!$this->installAdminTab('AdminMarketingE', true, $this->l('Send an e-mailing'), $id_marketing))			return false;
-		if (!$this->installAdminTab('AdminMarketingF', true, $this->l('Send a fax-Mailing'), $id_marketing))		return false;
-		if (!$this->installAdminTab('AdminMarketingS', true, $this->l('Send a sms-Mailing'), $id_marketing))		return false;
-
-		// On ajoute les onglets de consultation des statistiques
-		// ------------------------------------------------------
-		if (!$this->installAdminTab('AdminMarketingEStats', false, $this->l('My email statistics'), $id_marketing))	return false;
-		if (!$this->installAdminTab('AdminMarketingFStats', false, $this->l('My fax statistics'), $id_marketing))	return false;
-		if (!$this->installAdminTab('AdminMarketingSStats', false, $this->l('My sms statistics'), $id_marketing))	return false;
-
-		// On ajoute les étapes nécessaires à l'emailing
-		// ---------------------------------------------
-		if (!$this->installAdminTab('AdminMarketingEStep1', false, $this->l('Send an e-mailing'), $id_marketing))	return false;
-		if (!$this->installAdminTab('AdminMarketingEStep2', false, $this->l('Send an e-mailing'), $id_marketing))	return false;
-		if (!$this->installAdminTab('AdminMarketingEStep3', false, $this->l('Send an e-mailing'), $id_marketing))	return false;
-		if (!$this->installAdminTab('AdminMarketingEStep4', false, $this->l('Send an e-mailing'), $id_marketing))	return false;
-		if (!$this->installAdminTab('AdminMarketingEStep5', false, $this->l('Send an e-mailing'), $id_marketing))	return false;
-		if (!$this->installAdminTab('AdminMarketingEStep6', false, $this->l('Send an e-mailing'), $id_marketing))	return false;
-		if (!$this->installAdminTab('AdminMarketingEStep7', false, $this->l('Send an e-mailing'), $id_marketing))	return false;
-
-		if (!$this->registerHook('backOfficeHeader'))
-			return false;
-
-/*
-		$lang = Configuration::get('PS_LANG_DEFAULT');
-		$q = new QuickAccess();
-		$q->link = 'http://www.google.com';
-		$q->new_window = 1;
-		$q->name[$lang] = $this->l('Send a mailing (email, fax, sms)');
-		$q->add();
-*/
-
-		$this->html .= $this->displayConfirmation('Settings updated');
-
-		return true;
-	}
-
-	public function installDB()
-	{
-		/* Pour le stockage des identifiants à l'api */
-
-		if (!Db::getInstance()->execute('
-			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing` (
-				`api_media` ENUM(\'all\',\'email\',\'fax\',\'sms\') NOT NULL DEFAULT \'all\',
-				`api_login` VARCHAR(255) NULL DEFAULT NULL,
-				`api_password` VARCHAR(255) NULL DEFAULT NULL,
-				PRIMARY KEY (`api_login`)
-			) DEFAULT CHARSET=utf8')) return false;
-
-		/* Pour le stockage des campagnes d'emailing */
-		/* Week_limite : L=Lundi M=Mardi C=Mercredi J=Jeudi V=Vendredi S=Samedi D=Dimanche */
-
-		if (!Db::getInstance()->execute('
-			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email` (
-				`campaign_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-				`campaign_state` INT UNSIGNED NOT NULL DEFAULT 1,
-				`campaign_date_create` DATETIME NOT NULL,
-				`campaign_date_update` DATETIME NULL DEFAULT NULL,
-				`campaign_date_send` DATETIME NULL DEFAULT NULL,
-				`campaign_name` VARCHAR(255) NULL DEFAULT NULL,
-				`campaign_tracking` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
-				`campaign_linking` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
-				`campaign_redlist` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
-				`campaign_day_limit` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-				`campaign_max_limit` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-				`campaign_week_limit` VARCHAR(7) NULL DEFAULT NULL,
-				`campaign_lang` VARCHAR(2) NOT NULL DEFAULT \'fr\',
-				`campaign_html` LONGTEXT NULL,
-				`campaign_sender_email` VARCHAR(255) NULL DEFAULT NULL,
-				`campaign_sender_name` VARCHAR(255) NULL DEFAULT NULL,
-				`campaign_optin` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
-			    `campaign_newsletter` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
-			    `campaign_active` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
-			    `campaign_api_list_id` INT UNSIGNED NULL DEFAULT NULL,
-			    `campaign_api_message_id` INT UNSIGNED NULL DEFAULT NULL,
-			    `campaign_last_tester` VARCHAR(255) NULL DEFAULT NULL,
-				PRIMARY KEY (`campaign_id`),
-				INDEX `index_state` (`campaign_state`)
-			) DEFAULT CHARSET=utf8')) return false;
-
-		if (!Db::getInstance()->execute('
-			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_groups` (
-			    `campaign_id` INT UNSIGNED NOT NULL,
-			    `group_id` INT UNSIGNED NOT NULL,
-				PRIMARY KEY (`campaign_id`, `group_id`)
-			) DEFAULT CHARSET=utf8')) return false;
-
-		if (!Db::getInstance()->execute('
-			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_langs` (
-			    `campaign_id` INT UNSIGNED NOT NULL,
-			    `lang_id` INT UNSIGNED NOT NULL,
-				PRIMARY KEY (`campaign_id`, `lang_id`)
-			) DEFAULT CHARSET=utf8')) return false;
-
-		/* Pour le stockage des campagnes de fax-mailing */
-
-		/* Pour le stockage des campagnes de sms-mailing */
-
-		return true;
+		return parent::install()
+			&& $this->installDB($alter_db)
+			/* Add main Tab (visible into Customer) */
+			&& $this->installAdminTab('AdminMarketing', true, $this->displayName, 'AdminParentModules')
+			/* Add media controllers */
+			&& $this->installAdminTab('AdminMarketingE', false, $this->displayName, 'AdminMarketing')
+			&& $this->installAdminTab('AdminMarketingF', false, $this->displayName, 'AdminMarketing')
+			&& $this->installAdminTab('AdminMarketingS', false, $this->displayName, 'AdminMarketing')
+			/* Add order/subscription controllers */
+			&& $this->installAdminTab('AdminMarketingInscription', false, $this->l('Inscription'), 'AdminMarketing')
+			&& $this->installAdminTab('AdminMarketingBuy', false, $this->l('Cart'), 'AdminMarketing')
+			/* Add emailing controllers */
+			&& $this->installAdminTab('AdminMarketingEStep1', false, $this->l('E-Mailing'), 'AdminMarketingE')
+			&& $this->installAdminTab('AdminMarketingEStep2', false, $this->l('E-Mailing'), 'AdminMarketingE')
+			&& $this->installAdminTab('AdminMarketingEStep3', false, $this->l('E-Mailing'), 'AdminMarketingE')
+			&& $this->installAdminTab('AdminMarketingEStep4', false, $this->l('E-Mailing'), 'AdminMarketingE')
+			&& $this->installAdminTab('AdminMarketingEStep5', false, $this->l('E-Mailing'), 'AdminMarketingE')
+			&& $this->installAdminTab('AdminMarketingEStep6', false, $this->l('E-Mailing'), 'AdminMarketingE')
+			&& $this->installAdminTab('AdminMarketingEStep7', false, $this->l('E-Mailing'), 'AdminMarketingE')
+			&& $this->installAdminTab('AdminMarketingEStep8', false, $this->l('E-Mailing'), 'AdminMarketingE')
+			/* Add fax controllers */
+			&& $this->installAdminTab('AdminMarketingFStep1', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+			&& $this->installAdminTab('AdminMarketingFStep2', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+			&& $this->installAdminTab('AdminMarketingFStep3', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+			&& $this->installAdminTab('AdminMarketingFStep4', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+			&& $this->installAdminTab('AdminMarketingFStep5', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+			&& $this->installAdminTab('AdminMarketingFStep6', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+			&& $this->installAdminTab('AdminMarketingFStep7', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+			&& $this->installAdminTab('AdminMarketingFStep8', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+			/* Add sms controllers */
+			&& $this->installAdminTab('AdminMarketingSStep1', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+			&& $this->installAdminTab('AdminMarketingSStep2', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+			&& $this->installAdminTab('AdminMarketingSStep3', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+			&& $this->installAdminTab('AdminMarketingSStep4', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+			&& $this->installAdminTab('AdminMarketingSStep5', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+			&& $this->installAdminTab('AdminMarketingSStep6', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+			&& $this->installAdminTab('AdminMarketingSStep7', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+			/* Add statistics controllers */
+			&& $this->installAdminTab('AdminMarketingEList', false, $this->l('E-Mailing'), 'AdminMarketingE')
+			&& $this->installAdminTab('AdminMarketingFList', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+			&& $this->installAdminTab('AdminMarketingSList', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+			&& $this->installAdminTab('AdminMarketingEStats', false, $this->l('E-Mailing'), 'AdminMarketingE')
+			&& $this->installAdminTab('AdminMarketingFStats', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+			&& $this->installAdminTab('AdminMarketingSStats', false, $this->l('Sms-Mailing'), 'AdminMarketingS');
 	}
 
 	public function uninstall($alter_db = true)
 	{
-		Configuration::deleteByName('session_id_api');
+		return parent::uninstall()
+			&& Configuration::deleteByName('adminmarketing_session_api')
+			&& $this->uninstallDB($alter_db)
+			&& $this->uninstallAdminTab('AdminMarketing')
+			&& $this->uninstallAdminTab('AdminMarketingE')
+			&& $this->uninstallAdminTab('AdminMarketingF')
+			&& $this->uninstallAdminTab('AdminMarketingS')
+			&& $this->uninstallAdminTab('AdminMarketingInscription')
+			&& $this->uninstallAdminTab('AdminMarketingBuy')
+			&& $this->uninstallAdminTab('AdminMarketingEList')
+			&& $this->uninstallAdminTab('AdminMarketingFList')
+			&& $this->uninstallAdminTab('AdminMarketingSList')
+			&& $this->uninstallAdminTab('AdminMarketingEStats')
+			&& $this->uninstallAdminTab('AdminMarketingFStats')
+			&& $this->uninstallAdminTab('AdminMarketingSStats')
+			&& $this->uninstallAdminTab('AdminMarketingEStep1')
+			&& $this->uninstallAdminTab('AdminMarketingEStep2')
+			&& $this->uninstallAdminTab('AdminMarketingEStep3')
+			&& $this->uninstallAdminTab('AdminMarketingEStep4')
+			&& $this->uninstallAdminTab('AdminMarketingEStep5')
+			&& $this->uninstallAdminTab('AdminMarketingEStep6')
+			&& $this->uninstallAdminTab('AdminMarketingEStep7')
+			&& $this->uninstallAdminTab('AdminMarketingEStep8')
+			&& $this->uninstallAdminTab('AdminMarketingFStep1')
+			&& $this->uninstallAdminTab('AdminMarketingFStep2')
+			&& $this->uninstallAdminTab('AdminMarketingFStep3')
+			&& $this->uninstallAdminTab('AdminMarketingFStep4')
+			&& $this->uninstallAdminTab('AdminMarketingFStep5')
+			&& $this->uninstallAdminTab('AdminMarketingFStep6')
+			&& $this->uninstallAdminTab('AdminMarketingFStep7')
+			&& $this->uninstallAdminTab('AdminMarketingFStep8')
+			&& $this->uninstallAdminTab('AdminMarketingSStep1')
+			&& $this->uninstallAdminTab('AdminMarketingSStep2')
+			&& $this->uninstallAdminTab('AdminMarketingSStep3')
+			&& $this->uninstallAdminTab('AdminMarketingSStep4')
+			&& $this->uninstallAdminTab('AdminMarketingSStep5')
+			&& $this->uninstallAdminTab('AdminMarketingSStep6')
+			&& $this->uninstallAdminTab('AdminMarketingSStep7');
+	}
 
-		$this->unregisterHook('backOfficeHeader');
-
-		$this->uninstallAdminTab('AdminMarketingEStep1');
-		$this->uninstallAdminTab('AdminMarketingEStep2');
-		$this->uninstallAdminTab('AdminMarketingEStep3');
-		$this->uninstallAdminTab('AdminMarketingEStep4');
-		$this->uninstallAdminTab('AdminMarketingEStep5');
-		$this->uninstallAdminTab('AdminMarketingEStep6');
-		$this->uninstallAdminTab('AdminMarketingEStep7');
-
-		$this->uninstallAdminTab('AdminMarketingEStats');
-		$this->uninstallAdminTab('AdminMarketingFStats');
-		$this->uninstallAdminTab('AdminMarketingSStats');
-
-		$this->uninstallAdminTab('AdminMarketingE');
-		$this->uninstallAdminTab('AdminMarketingF');
-		$this->uninstallAdminTab('AdminMarketingS');
-		$this->uninstallAdminTab('AdminMarketing');
+	public function installDB($alter_db = true)
+	{
+		$return = true;
 
 		if ((bool)$alter_db)
 		{
-			if (!$this->uninstallDB())
-				return false;
+			/* To store api credentials */
 
-			// On retire le répertoire de stockage des images des emailing
-			// -----------------------------------------------------------
-			if (Tools::file_exists_no_cache($this->getPreviewFolder()))
-				Tools::deleteDirectory($this->getPreviewFolder());
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing` (
+					`api_media` ENUM(\'all\',\'email\',\'fax\',\'sms\') NOT NULL DEFAULT \'all\',
+					`api_login` VARCHAR(255) NULL DEFAULT NULL,
+					`api_password` VARCHAR(255) NULL DEFAULT NULL,
+					PRIMARY KEY (`api_login`)
+				) DEFAULT CHARSET=utf8');
+
+			/* To store e-mailing campaigns */
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email` (
+					`campaign_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_state` INT UNSIGNED NOT NULL DEFAULT 1,
+					`campaign_date_create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					`campaign_date_update` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					`campaign_date_send` DATETIME NULL DEFAULT NULL,
+					`campaign_name` VARCHAR(255) NULL DEFAULT NULL,
+					`campaign_tracking` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					`campaign_linking` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					`campaign_redlist` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					`campaign_day_limit` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+					`campaign_max_limit` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+					`campaign_week_limit` VARCHAR(7) NULL DEFAULT NULL,
+					`campaign_lang` VARCHAR(2) NOT NULL DEFAULT \'fr\',
+					`campaign_html` LONGTEXT NULL,
+					`campaign_sender_email` VARCHAR(255) NULL DEFAULT NULL,
+					`campaign_sender_name` VARCHAR(255) NULL DEFAULT NULL,
+					`campaign_api_list_id` INT UNSIGNED NULL DEFAULT NULL,
+					`campaign_api_message_id` INT UNSIGNED NULL DEFAULT NULL,
+					`campaign_api_validation` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
+					`campaign_last_tester` VARCHAR(255) NULL DEFAULT NULL,
+					`campaign_selected_recipients` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+					`campaign_optin` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					`campaign_newsletter` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					`campaign_active` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					`recipients_modified` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
+					PRIMARY KEY (`campaign_id`),
+					INDEX `index_state` (`campaign_state`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_recipients` (
+					`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`target` TEXT NULL,
+					`uploaded` BIT(1) NOT NULL DEFAULT b\'0\',
+					`lang_iso` VARCHAR(3) NULL DEFAULT NULL,
+					`last_name` TEXT NULL,
+					`first_name` TEXT NULL,
+					`ip_address` TEXT NULL,
+					`last_connexion_date` INT UNSIGNED NULL DEFAULT NULL,
+					`source` VARCHAR(10) NULL,
+					PRIMARY KEY (`id`),
+					INDEX `campaign_id` (`campaign_id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_groups` (
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`group_id` INT UNSIGNED NOT NULL,
+					PRIMARY KEY (`campaign_id`, `group_id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_langs` (
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`lang_id` INT UNSIGNED NOT NULL,
+					PRIMARY KEY (`campaign_id`, `lang_id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_categories` (
+					`campaign_id` INT(10) UNSIGNED NOT NULL,
+					`category_id` INT(10) UNSIGNED NOT NULL,
+					PRIMARY KEY (`campaign_id`, `category_id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_products` (
+					`campaign_id` INT(10) UNSIGNED NOT NULL,
+					`product_id` INT(10) UNSIGNED NOT NULL,
+					PRIMARY KEY (`campaign_id`, `product_id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_birthdays` (
+					`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`birthday_type` VARCHAR(50) NOT NULL,
+					`birthday_start` VARCHAR(50) NOT NULL,
+					`birthday_end` VARCHAR(50) NOT NULL,
+					PRIMARY KEY (`id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_civilities` (
+					`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`civility_id` INT UNSIGNED NOT NULL,
+					PRIMARY KEY (`id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_countries` (
+					`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`country_id` INT UNSIGNED NOT NULL,
+					PRIMARY KEY (`id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_postcodes` (
+					`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`country_id` INT UNSIGNED NOT NULL,
+					`postcode` INT UNSIGNED NOT NULL,
+					PRIMARY KEY (`id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_buyingdates` (
+					`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`min_buyingdate` DATE NOT NULL,
+					`max_buyingdate` DATE NOT NULL,
+					PRIMARY KEY (`id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_accountdates` (
+					`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`min_accountdate` DATE NOT NULL,
+					`max_accountdate` DATE NOT NULL,
+					PRIMARY KEY (`id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_promocodes` (
+					`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT(10) UNSIGNED NOT NULL,
+					`promocode_type` VARCHAR(50) NOT NULL,
+					`promocode` VARCHAR(50) NULL DEFAULT NULL,
+					PRIMARY KEY (`id`)
+				) DEFAULT CHARSET=utf8');
+
+			/* To store fax-mailing campaigns */
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_fax` (
+					`campaign_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_state` INT UNSIGNED NOT NULL DEFAULT 1,
+					`campaign_date_create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					`campaign_date_update` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					`campaign_date_send` DATETIME NULL DEFAULT NULL,
+					`campaign_name` VARCHAR(255) NULL DEFAULT NULL,
+					`campaign_day_limit` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+					`campaign_max_limit` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+					`campaign_week_limit` VARCHAR(7) NULL DEFAULT \'LMCJVSD\',
+					`campaign_start_hour` INT(11) NOT NULL DEFAULT 0,
+					`campaign_end_hour` INT(11) NOT NULL DEFAULT 1440,
+					`campaign_api_message_id` INT UNSIGNED NULL DEFAULT NULL,
+					`campaign_api_validation` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
+					`campaign_last_tester` VARCHAR(255) NULL DEFAULT NULL,
+					`path_to_import` VARCHAR(255) NULL DEFAULT NULL,
+					`recipients_modified` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
+					`campaign_selected_recipients` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+					`campaign_active` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					PRIMARY KEY (`campaign_id`),
+					INDEX `index_state` (`campaign_state`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_fax_recipients` (
+					`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`target` TEXT NULL,
+					`uploaded` BIT(1) NOT NULL DEFAULT b\'0\',
+					`col_0` TEXT NULL,
+					`col_1` TEXT NULL,
+					`col_2` TEXT NULL,
+					`col_3` TEXT NULL,
+					`col_4` TEXT NULL,
+					`col_5` TEXT NULL,
+					`col_6` TEXT NULL,
+					`col_7` TEXT NULL,
+					`col_8` TEXT NULL,
+					`col_9` TEXT NULL,
+					`col_10` TEXT NULL,
+					`col_11` TEXT NULL,
+					`col_12` TEXT NULL,
+					`col_13` TEXT NULL,
+					`col_14` TEXT NULL,
+					`col_15` TEXT NULL,
+					`col_16` TEXT NULL,
+					`col_17` TEXT NULL,
+					`col_18` TEXT NULL,
+					`col_19` TEXT NULL,
+					PRIMARY KEY (`id`),
+					INDEX `campaign_id` (`campaign_id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_fax_pages` (
+					`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`page_path` VARCHAR(255) NOT NULL,
+					`page_url` VARCHAR(255) NOT NULL,
+					`page_path_original` VARCHAR(255) NOT NULL,
+					PRIMARY KEY (`id`),
+					INDEX `campaign_id` (`campaign_id`)
+				) DEFAULT CHARSET=utf8');
+
+			/* To store sms-mailing campaigns */
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_sms` (
+					`campaign_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_state` INT UNSIGNED NOT NULL DEFAULT 1,
+					`campaign_date_create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					`campaign_date_update` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					`campaign_date_send` DATETIME NULL DEFAULT NULL,
+					`campaign_name` VARCHAR(255) NULL DEFAULT NULL,
+					`campaign_day_limit` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+					`campaign_max_limit` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+					`campaign_week_limit` VARCHAR(7) NULL DEFAULT \'LMCJVS\',
+					`campaign_start_hour` INT(11) NOT NULL DEFAULT 480,
+					`campaign_end_hour` INT(11) NOT NULL DEFAULT 1200,
+					`campaign_sms_text` LONGTEXT NULL,
+					`campaign_api_message_id` INT UNSIGNED NULL DEFAULT NULL,
+					`campaign_api_validation` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
+					`campaign_last_tester` VARCHAR(255) NULL DEFAULT NULL,
+					`recipients_modified` TINYINT NOT NULL DEFAULT 0,
+					`path_to_import` VARCHAR(255) NULL DEFAULT NULL,
+					`campaign_selected_recipients` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+					`campaign_active` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					PRIMARY KEY (`campaign_id`),
+					INDEX `index_state` (`campaign_state`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_sms_recipients` (
+					`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`target` TEXT NULL,
+					`uploaded` BIT(1) NOT NULL DEFAULT b\'0\',
+					`col_0` TEXT NULL,
+					`col_1` TEXT NULL,
+					`col_2` TEXT NULL,
+					`col_3` TEXT NULL,
+					`col_4` TEXT NULL,
+					`col_5` TEXT NULL,
+					`col_6` TEXT NULL,
+					`col_7` TEXT NULL,
+					`col_8` TEXT NULL,
+					`col_9` TEXT NULL,
+					`col_10` TEXT NULL,
+					`col_11` TEXT NULL,
+					`col_12` TEXT NULL,
+					`col_13` TEXT NULL,
+					`col_14` TEXT NULL,
+					`col_15` TEXT NULL,
+					`col_16` TEXT NULL,
+					`col_17` TEXT NULL,
+					`col_18` TEXT NULL,
+					`col_19` TEXT NULL,
+					`source` VARCHAR(10) NULL,
+					PRIMARY KEY (`id`),
+					INDEX `campaign_id` (`campaign_id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_sms_groups` (
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`group_id` INT UNSIGNED NOT NULL,
+					PRIMARY KEY (`campaign_id`, `group_id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_sms_langs` (
+					`campaign_id` INT UNSIGNED NOT NULL,
+					`lang_id` INT UNSIGNED NOT NULL,
+					PRIMARY KEY (`campaign_id`, `lang_id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_sms_categories` (
+					`campaign_id` INT(10) UNSIGNED NOT NULL,
+					`category_id` INT(10) UNSIGNED NOT NULL,
+					PRIMARY KEY (`campaign_id`, `category_id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_sms_products` (
+					`campaign_id` INT(10) UNSIGNED NOT NULL,
+					`product_id` INT(10) UNSIGNED NOT NULL,
+					PRIMARY KEY (`campaign_id`, `product_id`)
+				) DEFAULT CHARSET=utf8');
+
+			/* To store cart & billing address */
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_order_address` (
+					`id_address` INT(10) NOT NULL,
+					`company_name` VARCHAR(200) NULL DEFAULT NULL,
+					`company_email` VARCHAR(200) NULL DEFAULT NULL,
+					`company_address1` VARCHAR(200) NULL DEFAULT NULL,
+					`company_address2` VARCHAR(200) NULL DEFAULT NULL,
+					`company_zipcode` VARCHAR(200) NULL DEFAULT NULL,
+					`company_city` VARCHAR(200) NULL DEFAULT NULL,
+					`country_id` INT(11) NULL DEFAULT NULL,
+					`company_country` VARCHAR(200) NULL DEFAULT NULL,
+					`company_phone` VARCHAR(200) NULL DEFAULT NULL,
+					`product` VARCHAR(200) NULL DEFAULT NULL,
+					PRIMARY KEY (`id_address`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_order_cart` (
+					`order_session` VARCHAR(100) NOT NULL DEFAULT \'\',
+					`order_product` VARCHAR(100) NULL DEFAULT NULL,
+					`order_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					`campaign_media` VARCHAR(50) NOT NULL DEFAULT \'AdminMarketing\',
+					`campaign_id` INT(11) NULL DEFAULT NULL,
+					PRIMARY KEY (`order_session`)
+				) DEFAULT CHARSET=utf8');
 		}
 
-		if (!parent::uninstall())
-			return false;
-
-		return true;
+		return $return;
 	}
 
-	public function uninstallDB()
+	public function uninstallDB($alter_db = true)
 	{
-		if (!Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'expressmailing_email_groups`'))
-			return false;
-
-		if (!Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'expressmailing_email_langs`'))
-			return false;
-
-		if (!Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'expressmailing_email`'))
-			return false;
-
-		if (!Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'expressmailing`'))
-			return false;
-
-		return true;
-	}
-
-	private function installAdminTab($tab_class, $tab_active, $tab_name, $tab_parent)
-	{
-		if (!Tab::getIdFromClassName($tab_class))
+		if ((bool)$alter_db)
 		{
-			// Si l'onglet n'existe pas déjà on l'ajoute
-			// -----------------------------------------
+			return Db::getInstance()->execute(
+					'DROP TABLE IF EXISTS
+					`'._DB_PREFIX_.'expressmailing_order_address`,
+					`'._DB_PREFIX_.'expressmailing_order_cart`,
+					`'._DB_PREFIX_.'expressmailing_sms_products`,
+					`'._DB_PREFIX_.'expressmailing_sms_categories`,
+					`'._DB_PREFIX_.'expressmailing_sms_langs`,
+					`'._DB_PREFIX_.'expressmailing_sms_groups`,
+					`'._DB_PREFIX_.'expressmailing_sms_recipients`,
+					`'._DB_PREFIX_.'expressmailing_sms`,
+					`'._DB_PREFIX_.'expressmailing_fax_pages`,
+					`'._DB_PREFIX_.'expressmailing_fax_recipients`,
+					`'._DB_PREFIX_.'expressmailing_fax`,
+					`'._DB_PREFIX_.'expressmailing_email_promocodes`,
+					`'._DB_PREFIX_.'expressmailing_email_accountdates`,
+					`'._DB_PREFIX_.'expressmailing_email_buyingdates`,
+					`'._DB_PREFIX_.'expressmailing_email_postalcodes`,
+					`'._DB_PREFIX_.'expressmailing_email_countries`,
+					`'._DB_PREFIX_.'expressmailing_email_civilities`,
+					`'._DB_PREFIX_.'expressmailing_email_birthdays`,
+					`'._DB_PREFIX_.'expressmailing_email_products`,
+					`'._DB_PREFIX_.'expressmailing_email_categories`,
+					`'._DB_PREFIX_.'expressmailing_email_langs`,
+					`'._DB_PREFIX_.'expressmailing_email_groups`,
+					`'._DB_PREFIX_.'expressmailing_email_recipients`,
+					`'._DB_PREFIX_.'expressmailing_email`,
+					`'._DB_PREFIX_.'expressmailing`');
+		}
+		return true;
+	}
+
+	private function installAdminTab($tab_class, $tab_active, $tab_name, $tab_class_parent)
+	{
+		if (!Tab::getIdFromClassName((string)$tab_class))
+		{
+			// Get tab parent id
+			// -----------------
+			if (in_array((string)$tab_class_parent, $this->ids_tabs))
+				$id_tab_parent = $this->ids_tabs[(string)$tab_class_parent];
+			else
+				$id_tab_parent = Tab::getIdFromClassName((string)$tab_class_parent);
+
+			// Add the new tab
+			// ---------------
 			$tab = new Tab();
-			$tab->name = array();
+			$tab->name = array ();
 
 			foreach (Language::getLanguages() as $language)
-				$tab->name[$language['id_lang']] = (string)$tab_name;
+				$tab->name[$language['id_lang']] = Translate::getAdminTranslation((string)$tab_name, 'expressmailing', false, false);
 
 			$tab->class_name = (string)$tab_class;
 			$tab->module = $this->name;
-			$tab->id_parent = (int)$tab_parent;
+			$tab->id_parent = (int)$id_tab_parent;
 			$tab->active = (bool)$tab_active ? 1 : 0;
 
 			if (!$tab->save())
 				return false;
 
-			// On change sa position
-			// Voir https://github.com/pal/prestashop/blob/master/classes/Tab.php
-			// ------------------------------------------------------------------
-			if ((int)$tab_parent == 0)
-			{
-				$tab_promo = Tab::getTab($this->context->language->id, Tab::getIdFromClassName('AdminPriceRule'));
-				$tab_marketing = Tab::getTab($this->context->language->id, Tab::getIdFromClassName($tab_class));
-
-				$position_promo = $tab_promo['position'] + 1;
-				$position_marketing = $tab_marketing['position'];
-
-				for ($i = $position_marketing; $i > $position_promo; $i--)
-					$tab->move('l');
-			}
-
-			// Puis on valide l'ajout de l'onglet
-			// ----------------------------------
-				return true;
+			$this->ids_tabs[(string)$tab_class] = $tab->id;
 		}
 
-		return false;
+		// Else, Tab already installed
+		// ---------------------------
+		return true;
 	}
 
 	private function uninstallAdminTab($tab_class)
@@ -278,28 +556,21 @@ class ExpressMailing extends Module
 
 		if ($id_tab != 0)
 		{
-			// On retire le menu
+			// We remove the Tab
 			// -----------------
 			$tab = new Tab($id_tab);
-			$tab->delete();
-
-			return true;
+			return $tab->delete();
 		}
 
-		return false;
-	}
-
-	public function hookBackOfficeHeader()
-	{
-		$this->context->controller->addCSS($this->_path.'css/icon-marketing.css', 'all');
+		// Else, Tab already uninstalled
+		// -----------------------------
+		return true;
 	}
 
 	public function getContent()
 	{
-		$output = $this->display(__FILE__, 'views/templates/admin/step0.tpl');
-		$output .= $this->display(__FILE__, 'views/templates/admin/footer.tpl');
-
-		return $output;
+		Tools::redirectAdmin('index.php?controller=AdminMarketing&token='.Tools::getAdminTokenLite('AdminMarketing'));
+		exit;
 	}
 
 	public function getPreviewFolder()

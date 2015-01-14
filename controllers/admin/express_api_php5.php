@@ -1,68 +1,101 @@
 <?php
 /**
-* 2014 (c) Axalone France - Express-Mailing
-*
-* This file is a commercial module for Prestashop
-* Do not edit or add to this file if you wish to upgrade PrestaShop or
-* customize PrestaShop for your needs please refer to
-* http://www.express-mailing.com for more information.
-*
-* @author    Axalone France <info@express-mailing.com>
-* @copyright 2014 (c) Axalone France
-* @license   http://www.express-mailing.com
-*/
+ * 2014-2015 (c) Axalone France - Express-Mailing
+ *
+ * This file is a commercial module for Prestashop
+ * Do not edit or add to this file if you wish to upgrade PrestaShop or
+ * customize PrestaShop for your needs please refer to
+ * http://www.express-mailing.com for more information.
+ *
+ * @author    Axalone France <info@express-mailing.com>
+ * @copyright 2014-2015 (c) Axalone France
+ * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
+ */
 
 class ExpressApi
 {
-	private $base_url = 'http://ep-0.axalone.com/Services/API/V1.0/ws.ashx';
+	public $base_url = 'http://ep-0.axalone.com/Services/API/V1.0/ws.ashx';
 
 	public function __construct($url = '')
 	{
-		if (!empty($url)) $this->base_url = $url;
+		if (!empty($url))
+			$this->base_url = $url;
 	}
 
-	public function call($module, $section, $method, $parameters, &$response_array, $session_id = null, &$error = null)
+	public function call($module, $section, $method,
+						$parameters, &$response_array,
+						$xml_or_post_mode = 'xml',
+						$session_id = null,
+						&$error = null,
+						$debug_post = null, $debug_response = null)
 	{
-		// Si parameters est vide on en crée un
+		// Si parameters est vide on en crÃ©e un
 		// ------------------------------------
 		if (!is_array($parameters))
 			$parameters = array();
 
-		// Génération du xml à envoyer
+		// GÃ©nÃ©ration du xml Ã  envoyer
 		// ---------------------------
-		$xml = $this->serialize($parameters);
-		$xml = utf8_encode($xml);
+		if ((string)$xml_or_post_mode === 'post')
+		{
+			// Convert $parameters to x-www-form-urlencoded
+			// --------------------------------------------
+			$xml = $this->makeQueryString($parameters, '', true);
+		}
+		elseif ((string)$xml_or_post_mode === 'xml')
+		{
+			$xml = $this->serialize($parameters);
+			$xml = utf8_encode($xml);
+		}
+		else
+		{
+			$error = -3;
+			return false;
+		}
+
 		$length = mb_strlen($xml);
 		$url = parse_url($this->base_url);
 
-		// Contruction et envoi de la requête HTTP
+		// Contruction et envoi de la requÃªte HTTP
 		// ---------------------------------------
-		$request =	'POST '.$url['path'].'?format=xml&method='.$module.'.'.$section.'.'.$method.
-					(!empty($session_id) ? '&idsession='.$session_id : '').
-					'&async=false HTTP/1.0'."\r\n";
+		$request = 'POST '.$url['path'].'?format=xml&method='.$module.'.'.$section.'.'.$method.
+			(!empty($session_id) ? '&idsession='.$session_id : '').
+			'&lang='.Context::getContext()->country->iso_code.
+			'&async=false HTTP/1.0'."\r\n";
 		$request .= 'Host: '.$url['host']."\r\n";
 		$request .= 'Connection: Close'."\r\n";
-		$request .= 'Content-type: application/xml'."\r\n";
+
+		if ($xml_or_post_mode === 'post')
+			$request .= 'Content-Type: application/x-www-form-urlencoded'."\r\n";
+		else
+			$request .= 'Content-type: application/xml'."\r\n";
+
 		$request .= 'Content-Length: '.$length."\r\n";
 		$request .= "\r\n";
 		$request .= $xml;
+
+		if ($debug_post)
+			die($request);
 
 		$fp = fsockopen($url['host'], 80, $errno, $errstr, 10);
 
 		if ($fp === false)
 		{
-			$error = -2;
+			$error = $errstr;
 			return false;
 		}
 
 		fwrite($fp, $request);
 
 		$response = '';
-
-		while (!feof($fp)) $response .= fgets($fp, 128);
+		while (!feof($fp))
+			$response .= fgets($fp, 128);
 		fclose($fp);
 
 		$response = trim($response);
+
+		if ($debug_response)
+			die($response);
 
 		// On transforme la reponse HTTP en tableau associatif
 		// ---------------------------------------------------
@@ -131,7 +164,9 @@ class ExpressApi
 			}
 			else
 			{
-				if ($this->getAttributesValue('type', $xml_iterator->current()->attributes()) == 'binary')
+				if ($this->getAttributesValue('primitive', $xml_iterator->current()->attributes()) == 'array')
+					$array[Tools::strtolower($xml_iterator->key())] = array();
+				elseif ($this->getAttributesValue('type', $xml_iterator->current()->attributes()) == 'binary')
 					$array[Tools::strtolower($xml_iterator->key())] = mb_convert_encoding((string)$xml_iterator->current(), 'UTF-8', 'BASE64');
 				else
 					$array[Tools::strtolower($xml_iterator->key())] = (string)$xml_iterator->current();
@@ -163,8 +198,8 @@ class ExpressApi
 
 	private function arrayOrValueSerialize(&$document, &$root, $parameters)
 	{
-		// Fonction récursive permettant de générer le xml quelque soit le type de données
-		// Une donnée texte ou un array. Utilisée dans serialize()
+		// Fonction rÃ©cursive permettant de gÃ©nÃ©rer le xml quelque soit le type de donnÃ©es
+		// Une donnÃ©e texte ou un array. UtilisÃ©e dans serialize()
 
 		foreach ($parameters as $key => $value)
 		{
@@ -192,13 +227,49 @@ class ExpressApi
 					$element->setAttribute('isnull', 'true');
 				else
 				{
-					$value = mb_convert_encoding($value, 'HTML-ENTITIES', 'UTF-8');
+					if (gettype($value) === 'boolean')
+					{
+						if ($value)
+							$value = 'True';
+						else
+							$value = 'False';
+					}
+					else
+						$value = mb_convert_encoding($value, 'HTML-ENTITIES', 'UTF-8');
+
 					$content = $document->createTextNode($value);
 					$element->appendChild($content);
 				}
 			}
+
 			$root->appendChild($element);
 		}
+	}
+
+	private function makeQueryString($params, $prefix = '', $remove_final_amp = true)
+	{
+		$query_string = '';
+
+		if (is_array($params))
+		{
+			foreach ($params as $key => $value)
+			{
+				if ($prefix === '')
+					$correct_key = $key;
+				else
+					$correct_key = urlencode($prefix).'['.urlencode($key).']';
+
+				if (is_array($value))
+					$query_string .= $this->makeQueryString($value, $correct_key, false);
+				else
+					$query_string .= $correct_key.'='.urlencode($value).'&';
+			}
+		}
+
+		if ($remove_final_amp === true)
+			return Tools::substr($query_string, 0, Tools::strlen($query_string) - 1);
+		else
+			return $query_string;
 	}
 
 	private $error_codes = array(
@@ -250,7 +321,8 @@ class ExpressApi
 		400010 => 'F2M_OperationInterdite',
 		40015 => 'F2M_ActionImpossible',
 		50001 => 'OUT_ConvertionImpossible',
-		-2 => 'GEN_NonImplemente',
+		-3 => 'GEN_Mode_Invalide_XML_or_POST',
+		-2 => 'GEN_Non_Implemente',
 		-1 => 'GEN_Generique',
 		0 => 'OK'
 	);
@@ -259,8 +331,10 @@ class ExpressApi
 	{
 		if (isset($this->error_codes[$code]))
 			return $this->error_codes[$code];
-		else
+		elseif (is_int($code))
 			return $this->error_codes[-1];
+		else
+			return $code;
 	}
 
 }
