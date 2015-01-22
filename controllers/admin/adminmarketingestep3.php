@@ -105,7 +105,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			if (isset($_FILES))
 				$this->html_content = $this->copyImagesAndUpdateHTML($this->html_content, null, $_FILES);
 
-			$this->saveHTML();
+			return $this->saveHTML();
 		}
 
 		if (Tools::isSubmit('saveEmailingStep3') || Tools::isSubmit('nextEmailingStep3'))
@@ -115,20 +115,23 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			if (!empty($this->html_content))
 			{
 				$this->html_content = $this->copyImagesAndUpdateHTML($this->html_content);
-				$this->saveHTML();
 
-				$images_to_upload = $this->parseImagesToUpload($this->html_content);
-
-				if (Tools::isSubmit('nextEmailingStep3') && (count($images_to_upload) == 0))
+				if ($this->saveHTML())
 				{
-					Tools::redirectAdmin('index.php?controller=AdminMarketingEStep4&campaign_id='.
-						$this->campaign_id.
-						'&token='.Tools::getAdminTokenLite('AdminMarketingEStep4'));
-					exit;
+					$images_to_upload = $this->parseImagesToUpload($this->html_content);
+
+					if (Tools::isSubmit('nextEmailingStep3') && (count($images_to_upload) == 0))
+					{
+						Tools::redirectAdmin('index.php?controller=AdminMarketingEStep4&campaign_id='.
+							$this->campaign_id.
+							'&token='.Tools::getAdminTokenLite('AdminMarketingEStep4'));
+						exit;
+					}
 				}
 			}
-			else
-				$this->errors[] = $this->module->l('Please verify the required fields', 'adminmarketingestep3');
+
+			$this->errors[] = $this->module->l('Please verify the required fields', 'adminmarketingestep3');
+			return false;
 		}
 	}
 
@@ -309,8 +312,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			if (!empty($content_html))
 			{
 				$this->html_content = $content_html;
-				$this->saveHTML();
-				return true;
+				return $this->saveHTML();
 			}
 		}
 
@@ -324,6 +326,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	 */
 	private function importURL($url)
 	{
+		$url = (string)$url;
 		if ((strpos($url, '://') === false))
 			$url = 'http://'.$url;
 
@@ -336,11 +339,10 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			$html_content = $this->copyImagesAndUpdateHTML($html_content, $url);
 			$html_content = $this->updateRelativeLinks($html_content, $url);
 			$this->html_content = $html_content;
-			$this->saveHTML();
-			return true;
+			return $this->saveHTML();
 		}
-		else
-			return false;
+
+		return false;
 	}
 
 	/**
@@ -411,8 +413,12 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	 */
 	private function updateRelativeLinks($html_content, $imported_url)
 	{
+		$html_content = (string)$html_content;
+		$imported_url = (string)$imported_url;
+
 		$links = $this->getLinkTags($html_content);
 		$hrefs = $links[2];
+
 		foreach ($hrefs as $key => $href)
 		{
 			$absolute_link = $this->getAbsoluteFromRelativeURL($href, $imported_url);
@@ -430,7 +436,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	private function getLinkTags($html_content)
 	{
 		$links = null;
-		preg_match_all('/(<[^>]*href=[\'\"])((?<=href=\")[^\"]*|(?<=href=\')[^\']*)([\'\"][^>]*>)/i', $html_content, $links);
+		preg_match_all('/(<[^>]*href=[\'\"])((?<=href=\")[^\"]*|(?<=href=\')[^\']*)([\'\"][^>]*>)/i', (string)$html_content, $links);
 		return $links;
 	}
 
@@ -442,7 +448,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	private function getImgTags($html_content)
 	{
 		$images = null;
-		preg_match_all('/(<img[^>]*src=[\'\"])((?<=src=\")[^\"]*|(?<=src=\')[^\']*)([\'\"][^>]*>)/i', $html_content, $images);
+		preg_match_all('/(<img[^>]*src=[\'\"])((?<=src=\")[^\"]*|(?<=src=\')[^\']*)([\'\"][^>]*>)/i', (string)$html_content, $images);
 		return $images;
 	}
 
@@ -455,8 +461,10 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	 */
 	private function copyImagesAndUpdateHTML($html_content, $imported_url = null, Array $files = null)
 	{
-		$images = $this->getImgTags($html_content);
+		$html_content = (string)$html_content;
+		if ($imported_url) $imported_url = (string)$imported_url;
 
+		$images = $this->getImgTags($html_content);
 		$complete_tags = $images[0];
 		$before_src = $images[1];
 		$srcs = $images[2];
@@ -476,6 +484,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 						break;
 					}
 				}
+
 				if (!isset($filename) || !isset($image_url))
 					continue;
 			}
@@ -519,6 +528,9 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	 */
 	private function getAbsoluteFromRelativeURL($relative, $base_url)
 	{
+		$relative = (string)$relative;
+		$base_url = (string)$base_url;
+
 		if (strpos($relative, '//') === 0)
 			return 'http:'.$relative;
 
@@ -556,17 +568,44 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	private function copyFileToStorage($url, $filename = null)
 	{
 		$dest = $this->module->getPreviewFolder();
+		if (!Tools::file_exists_no_cache($dest))
+		{
+			mkdir($dest, 0777, true);
+			switch ($this->context->language->iso_code)
+			{
+				case 'fr':
+					Tools::copy(_PS_MODULE_DIR_.'expressmailing/img/config_fr.png', $dest.'config_fr.png');
+					Tools::copy(_PS_MODULE_DIR_.'expressmailing/views/index_fr.php', $dest.'index.php');
+					break;
+
+				case 'pl':
+					Tools::copy(_PS_MODULE_DIR_.'expressmailing/img/config_pl.png', $dest.'config_pl.png');
+					Tools::copy(_PS_MODULE_DIR_.'expressmailing/views/index_pl.php', $dest.'index.php');
+					break;
+
+				default:
+					Tools::copy(_PS_MODULE_DIR_.'expressmailing/img/config_en.png', $dest.'config_en.png');
+					Tools::copy(_PS_MODULE_DIR_.'expressmailing/views/index_en.php', $dest.'index.php');
+					break;
+			}
+		}
+
 		$dest .= $this->campaign_id.DIRECTORY_SEPARATOR;
 		if (!Tools::file_exists_no_cache($dest))
+		{
 			mkdir($dest, 0777, true);
+			Tools::copy(_PS_MODULE_DIR_.'expressmailing/index.php', $dest.'index.php');
+		}
+
 		if ($filename)
-			$dest .= $filename;
+			$dest .= (string)$filename;
 		else
-			$dest .= basename($url);
-		if (Tools::copy($url, $dest))
+			$dest .= basename((string)$url);
+
+		if (Tools::copy((string)$url, $dest))
 			return $dest;
-		else
-			return null;
+
+		return null;
 	}
 
 	private function cleanHTML()
@@ -582,7 +621,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	{
 		$this->cleanHTML();
 
-		Db::getInstance()->update('expressmailing_email', array(
+		return Db::getInstance()->update('expressmailing_email', array(
 			'campaign_html' => pSQL($this->html_content, true)
 			), 'campaign_id = '.pSQL($this->campaign_id)
 		);

@@ -72,8 +72,8 @@ $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_81e982d713e2ef4f71e64
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_4d0db83d9772046e4b7aaa40f904c12b'] = 'Adres URL nie może być zaimportowany. Proszę się upewnić czy nie chodzi o przekierowanie lub katalog web';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_67e417311ee0d1aec0409437ef8631fa'] = 'Proszę sprawdź wymagane pola !';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_c7881a475a094477c74f7fe78a55b4ff'] = 'Krok 3 : Importuj plik HTML z dysku twardego lub strony internetowej ';
-$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_4617938f686798eed339719bd9a2284e'] = 'Importer depuis une page HTML sur mon disque dur :';
-$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_84f3e65e5672209c0cf2233a366170fd'] = 'Importer depuis une page web en ligne :';
+$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_4617938f686798eed339719bd9a2284e'] = 'Importuj stronê HTML z dysku twardego :';
+$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_84f3e65e5672209c0cf2233a366170fd'] = 'Importuj ze strony internetowej :';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_f3e7cbace3e4fa7fde863b40b634104e'] = 'Analizuj dane ...';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_51dc3c0a8668961baef1b4ca986459ef'] = 'Plik HTML zawiera %d obraz(y) ';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_434141bb658564b4ca1ea50521c15df9'] = ', zaimportuj do katalogu zarządzania newsletterem w Prestashop.';
@@ -81,7 +81,7 @@ $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_28388a95f91696aec7b57
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_71d385d7596901b1a3d50f7120e614cb'] = 'Wyślij %d obraz(y)%s na serwer';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_fd038fc7f319e48f3115d92bf5bdbef9'] = 'Pomiń';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_134d8beec41df28ec545d3a75bb8a249'] = 'Modyfikuj HTML uzywając edytora HTML';
-$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_8d1db1fe8fb5eef0aacc8060320dc3db'] = 'Corps HTML de votre emailing :';
+$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_8d1db1fe8fb5eef0aacc8060320dc3db'] = 'Zawartoœæ HTML maila :';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_ad3d06d03d94223fa652babc913de686'] = 'Zatwierdź';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_9349759a11d0057a79f582dc81cc75d8'] = 'Tylko zapisz';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_0557fa923dcee4d0f86b1409f5c2167f'] = 'Wróć';
@@ -308,7 +308,7 @@ $_MODULE['<{expressmailing}prestashop>marketing_step0_eb360333328a36cfedee877e57
 $_MODULE['<{expressmailing}prestashop>marketing_step0_c2d779f685ba921c0e1bbbe09c1d6be9'] = 'Wyślij :';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_8be57c351b7cf2cb1a790f733d1c8a8d'] = 'kampanię E-mail';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_ced9bd749040074979e88a3d1c04fd1d'] = 'Bezpłatna';
-$_MODULE['<{expressmailing}prestashop>marketing_step0_9e41b74e812fb64fac6eab3e3c00b548'] = 'do %d email / dzień';
+$_MODULE['<{expressmailing}prestashop>marketing_step0_9e41b74e812fb64fac6eab3e3c00b548'] = 'do %d emaili / dzień';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_a12baad9d5b2584d5cf98ed72307cd4b'] = 'kampanię Fax';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_f5eac90aeff7e341177d66e435d6c6c3'] = 'kampanię Sms';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_70d3fb4bab0ebc347c2459fbf5d63eb8'] = 'Moje statystyki';
@@ -351,7 +351,7 @@ $_MODULE['<{expressmailing}prestashop>marketinge_step4_e75f8202762ae5b01444e0705
 $_MODULE['<{expressmailing}prestashop>ajax_upload_a828f22c86da28c1672e53ef1b6e2b13'] = 'Kopiowanie kontaktów w toku ...';
 $_MODULE['<{expressmailing}prestashop>ajax_upload_4a9cd13fecd9d72301a7249b376224cf'] = 'Wystąpił błąd na jednym z bloków danych :';
 $_MODULE['<{expressmailing}prestashop>ajax_upload_bc6e49bd472e2f3eeafa431db6e9d900'] = 'Spróbujemy ponownie ...';
-$_MODULE['<{expressmailing}prestashop>ajax_upload_a12a457de0eae73cb93cfdc370f4ceea'] = 'Dodawanie kontaktów (5)';
+$_MODULE['<{expressmailing}prestashop>ajax_upload_506b8cb11011ee9b66699256e491baae'] = 'Krok 6 : Dodawanie kontaktów';
 $_MODULE['<{expressmailing}prestashop>email_preview_89e0968ac9bb5f6b2079896abd4c4d24'] = 'Podgląd Twojej wiadomości';
 $_MODULE['<{expressmailing}prestashop>email_preview_10ac3d04253ef7e1ddc73e6091c0cd55'] = 'Dalej';
 $_MODULE['<{expressmailing}prestashop>email_preview_06933067aafd48425d67bcb01bba5cb6'] = 'Aktualizuj';
@@ -376,6 +376,7 @@ $_MODULE['<{expressmailing}prestashop>marketingf_graph_38881e0a24039dc2621e1d6f8
 $_MODULE['<{expressmailing}prestashop>fax_preview_bdec45b991a36960a99911a0c146ad69'] = 'Usuń stronę';
 $_MODULE['<{expressmailing}prestashop>fax_preview_10ac3d04253ef7e1ddc73e6091c0cd55'] = 'Dalej';
 $_MODULE['<{expressmailing}prestashop>fax_preview_0557fa923dcee4d0f86b1409f5c2167f'] = 'Wróć';
+$_MODULE['<{expressmailing}prestashop>ajax_upload_a12a457de0eae73cb93cfdc370f4ceea'] = 'Krok 5 : Dodawanie kontaktów';
 $_MODULE['<{expressmailing}prestashop>display_cleaner_80c99ba7bf9572061211cb84827239ef'] = 'Krok 6 : oczyszczanie listy adresatów';
 $_MODULE['<{expressmailing}prestashop>display_cleaner_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Typ błędu';
 $_MODULE['<{expressmailing}prestashop>display_cleaner_e93f994f01c537c4e2f7d8528c3eb5e9'] = 'Ilość numerów';
@@ -427,7 +428,7 @@ $_MODULE['<{expressmailing}prestashop>tabcontacts_importation_sms_a1d38972aadf14
 $_MODULE['<{expressmailing}prestashop>tabcontacts_importation_sms_f3e7cbace3e4fa7fde863b40b634104e'] = 'Rozpocznij analizę ...';
 $_MODULE['<{expressmailing}prestashop>tabcontacts_importation_sms_80ffff123555bd5173345bc8f144edeb'] = 'Wyczyść wybór';
 $_MODULE['<{expressmailing}prestashop>tabcontacts_importation_sms_236fe0df679a86298a2d5137ed35bae1'] = 'Usuń duplikaty (%d)';
-$_MODULE['<{expressmailing}prestashop>ajax_upload_9ddc0a8e764d9e42bcda89405c0f8080'] = 'Dodawanie kontaktów (4)';
+$_MODULE['<{expressmailing}prestashop>ajax_upload_9ddc0a8e764d9e42bcda89405c0f8080'] = 'Krok 4 : Dodawanie kontaktów';
 $_MODULE['<{expressmailing}prestashop>marketings_step5_39c2a42d6954c72d2647e36da9420836'] = 'Krok 5 : Oczyszczanie listy adresatów';
 $_MODULE['<{expressmailing}prestashop>marketings_step5_2deada69636301a987e80395f6884857'] = 'Strefy wysyłki / Porady filtrowania';
 $_MODULE['<{expressmailing}prestashop>marketings_step5_e93f994f01c537c4e2f7d8528c3eb5e9'] = 'Ilość numerów';

@@ -351,7 +351,7 @@ $_MODULE['<{expressmailing}prestashop>marketinge_step4_e75f8202762ae5b01444e0705
 $_MODULE['<{expressmailing}prestashop>ajax_upload_a828f22c86da28c1672e53ef1b6e2b13'] = 'Copie des destinataires en cours ...';
 $_MODULE['<{expressmailing}prestashop>ajax_upload_4a9cd13fecd9d72301a7249b376224cf'] = 'Une erreur est survenue sur un bloc de données :';
 $_MODULE['<{expressmailing}prestashop>ajax_upload_bc6e49bd472e2f3eeafa431db6e9d900'] = 'Nous allons ré-essayer à nouveau ...';
-$_MODULE['<{expressmailing}prestashop>ajax_upload_a12a457de0eae73cb93cfdc370f4ceea'] = 'Copie des contacts (Etape 5)';
+$_MODULE['<{expressmailing}prestashop>ajax_upload_506b8cb11011ee9b66699256e491baae'] = 'Copie des contacts (Etape 6)';
 $_MODULE['<{expressmailing}prestashop>email_preview_89e0968ac9bb5f6b2079896abd4c4d24'] = 'Aperçu final de votre campagne';
 $_MODULE['<{expressmailing}prestashop>email_preview_10ac3d04253ef7e1ddc73e6091c0cd55'] = 'Suivant';
 $_MODULE['<{expressmailing}prestashop>email_preview_06933067aafd48425d67bcb01bba5cb6'] = 'Modifier';
@@ -376,6 +376,7 @@ $_MODULE['<{expressmailing}prestashop>marketingf_graph_38881e0a24039dc2621e1d6f8
 $_MODULE['<{expressmailing}prestashop>fax_preview_bdec45b991a36960a99911a0c146ad69'] = 'Supprimer cette page';
 $_MODULE['<{expressmailing}prestashop>fax_preview_10ac3d04253ef7e1ddc73e6091c0cd55'] = 'Suivant';
 $_MODULE['<{expressmailing}prestashop>fax_preview_0557fa923dcee4d0f86b1409f5c2167f'] = 'Précédent';
+$_MODULE['<{expressmailing}prestashop>ajax_upload_a12a457de0eae73cb93cfdc370f4ceea'] = 'Copie des contacts (Etape 5)';
 $_MODULE['<{expressmailing}prestashop>display_cleaner_80c99ba7bf9572061211cb84827239ef'] = 'Nettoyage des destinataires (Etape 6)';
 $_MODULE['<{expressmailing}prestashop>display_cleaner_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Type d\'erreur';
 $_MODULE['<{expressmailing}prestashop>display_cleaner_e93f994f01c537c4e2f7d8528c3eb5e9'] = 'Nb. numéros';

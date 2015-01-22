@@ -127,29 +127,21 @@ class AdminMarketingController extends ModuleAdminController
 
 			if ($this->session_api->call('fax', 'account', 'enum_credit_balances', $parameters, $response_array))
 			{
-				if (!count($response_array))
+				foreach ($response_array as $credit)
 				{
-					$tmp_credits = '<span class="red no-bold">'.sprintf($this->module->l('You have no credit %s', 'adminmarketing'), 'fax').'</span>';
-					$smarty_fax_credits = $tmp_credits;
-				}
-				else
-				{
-					foreach ($response_array as $credit)
+					switch ((string)$credit['balance'])
 					{
-						switch ((string)$credit['balance'])
-						{
-							case '0':
-								$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketing').'</span>';
-								break;
-							case '1':
-								$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketing');
-								break;
-							default:
-								$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketing'), $credit['balance'], '%s');
-								break;
-						}
-						$smarty_fax_credits .= sprintf($tmp_credits, '&laquo;&nbsp;'.$credit['credit_name'].'&nbsp;&raquo;<br>');
+						case '0':
+							$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketing').'</span>';
+							break;
+						case '1':
+							$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketing');
+							break;
+						default:
+							$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketing'), $credit['balance'], '%s');
+							break;
 					}
+					$smarty_fax_credits .= sprintf($tmp_credits, '&laquo;&nbsp;'.$credit['credit_name'].'&nbsp;&raquo;<br>');
 				}
 			}
 		}
@@ -168,29 +160,21 @@ class AdminMarketingController extends ModuleAdminController
 
 			if ($this->session_api->call('sms', 'account', 'enum_credit_balances', $parameters, $response_array))
 			{
-				if (!count($response_array))
+				foreach ($response_array as $credit)
 				{
-					$tmp_credits = '<span class="red no-bold">'.sprintf($this->module->l('You have no credit %s', 'adminmarketing'), 'sms').'</span>';
-					$smarty_sms_credits = $tmp_credits;
-				}
-				else
-				{
-					foreach ($response_array as $credit)
+					switch ((string)$credit['balance'])
 					{
-						switch ((string)$credit['balance'])
-						{
-							case '0':
-								$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketing').'</span>';
-								break;
-							case '1':
-								$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketing');
-								break;
-							default:
-								$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketing'), $credit['balance'], '%s');
-								break;
-						}
-						$smarty_sms_credits .= sprintf($tmp_credits, '&laquo;&nbsp;'.$credit['credit_name'].'&nbsp;&raquo;<br>');
+						case '0':
+							$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketing').'</span>';
+							break;
+						case '1':
+							$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketing');
+							break;
+						default:
+							$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketing'), $credit['balance'], '%s');
+							break;
 					}
+					$smarty_sms_credits .= sprintf($tmp_credits, '&laquo;&nbsp;'.$credit['credit_name'].'&nbsp;&raquo;<br>');
 				}
 			}
 		}
@@ -222,6 +206,12 @@ class AdminMarketingController extends ModuleAdminController
 				$tool_tip .= '<hr>'.$this->module->l('Sms account :', 'adminmarketing').'<br>';
 				$tool_tip .= empty($credential_sms) ? $this->module->l('None', 'adminmarketing') : $credential_sms;
 			}
+
+			if (empty($smarty_fax_credits))
+				$smarty_fax_credits = '<span class="red">'.sprintf($this->module->l('You have no credit %s', 'adminmarketing'), 'fax').'</span>';
+
+			if (empty($smarty_sms_credits))
+				$smarty_sms_credits = '<span class="red">'.sprintf($this->module->l('You have no credit %s', 'adminmarketing'), 'sms').'</span>';
 
 			// Get all the tickets available for Prestashop
 			// --------------------------------------------

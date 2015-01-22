@@ -273,6 +273,9 @@ class AdminMarketingSListController extends ModuleAdminController
 			}
 		}
 
+		$footer = $this->getTemplatePath().'footer.tpl';
+		$output .= $this->context->smarty->fetch($footer);
+
 		return $output;
 	}
 

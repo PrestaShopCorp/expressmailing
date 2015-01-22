@@ -158,12 +158,12 @@ class AdminMarketingEStatsController extends ModuleAdminController
 					$helper->currentIndex = $this->context->link->getAdminLink('AdminMarketingEStats', false);
 					$helper->allow_export = false;
 					$helper->title = '<i class="icon-bar-chart"></i> '.
-						$this->module->l('Broadcast evolution during last 24/48 hours');
+						$this->module->l('Broadcast evolution during last 24/48 hours', 'adminmarketingestats');
 
 					$helper->toolbar_btn = array(
 						'back' => array(
 							'href' => 'index.php?controller=AdminMarketingEList&token='.Tools::getAdminTokenLite('AdminMarketingEList'),
-							'desc' => $this->l('Back to list')
+							'desc' => $this->module->l('Back to list', 'adminmarketingestats')
 						)
 					);
 

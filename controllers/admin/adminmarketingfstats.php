@@ -182,7 +182,7 @@ class AdminMarketingFStatsController extends ModuleAdminController
 
 			if ($this->session_api->call('fax', 'campaign', 'get_infos', $parameters, $response_array))
 			{
-				$this->campaign_name = $response_array['name'];
+				$this->campaign_name = html_entity_decode($response_array['name']);
 				$this->campaign_state = $response_array['state'];
 				$this->finished_date = $response_array['finished_date'];
 				$this->planning_start_hour = $response_array['planning_start_hour'];
