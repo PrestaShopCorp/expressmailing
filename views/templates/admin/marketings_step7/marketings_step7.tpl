@@ -32,7 +32,7 @@
 			<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller=AdminMarketingSStep7&token={Tools::getAdminTokenLite('AdminMarketingSStep7')|escape}" method="post" enctype="multipart/form-data" novalidate="">
 				<div class="panel" id="fieldset_0">
 					<div class="panel-heading">
-						<i class="icon-envelope-alt"></i> {l s='Final validation before sending (7)' mod='expressmailing'}
+						<i class="icon-envelope-alt"></i> {l s='Final validation before sending (step 7)' mod='expressmailing'}
 					</div>
 					<div class="form-wrapper">
 						<div class="form-group hidden">

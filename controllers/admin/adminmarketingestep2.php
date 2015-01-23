@@ -49,7 +49,7 @@ class AdminMarketingEStep2Controller extends ModuleAdminController
 	{
 		$this->fields_form = array(
 			'legend' => array(
-				'title' => $this->module->l('Campaign configuration (2)', 'adminmarketingestep2'),
+				'title' => $this->module->l('Campaign configuration (step 2)', 'adminmarketingestep2'),
 				'icon' => 'icon-cogs'
 			),
 			'description' => $this->module->l('Avoid sender names too commercial', 'adminmarketingestep2')."<br>\r\n".
@@ -66,7 +66,7 @@ class AdminMarketingEStep2Controller extends ModuleAdminController
 				array (
 					'type' => 'text',
 					'lang' => false,
-					'label' => $this->module->l('campaign_sender_email', 'adminmarketingestep2'),
+					'label' => $this->module->l('Campaign sender email :', 'adminmarketingestep2'),
 					'name' => 'campaign_sender_email',
 					'prefix' => '<i class="icon-envelope-o"></i>',
 					'col' => 4,
@@ -75,7 +75,7 @@ class AdminMarketingEStep2Controller extends ModuleAdminController
 				array (
 					'type' => 'text',
 					'lang' => false,
-					'label' => $this->module->l('campaign_sender_name', 'adminmarketingestep2'),
+					'label' => $this->module->l('Campaign sender name :', 'adminmarketingestep2'),
 					'name' => 'campaign_sender_name',
 					'prefix' => '<i class="icon-user"></i>',
 					'col' => 4,

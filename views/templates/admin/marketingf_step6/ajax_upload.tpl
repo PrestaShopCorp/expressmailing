@@ -61,7 +61,7 @@
 <form id="configuration_form" class="defaultForm form-horizontal AdminMarketingFStep6" action="index.php?controller=AdminMarketingFStep6&token={Tools::getAdminTokenLite('AdminMarketingFStep6')|escape}" method="post" enctype="multipart/form-data" novalidate="">
 	<div class="panel">
 		<div class="panel-heading">
-			<i class="icon process-icon-loading"></i>&nbsp;&nbsp;{l s='Recipients upload (5)' mod='expressmailing'}
+			<i class="icon process-icon-loading"></i>&nbsp;&nbsp;{l s='Recipients upload (step 5)' mod='expressmailing'}
 		</div>
 		<div class="form-wrapper">
 			<div class="form-group">

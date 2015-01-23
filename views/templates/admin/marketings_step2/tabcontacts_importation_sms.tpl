@@ -42,7 +42,7 @@
 					<div id="tabs" style="border: 0px; padding: 0px">
 						<ul style="border-radius: 0px; background: white; border: 0px; border-bottom: 1px solid #e6e6e6">
 							<li style="border-color: #e6e6e6"><a id="csv-file-tab" href="#csv-file">{l s='Import a CSV file' mod='expressmailing'}</a></li>
-							<li style="border-color: #e6e6e6"><a id="prestashop-customers-tab" href="#prestashop-customers">{l s='Import from your customers' mod='expressmailing'}</a></li>
+							<li style="border-color: #e6e6e6"><a id="prestashop-customers-tab" href="#prestashop-customers">{l s='Import from your Prestashop\'s customers' mod='expressmailing'}</a></li>
 							<!--<li style="border-color: #e6e6e6"><a id="xls-file-tab" href="#xls-file">{l s='Import an XLS file' mod='expressmailing'}</a></li>
 							<li style="border-color: #e6e6e6"><a id="quick-import-tab" href="#quick-import">{l s='Quick import' mod='expressmailing'}</a></li>-->
 						</ul>

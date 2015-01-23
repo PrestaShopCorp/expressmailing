@@ -143,7 +143,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	{
 		$this->fields_form = array(
 			'legend' => array(
-				'title' => $this->module->l('Import HTML from file or URI (3)', 'adminmarketingestep3'),
+				'title' => $this->module->l('Import HTML from file or URL (step 3)', 'adminmarketingestep3'),
 				'icon' => 'icon-beaker'
 			),
 			'input' => array(
@@ -163,7 +163,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				),
 				array (
 					'type' => 'text',
-					'label' => $this->module->l('Import from web page :', 'adminmarketingestep3'),
+					'label' => $this->module->l('Import from a web page :', 'adminmarketingestep3'),
 					'name' => 'html_url',
 					'prefix' => 'http://',
 					'col' => 6,

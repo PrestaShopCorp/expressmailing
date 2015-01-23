@@ -16,7 +16,7 @@
         <form id="configuration_form" class="defaultForm form-horizontal AdminMarketingSStep1" action="index.php?controller=AdminMarketingSStep1&token={Tools::getAdminTokenLite('AdminMarketingSStep1')|escape}" method="post" enctype="multipart/form-data" novalidate="">
             <div class="panel" id="fieldset_0">
                 <div class="panel-heading">
-                    <i class="icon-cogs"></i> {l s='Campaign configuration (1)' mod='expressmailing'}
+                    <i class="icon-cogs"></i> {l s='Campaign configuration (step 1)' mod='expressmailing'}
                 </div>
                 <div class="form-wrapper">
                     <div class="form-group">

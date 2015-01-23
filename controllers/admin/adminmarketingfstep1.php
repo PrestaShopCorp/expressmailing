@@ -92,7 +92,7 @@ class AdminMarketingFStep1Controller extends ModuleAdminController
 
 		$this->fields_form = array(
 			'legend' => array(
-				'title' => $this->module->l('Campaign configuration (1)', 'adminmarketingfstep1'),
+				'title' => $this->module->l('Campaign configuration (step 1)', 'adminmarketingfstep1'),
 				'icon' => 'icon-cogs'
 			),
 			'input' => array(

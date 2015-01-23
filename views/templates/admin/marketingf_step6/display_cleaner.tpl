@@ -150,7 +150,7 @@
 <form id="configuration_form" class="defaultForm form-horizontal AdminMarketingFStep6" action="index.php?controller=AdminMarketingFStep6&token={Tools::getAdminTokenLite('AdminMarketingFStep6')|escape}" method="post" enctype="multipart/form-data" novalidate="">
 	<div class="panel">
 		<div class="panel-heading">
-			<i class="icon-trash"></i> {l s='Recipients cleaner (6)' mod='expressmailing'}
+			<i class="icon-trash"></i> {l s='Recipients cleaner (step 6)' mod='expressmailing'}
 		</div>
 		<div class="form-wrapper">
 			<div class="form-group hide">

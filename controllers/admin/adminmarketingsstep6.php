@@ -68,7 +68,7 @@ class AdminMarketingSStep6Controller extends ModuleAdminController
 	{
 		$this->fields_form = array(
 			'legend' => array(
-				'title' => $this->module->l('Test your sms-mailing before his validation (6)', 'adminmarketingsstep6'),
+				'title' => $this->module->l('Test your sms-mailing before his validation (step 6)', 'adminmarketingsstep6'),
 				'icon' => 'icon-phone'
 			),
 			'input' => array(

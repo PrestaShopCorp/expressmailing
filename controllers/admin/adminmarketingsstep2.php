@@ -46,7 +46,7 @@ class AdminMarketingSStep2Controller extends ModuleAdminController
 		parent::__construct();
 
 		$this->context->smarty->assign('mod_dev', _PS_MODE_DEV_);
-		$this->context->smarty->assign('title', $this->module->l('Contacts importation (2)', 'adminmarketingsstep2'));
+		$this->context->smarty->assign('title', $this->module->l('Contacts importation (step 2)', 'adminmarketingsstep2'));
 		$this->context->smarty->assign('campaign_id', $this->campaign_id);
 	}
 
@@ -243,7 +243,7 @@ class AdminMarketingSStep2Controller extends ModuleAdminController
 
 		$this->fields_form = array (
 			'legend' => array (
-				'title' => $this->module->l('Recipients configuration (2)', 'adminmarketingsstep2'),
+				'title' => $this->module->l('Recipients configuration (step 2)', 'adminmarketingsstep2'),
 				'icon' => 'icon-shopping-cart'
 			),
 			'input' => array (

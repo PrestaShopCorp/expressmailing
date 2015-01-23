@@ -76,8 +76,8 @@ class AdminMarketingFStep4Controller extends ModuleAdminController
 		$this->context->smarty->assign('media', 'fax');
 		$this->context->smarty->assign('preview', $preview);
 		$this->context->smarty->assign('campaign_id', $this->campaign_id);
-		$this->context->smarty->assign('token', Tools::getAdminTokenLite('AdminMarketingFStep3'));
 		$this->context->smarty->assign('next_page', 'AdminMarketingFStep3');
+		$this->context->smarty->assign('prev_page', 'AdminMarketingFStep3');
 
 		return true;
 	}

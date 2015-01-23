@@ -67,7 +67,7 @@
 <form id="configuration_form" class="defaultForm form-horizontal AdminMarketingSStep5" action="index.php?controller=AdminMarketingSStep5&token={Tools::getAdminTokenLite('AdminMarketingSStep5')|escape}" method="post" enctype="multipart/form-data" novalidate="">
 	<div class="panel">
 		<div class="panel-heading">
-			<i class="icon-trash"></i> {l s='Recipients cleaner (5)' mod='expressmailing'}
+			<i class="icon-trash"></i> {l s='Recipients cleaner (step 5)' mod='expressmailing'}
 		</div>
 		<div class="form-wrapper">
 			<div class="{if $mod_dev}form-group{else}form-group hide{/if}">

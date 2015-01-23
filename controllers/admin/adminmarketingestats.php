@@ -39,7 +39,6 @@ class AdminMarketingEStatsController extends ModuleAdminController
 	public function setMedia()
 	{
 		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css', 'all');
-		$this->addJS(_PS_MODULE_DIR_.'expressmailing/js/marketinge_stats.js', 'all');
 		parent::setMedia();
 	}
 

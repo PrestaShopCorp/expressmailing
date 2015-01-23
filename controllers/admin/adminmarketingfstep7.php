@@ -68,7 +68,7 @@ class AdminMarketingFStep7Controller extends ModuleAdminController
 	{
 		$this->fields_form = array(
 			'legend' => array(
-				'title' => $this->module->l('Test your fax-mailing before his validation (7)', 'adminmarketingfstep7'),
+				'title' => $this->module->l('Test your fax-mailing before his validation (step 7)', 'adminmarketingfstep7'),
 				'icon' => 'icon-print'
 			),
 			'input' => array(

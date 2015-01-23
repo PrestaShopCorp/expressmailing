@@ -76,8 +76,8 @@ class AdminMarketingSStep3Controller extends ModuleAdminController
 
 		$this->context->smarty->assign('preview', $preview);
 		$this->context->smarty->assign('campaign_id', $this->campaign_id);
-		$this->context->smarty->assign('token', Tools::getAdminTokenLite('AdminMarketingSStep2'));
 		$this->context->smarty->assign('next_page', 'AdminMarketingSStep2');
+		$this->context->smarty->assign('prev_page', 'AdminMarketingSStep2');
 
 		return true;
 	}

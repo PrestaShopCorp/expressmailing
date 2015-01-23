@@ -11,6 +11,17 @@
 * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
 *}
 
+{capture assign="l_sent"}{l s='Sent' mod='expressmailing'}{/capture}
+{capture assign="l_not_sent"}{l s='Not[br]Sent' mod='expressmailing'}{/capture}
+{capture assign="l_delivrered"}{l s='Delivered' mod='expressmailing'}{/capture}
+{capture assign="l_not_delivrered"}{l s='Not[br]Delivered' mod='expressmailing'}{/capture}
+{capture assign="l_opened"}{l s='Opened' mod='expressmailing'}{/capture}
+{capture assign="l_not_opened"}{l s='Not[br]Opened' mod='expressmailing'}{/capture}
+{capture assign="l_clickers"}{l s='Distinct[br]Clickers' mod='expressmailing'}{/capture}
+{capture assign="l_clicks"}{l s='Total[br]Clicks' mod='expressmailing'}{/capture}
+{capture assign="l_abuses"}{l s='Abuse[br]Reports' mod='expressmailing'}{/capture}
+{capture assign="l_unsubscribes"}{l s='Unsub[br]scribes' mod='expressmailing'}{/capture}
+
 <div class="row">
     <div class="col-lg-12">
 		<form class="defaultForm form-horizontal AdminMarketingEStep6" action="#" method="post" enctype="multipart/form-data" novalidate="">
@@ -44,7 +55,7 @@
 			<tr>
 				<td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">Envoyés</span>
+						<span class="stat_label">{$l_sent|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$sent|escape:'intval'}</span>
 						</span>
@@ -52,7 +63,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">Non<br>Envoyés</span>
+						<span class="stat_label">{$l_not_sent|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$not_sent|escape:'intval'}</span>
 						</span>
@@ -60,7 +71,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">Aboutis</span>
+						<span class="stat_label">{$l_delivrered|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$delivered|escape:'intval'}</span>
 						</span>
@@ -71,7 +82,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">Non<br>Aboutis</span>
+						<span class="stat_label">{$l_not_delivrered|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$not_delivered|escape:'intval'}</span>
 						</span>
@@ -82,7 +93,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">Ouverts</span>
+						<span class="stat_label">{$l_opened|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$opened|escape:'intval'}</span>
 						</span>
@@ -93,7 +104,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">Non<br>Ouverts</span>
+						<span class="stat_label">{$l_not_opened|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$not_opened|escape:'intval'}</span>
 						</span>
@@ -104,7 +115,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">Cliqueurs</span>
+						<span class="stat_label">{$l_clickers|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$unique_clickers|escape:'intval'}</span>
 						</span>
@@ -115,7 +126,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">Liens<br>cliqués</span>
+						<span class="stat_label">{$l_clicks|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$all_clicks|escape:'intval'}</span>
 						</span>
@@ -123,7 +134,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">Plaintes</span>
+						<span class="stat_label">{$l_abuses|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$abuses|escape:'intval'}</span>
 						</span>
@@ -134,7 +145,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">Désabon-<br>nements</span>
+						<span class="stat_label">{$l_unsubscribes|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$unsubscribes|escape:'intval'}</span>
 						</span>
@@ -149,3 +160,52 @@
 		</form>
 	</div>
 </div>
+
+<script type="text/javascript">
+
+	// Graph des aboutis/npai sur 24 heures
+
+	function myData()
+	{
+		return [
+			{
+				key: "{$l_delivrered|replace:'[br]':'<br/>'}",
+				values: series1,
+				color: "green"
+			}
+		];
+	}
+
+	$(function ()
+	{
+		nv.addGraph(function()
+		{
+			var chart = nv.models.multiBarChart()
+				.x(function(d) { return d.x; })
+				.y(function(d) { return d.y; })
+				.showLegend(true)
+				.tooltips(true)
+				.showControls(false)		// Allow user to switch between 'Grouped' and 'Stacked' mode.
+				.reduceXTicks(true)			// If 'false', every single x-axis tick label will be rendered.
+				.showXAxis(true)
+				.showYAxis(true);
+
+			chart.xAxis
+				.tickFormat(function(d) { return d3.time.format('%e %b - %Hh%M')(new Date(d)); } )
+				.showMaxMin(true);
+
+			chart.yAxis
+				.tickFormat(d3.format(',f'))
+				.showMaxMin(true);
+
+			d3.select('#stack')
+				.datum(myData)
+				.call(chart);
+
+			nv.utils.windowResize(chart.update);
+			return chart;
+		});
+
+	});
+
+</script>

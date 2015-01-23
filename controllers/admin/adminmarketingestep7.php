@@ -77,7 +77,7 @@ class AdminMarketingEStep7Controller extends ModuleAdminController
 		// ----------------------------
 		$this->fields_form = array(
 			'legend' => array(
-				'title' => $this->module->l('Test your e-mailing before his validation (7)', 'adminmarketingestep7'),
+				'title' => $this->module->l('Test your e-mailing before his validation (step 7)', 'adminmarketingestep7'),
 				'icon' => 'icon-envelope-alt'
 			),
 			'input' => array(

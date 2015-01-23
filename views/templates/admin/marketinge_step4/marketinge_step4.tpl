@@ -17,7 +17,7 @@
             <input type="hidden" name="submitAddconfiguration" value="1">
             <div class="panel" id="fieldset_0">
                 <div class="panel-heading">
-                    <i class="icon-envelope-alt"></i> {l s='Recipients configuration (4)' mod='expressmailing'}
+                    <i class="icon-envelope-alt"></i> {l s='Recipients configuration (step 4)' mod='expressmailing'}
                 </div>
                 <div class="form-wrapper">
                     <div class="form-group hide">

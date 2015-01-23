@@ -69,7 +69,7 @@ class AdminMarketingFStep2Controller extends ModuleAdminController
 
 		$this->fields_form = array (
 			'legend' => array (
-				'title' => $this->module->l('Add document(s) to the campaign (2)', 'adminmarketingfstep2'),
+				'title' => $this->module->l('Add document(s) to the campaign (step 2)', 'adminmarketingfstep2'),
 				'icon' => 'icon-print'
 			),
 			'input' => array (
@@ -83,7 +83,7 @@ class AdminMarketingFStep2Controller extends ModuleAdminController
 				),
 				array (
 					'type' => 'file',
-					'label' => $this->module->l('Choose a document (Pdf or Word file) :', 'adminmarketingestep2'),
+					'label' => $this->module->l('Choose a document (Pdf or Word file) :', 'adminmarketingfstep2'),
 					'name' => 'document',
 					'required' => false
 				)
@@ -98,7 +98,7 @@ class AdminMarketingFStep2Controller extends ModuleAdminController
 					'href' => 'index.php?controller=AdminMarketingFStep1&campaign_id='.
 					$this->campaign_id.
 					'&token='.Tools::getAdminTokenLite('AdminMarketingFStep1'),
-					'title' => $this->module->l('Back', 'adminmarketingestep2'),
+					'title' => $this->module->l('Back', 'adminmarketingfstep2'),
 					'icon' => 'process-icon-back'
 				)
 			)

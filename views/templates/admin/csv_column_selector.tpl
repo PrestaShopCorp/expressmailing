@@ -45,7 +45,7 @@
 			</div>
 		</div>
 		<div class="panel-footer">
-			<a align="left" style="display:inline-block" id="previous" href="index.php?controller=AdminMarketingSStep2&campaign_id={$campaign_id|escape:'intval'}&token={Tools::getAdminTokenLite('AdminMarketingSStep2')|escape}" class="btn btn-default">
+			<a align="left" style="display:inline-block" id="previous" href="index.php?controller={$prev_page|escape}&campaign_id={$campaign_id|escape:'intval'}&token={Tools::getAdminTokenLite($prev_page)|escape}" class="btn btn-default">
 				<i class="process-icon-back"></i> {l s='Back' mod='expressmailing'}
 			</a>
 			<form class="pull-right" id="formsubmit" style="display:inline-block"  method="post" enctype="multipart/form-data" novalidate="">
@@ -68,8 +68,7 @@
 			$columnCellsRemove.removeClass('highlighted');
 			var $columnCells = $this.parents('table').find('tr td:nth-child(' + (index + 1) + ')');
 			$columnCells.addClass('highlighted');
-			document.getElementById("formsubmit").setAttribute("action", 'index.php?controller={$next_page|escape:'intval'}&campaign_id={$campaign_id|escape:'intval'}&token={$token|escape}&indexCol=' + index);
-			document.getElementById("previous").setAttribute("href", 'index.php?controller={$next_page|escape:'intval'}&campaign_id={$campaign_id|escape:'intval'}&token={$token|escape}');
+			document.getElementById("formsubmit").setAttribute("action", 'index.php?controller={$next_page|escape}&campaign_id={$campaign_id|escape:'intval'}&token={Tools::getAdminTokenLite($next_page)|escape}&indexCol=' + index);
 
 			$('.' + $(this).attr('class').split(' ')[0]).each(function ()
 			{

@@ -83,7 +83,7 @@ class AdminMarketingFStep3Controller extends ModuleAdminController
 		// --------------------
 		$this->fields_form = array(
 			'legend' => array(
-				'title' => $this->module->l('Contacts importation (3)', 'adminmarketingfstep3'),
+				'title' => $this->module->l('Contacts importation (step 3)', 'adminmarketingfstep3'),
 				'icon' => 'icon-beaker'
 			),
 			'input' => array(
