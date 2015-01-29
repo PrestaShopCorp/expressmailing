@@ -47,7 +47,13 @@
 						<tr>
 							<td>{$product.product_ref|escape}</td>
 							<td>{$product.product_desc|escape}</td>
-							<td class="text-center">{displayPrice price=$product.normal_price currency=$currency->id}</td>
+							<td class="text-center">
+								{if isset($product.promo_price) and ($product.promo_price > 0)}
+									{displayPrice price=$product.promo_price currency=$currency->id}
+								{else}
+									{displayPrice price=$product.normal_price currency=$currency->id}
+								{/if}
+							</td>
 							<td class="text-center" nowrap style="vertical-align: middle">
 								{if $order_btn_proceed == 'checkout'}
 									<input type="text" style="width: 3em; display: inline" name="qty_{$product.product_ref|escape}" value="{$product.product_quantity|escape:'intval'}">
