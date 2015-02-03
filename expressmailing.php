@@ -162,8 +162,8 @@ class ExpressMailing extends Module
 				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email` (
 					`campaign_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 					`campaign_state` INT UNSIGNED NOT NULL DEFAULT 1,
-					`campaign_date_create` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-					`campaign_date_update` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					`campaign_date_create` TIMESTAMP NULL DEFAULT NULL,
+					`campaign_date_update` TIMESTAMP NULL DEFAULT NULL,
 					`campaign_date_send` TIMESTAMP NULL DEFAULT NULL,
 					`campaign_name` VARCHAR(255) NULL DEFAULT NULL,
 					`campaign_tracking` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
@@ -301,8 +301,8 @@ class ExpressMailing extends Module
 				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_fax` (
 					`campaign_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 					`campaign_state` INT UNSIGNED NOT NULL DEFAULT 1,
-					`campaign_date_create` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-					`campaign_date_update` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					`campaign_date_create` TIMESTAMP NULL DEFAULT NULL,
+					`campaign_date_update` TIMESTAMP NULL DEFAULT NULL,
 					`campaign_date_send` TIMESTAMP NULL DEFAULT NULL,
 					`campaign_name` VARCHAR(255) NULL DEFAULT NULL,
 					`campaign_day_limit` INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -368,8 +368,8 @@ class ExpressMailing extends Module
 				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_sms` (
 					`campaign_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 					`campaign_state` INT UNSIGNED NOT NULL DEFAULT 1,
-					`campaign_date_create` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-					`campaign_date_update` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					`campaign_date_create` TIMESTAMP NULL DEFAULT NULL,
+					`campaign_date_update` TIMESTAMP NULL DEFAULT NULL,
 					`campaign_date_send` TIMESTAMP NULL DEFAULT NULL,
 					`campaign_name` VARCHAR(255) NULL DEFAULT NULL,
 					`campaign_day_limit` INT(11) UNSIGNED NOT NULL DEFAULT 0,

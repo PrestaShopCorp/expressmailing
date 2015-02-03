@@ -37,7 +37,7 @@
 
 		{if !$campaign_sended}
 
-			<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller=AdminMarketingEStep7&token={Tools::getAdminTokenLite('AdminMarketingEStep7')|escape}" method="post" enctype="multipart/form-data" novalidate="">
+			<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller=AdminMarketingEStep8&token={Tools::getAdminTokenLite('AdminMarketingEStep8')|escape}" method="post" enctype="multipart/form-data" novalidate="">
 				<div class="panel" id="fieldset_0">
 					<div class="panel-heading">
 						<i class="icon-envelope-alt"></i> {l s='Final validation before sending (step 8)' mod='expressmailing'}
