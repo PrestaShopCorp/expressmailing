@@ -11,7 +11,7 @@
 * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
 *}
 
-<form id="configuration_form" class="defaultForm form-horizontal adminmarketing" action="index.php?controller=AdminMarketing&token={Tools::getAdminTokenLite('AdminMarketing')|escape}" method="post" enctype="multipart/form-data" novalidate>
+<form id="configuration_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape}" method="post" enctype="multipart/form-data" novalidate>
 	<div class="center small">
 		<img src="../modules/expressmailing/img/{l s='config_en.png' mod='expressmailing'}" border="0"><br>&nbsp;
 	</div>

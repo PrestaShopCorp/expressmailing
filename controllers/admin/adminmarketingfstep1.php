@@ -32,7 +32,7 @@ class AdminMarketingFStep1Controller extends ModuleAdminController
 
 		if (empty($this->campaign_id))
 		{
-			Tools::redirectAdmin('index.php?controller=AdminMarketing&token='.Tools::getAdminTokenLite('AdminMarketing'));
+			Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
 			exit;
 		}
 

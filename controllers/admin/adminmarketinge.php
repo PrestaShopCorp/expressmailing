@@ -12,9 +12,9 @@
  * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
  */
 
-include_once 'adminmarketing.php';
+include_once 'adminmarketingx.php';
 
-class AdminMarketingEController extends AdminMarketingController
+class AdminMarketingEController extends AdminMarketingXController
 {
 	public function __construct()
 	{

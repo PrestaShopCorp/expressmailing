@@ -15,7 +15,7 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
-include_once 'controllers/admin/adminmarketing.php';
+include_once 'controllers/admin/adminmarketingx.php';
 
 class ExpressMailing extends Module
 {
@@ -41,7 +41,7 @@ class ExpressMailing extends Module
 		$this->confirmUninstall = $this->l('Are you sure you want to uninstall ?');
 		$this->html_preview_folder = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.'expressmailing'.DIRECTORY_SEPARATOR;
 
-		Tools::addCSS(_PS_MODULE_DIR_.'expressmailing/css/icon-marketing.css');
+		$this->context->controller->addCSS(_PS_MODULE_DIR_.'expressmailing/css/icon-marketing.css');
 	}
 
 	public function reset()
@@ -55,14 +55,14 @@ class ExpressMailing extends Module
 		return parent::install()
 			&& $this->installDB($alter_db)
 			/* Add main Tab (visible into Customer) */
-			&& $this->installAdminTab('AdminMarketing', true, $this->displayName, 'AdminParentModules')
+			&& $this->installAdminTab('AdminMarketingX', true, $this->displayName, 'AdminParentModules')
 			/* Add media controllers */
-			&& $this->installAdminTab('AdminMarketingE', false, $this->displayName, 'AdminMarketing')
-			&& $this->installAdminTab('AdminMarketingF', false, $this->displayName, 'AdminMarketing')
-			&& $this->installAdminTab('AdminMarketingS', false, $this->displayName, 'AdminMarketing')
+			&& $this->installAdminTab('AdminMarketingE', false, $this->displayName, 'AdminMarketingX')
+			&& $this->installAdminTab('AdminMarketingF', false, $this->displayName, 'AdminMarketingX')
+			&& $this->installAdminTab('AdminMarketingS', false, $this->displayName, 'AdminMarketingX')
 			/* Add order/subscription controllers */
-			&& $this->installAdminTab('AdminMarketingInscription', false, $this->l('Inscription'), 'AdminMarketing')
-			&& $this->installAdminTab('AdminMarketingBuy', false, $this->l('Cart'), 'AdminMarketing')
+			&& $this->installAdminTab('AdminMarketingInscription', false, $this->l('Inscription'), 'AdminMarketingX')
+			&& $this->installAdminTab('AdminMarketingBuy', false, $this->l('Cart'), 'AdminMarketingX')
 			/* Add emailing controllers */
 			&& $this->installAdminTab('AdminMarketingEStep1', false, $this->l('E-Mailing'), 'AdminMarketingE')
 			&& $this->installAdminTab('AdminMarketingEStep2', false, $this->l('E-Mailing'), 'AdminMarketingE')
@@ -103,7 +103,7 @@ class ExpressMailing extends Module
 		return parent::uninstall()
 			&& Configuration::deleteByName('adminmarketing_session_api')
 			&& $this->uninstallDB($alter_db)
-			&& $this->uninstallAdminTab('AdminMarketing')
+			&& $this->uninstallAdminTab('AdminMarketingX')
 			&& $this->uninstallAdminTab('AdminMarketingE')
 			&& $this->uninstallAdminTab('AdminMarketingF')
 			&& $this->uninstallAdminTab('AdminMarketingS')
@@ -471,7 +471,7 @@ class ExpressMailing extends Module
 					`order_session` VARCHAR(100) NOT NULL DEFAULT \'\',
 					`order_product` VARCHAR(100) NULL DEFAULT NULL,
 					`order_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-					`campaign_media` VARCHAR(50) NOT NULL DEFAULT \'AdminMarketing\',
+					`campaign_media` VARCHAR(50) NOT NULL DEFAULT \'AdminMarketingX\',
 					`campaign_id` INT(11) NULL DEFAULT NULL,
 					PRIMARY KEY (`order_session`)
 				) DEFAULT CHARSET=utf8');
@@ -569,7 +569,7 @@ class ExpressMailing extends Module
 
 	public function getContent()
 	{
-		Tools::redirectAdmin('index.php?controller=AdminMarketing&token='.Tools::getAdminTokenLite('AdminMarketing'));
+		Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
 		exit;
 	}
 

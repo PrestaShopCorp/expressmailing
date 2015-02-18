@@ -35,7 +35,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 		if (empty($this->campaign_id))
 		{
-			Tools::redirectAdmin('index.php?controller=AdminMarketing&token='.Tools::getAdminTokenLite('AdminMarketing'));
+			Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
 			exit;
 		}
 
@@ -571,23 +571,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		if (!Tools::file_exists_no_cache($dest))
 		{
 			mkdir($dest, 0777, true);
-			switch ($this->context->language->iso_code)
-			{
-				case 'fr':
-					Tools::copy(_PS_MODULE_DIR_.'expressmailing/img/config_fr.png', $dest.'config_fr.png');
-					Tools::copy(_PS_MODULE_DIR_.'expressmailing/views/index_fr.php', $dest.'index.php');
-					break;
-
-				case 'pl':
-					Tools::copy(_PS_MODULE_DIR_.'expressmailing/img/config_pl.png', $dest.'config_pl.png');
-					Tools::copy(_PS_MODULE_DIR_.'expressmailing/views/index_pl.php', $dest.'index.php');
-					break;
-
-				default:
-					Tools::copy(_PS_MODULE_DIR_.'expressmailing/img/config_en.png', $dest.'config_en.png');
-					Tools::copy(_PS_MODULE_DIR_.'expressmailing/views/index_en.php', $dest.'index.php');
-					break;
-			}
+			Tools::copy(_PS_MODULE_DIR_.'expressmailing/index.php', $dest.'index.php');
 		}
 
 		$dest .= $this->campaign_id.DIRECTORY_SEPARATOR;

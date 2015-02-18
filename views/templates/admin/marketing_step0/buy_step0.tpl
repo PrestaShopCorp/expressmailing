@@ -12,7 +12,7 @@
 *}
 
 {if is_array($smarty_fax_tickets) || is_array($smarty_sms_tickets)}
-<form id="buy_form" class="defaultForm form-horizontal adminmarketing" action="index.php?controller=AdminMarketingBuy&token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape}" method="post" enctype="multipart/form-data" novalidate>
+<form id="buy_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller=AdminMarketingBuy&token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape}" method="post" enctype="multipart/form-data" novalidate>
 	<div class="panel" id="fieldset_0">
 		<div class="panel-heading">
 			<i class="icon-shopping-cart"></i>&nbsp;{l s='Buy credit packs' mod='expressmailing'}

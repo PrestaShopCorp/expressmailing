@@ -62,7 +62,7 @@ class AdminMarketingSStatsController extends ModuleAdminController
 		$this->campaign_id = (int)Tools::getValue('campaign_id');
 		if (empty($this->campaign_id))
 		{
-			Tools::redirectAdmin('index.php?controller=AdminMarketing&token='.Tools::getAdminTokenLite('AdminMarketing'));
+			Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
 			exit;
 		}
 

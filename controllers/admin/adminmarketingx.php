@@ -14,11 +14,11 @@
 
 include_once 'em_tools.php';
 
-class AdminMarketingController extends ModuleAdminController
+class AdminMarketingXController extends ModuleAdminController
 {
 	public function __construct()
 	{
-		$this->name = 'adminmarketing';
+		$this->name = 'adminmarketingx';
 		$this->bootstrap = true;
 		$this->module = 'expressmailing';
 		$this->context = Context::getContext();
@@ -37,23 +37,23 @@ class AdminMarketingController extends ModuleAdminController
 	public function initToolbarTitle()
 	{
 		parent::initToolbarTitle();
-		$this->toolbar_title = $this->module->l('Prepare a new campaign', 'adminmarketing');
+		$this->toolbar_title = $this->module->l('Prepare a new campaign', 'adminmarketingx');
 
 		$this->page_header_toolbar_btn['stat_email'] = array(
 			'href' => $this->context->link->getAdminLink('AdminMarketingEList', true),
-			'desc' => $this->module->l('My email stats', 'adminmarketing'),
+			'desc' => $this->module->l('My email stats', 'adminmarketingx'),
 			'icon' => 'process-icon-stats'
 		);
 
 		$this->page_header_toolbar_btn['stat_fax'] = array(
 			'href' => $this->context->link->getAdminLink('AdminMarketingFList', true),
-			'desc' => $this->module->l('My fax stats', 'adminmarketing'),
+			'desc' => $this->module->l('My fax stats', 'adminmarketingx'),
 			'icon' => 'process-icon-stats'
 		);
 
 		$this->page_header_toolbar_btn['stat_sms'] = array(
 			'href' => $this->context->link->getAdminLink('AdminMarketingSList', true),
-			'desc' => $this->module->l('My sms stats', 'adminmarketing'),
+			'desc' => $this->module->l('My sms stats', 'adminmarketingx'),
 			'icon' => 'process-icon-stats'
 		);
 	}
@@ -132,13 +132,13 @@ class AdminMarketingController extends ModuleAdminController
 					switch ((string)$credit['balance'])
 					{
 						case '0':
-							$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketing').'</span>';
+							$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketingx').'</span>';
 							break;
 						case '1':
-							$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketing');
+							$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketingx');
 							break;
 						default:
-							$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketing'), $credit['balance'], '%s');
+							$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketingx'), $credit['balance'], '%s');
 							break;
 					}
 					$smarty_fax_credits .= sprintf($tmp_credits, '&laquo;&nbsp;'.$credit['credit_name'].'&nbsp;&raquo;<br>');
@@ -165,13 +165,13 @@ class AdminMarketingController extends ModuleAdminController
 					switch ((string)$credit['balance'])
 					{
 						case '0':
-							$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketing').'</span>';
+							$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketingx').'</span>';
 							break;
 						case '1':
-							$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketing');
+							$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketingx');
 							break;
 						default:
-							$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketing'), $credit['balance'], '%s');
+							$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketingx'), $credit['balance'], '%s');
 							break;
 					}
 					$smarty_sms_credits .= sprintf($tmp_credits, '&laquo;&nbsp;'.$credit['credit_name'].'&nbsp;&raquo;<br>');
@@ -184,8 +184,8 @@ class AdminMarketingController extends ModuleAdminController
 			// If the subscriber has not yet opened an account
 			// We display the TPL with prices but without buying block (needs to be connected)
 			// -------------------------------------------------------------------------------
-			$smarty_fax_credits = $this->module->l('0,035 € per page (to France Metropolitan)', 'adminmarketing');
-			$smarty_sms_credits = $this->module->l('0,065 € per sms (to France Metropolitan)', 'adminmarketing');
+			$smarty_fax_credits = $this->module->l('0,035 € per page (to France Metropolitan)', 'adminmarketingx');
+			$smarty_sms_credits = $this->module->l('0,065 € per sms (to France Metropolitan)', 'adminmarketingx');
 
 			// Remove the stats toolbar buttons
 			// --------------------------------
@@ -196,22 +196,22 @@ class AdminMarketingController extends ModuleAdminController
 			// Tool tip that display the account(s) id(s)
 			// ------------------------------------------
 			if (($credential_email == $credential_fax) && ($credential_fax == $credential_sms))
-				$tool_tip = $this->module->l('Account ID :', 'adminmarketing').'<br>'.$credential_email;
+				$tool_tip = $this->module->l('Account ID :', 'adminmarketingx').'<br>'.$credential_email;
 			else
 			{
-				$tool_tip = $this->module->l('Email account :', 'adminmarketing').'<br>';
-				$tool_tip .= empty($credential_email) ? $this->module->l('None', 'adminmarketing') : $credential_email;
-				$tool_tip .= '<hr>'.$this->module->l('Fax account :', 'adminmarketing').'<br>';
-				$tool_tip .= empty($credential_fax) ? $this->module->l('None', 'adminmarketing') : $credential_fax;
-				$tool_tip .= '<hr>'.$this->module->l('Sms account :', 'adminmarketing').'<br>';
-				$tool_tip .= empty($credential_sms) ? $this->module->l('None', 'adminmarketing') : $credential_sms;
+				$tool_tip = $this->module->l('Email account :', 'adminmarketingx').'<br>';
+				$tool_tip .= empty($credential_email) ? $this->module->l('None', 'adminmarketingx') : $credential_email;
+				$tool_tip .= '<hr>'.$this->module->l('Fax account :', 'adminmarketingx').'<br>';
+				$tool_tip .= empty($credential_fax) ? $this->module->l('None', 'adminmarketingx') : $credential_fax;
+				$tool_tip .= '<hr>'.$this->module->l('Sms account :', 'adminmarketingx').'<br>';
+				$tool_tip .= empty($credential_sms) ? $this->module->l('None', 'adminmarketingx') : $credential_sms;
 			}
 
 			if (empty($smarty_fax_credits))
-				$smarty_fax_credits = '<span class="red">'.sprintf($this->module->l('You have no credit %s', 'adminmarketing'), 'fax').'</span>';
+				$smarty_fax_credits = '<span class="red">'.sprintf($this->module->l('You have no credit %s', 'adminmarketingx'), 'fax').'</span>';
 
 			if (empty($smarty_sms_credits))
-				$smarty_sms_credits = '<span class="red">'.sprintf($this->module->l('You have no credit %s', 'adminmarketing'), 'sms').'</span>';
+				$smarty_sms_credits = '<span class="red">'.sprintf($this->module->l('You have no credit %s', 'adminmarketingx'), 'sms').'</span>';
 
 			// Get all the tickets available for Prestashop
 			// --------------------------------------------

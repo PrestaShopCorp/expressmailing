@@ -30,14 +30,14 @@ class AdminMarketingBuyController extends ModuleAdminController
 		$this->lang = false;
 		$this->default_form_language = $this->context->language->id;
 
-		$this->media = (string)Tools::getValue('media', 'AdminMarketing');
+		$this->media = (string)Tools::getValue('media', 'AdminMarketingX');
 		$this->campaign_id = (int)Tools::getValue('campaign_id', '0');
 		$this->order_session = (string)Tools::getValue('order_session');
 		$this->order_product = (string)Tools::getValue('product');
 
 		if (empty($this->order_session) && empty($this->order_product))
 		{
-			Tools::redirectAdmin('index.php?controller=AdminMarketing&token='.Tools::getAdminTokenLite('AdminMarketing'));
+			Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
 			exit;
 		}
 
