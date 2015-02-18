@@ -39,7 +39,7 @@ class ExpressMailing extends Module
 		$this->displayName = 'Express-Mailing';
 		$this->description = $this->l('Marketing Module from Express-Mailing, including e-mailing (100% free), sending faxes and sms at low price');
 		$this->confirmUninstall = $this->l('Are you sure you want to uninstall ?');
-		$this->html_preview_folder = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.'expressmailing'.DIRECTORY_SEPARATOR;
+		$this->html_preview_folder = _PS_MODULE_DIR_.'expressmailing'.DIRECTORY_SEPARATOR.'campaigns'.DIRECTORY_SEPARATOR;
 
 		$this->context->controller->addCSS(_PS_MODULE_DIR_.'expressmailing/css/icon-marketing.css');
 	}

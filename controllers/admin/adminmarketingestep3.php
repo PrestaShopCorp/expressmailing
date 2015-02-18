@@ -40,6 +40,16 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		}
 
 		parent::__construct();
+
+		if(!function_exists('curl_version'))
+		{
+			$warning =
+			$this->module->l('In order to fetch images over http, you need to activate the PHP CURL extension on your server.', 'adminmarketingestep3');
+			$warning .= '<br/>';
+			$warning .=
+			$this->module->l('Otherwise this functionnality may not work properly and you will have to upload your images.', 'adminmarketingestep3');
+			$this->warnings[] = $warning;
+		}
 	}
 
 	public function initToolbarTitle()
@@ -507,7 +517,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 			if (!empty($image_url) && $this->copyFileToStorage($image_url, $filename))
 			{
-				$final_img_url = _PS_BASE_URL_.__PS_BASE_URI__.'expressmailing/'.$this->campaign_id.'/';
+				$final_img_url = _PS_BASE_URL_.__PS_BASE_URI__.'/modules/expressmailing/campaigns/'.$this->campaign_id.'/';
 				if ($filename)
 					$final_img_url .= $filename;
 				else
@@ -586,8 +596,25 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		else
 			$dest .= basename((string)$url);
 
-		if (Tools::copy((string)$url, $dest))
-			return $dest;
+		if (function_exists('curl_version'))
+		{
+			$ch = curl_init((string)$url);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+			$raw = curl_exec($ch);
+			curl_close ($ch);
+			if(file_exists($dest))
+				unlink($dest);
+			$fp = fopen($dest,'x');
+			fwrite($fp, $raw);
+			fclose($fp);
+			if(file_exists($dest))
+				return $dest;
+		}
+		else
+			if (Tools::copy((string)$url, $dest))
+				return $dest;
 
 		return null;
 	}
