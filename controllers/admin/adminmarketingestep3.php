@@ -578,11 +578,6 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	private function copyFileToStorage($url, $filename = null)
 	{
 		$dest = $this->module->getPreviewFolder();
-		if (!Tools::file_exists_no_cache($dest))
-		{
-			mkdir($dest, 0777, true);
-			Tools::copy(_PS_MODULE_DIR_.'expressmailing/index.php', $dest.'index.php');
-		}
 
 		$dest .= $this->campaign_id.DIRECTORY_SEPARATOR;
 		if (!Tools::file_exists_no_cache($dest))
