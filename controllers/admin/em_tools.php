@@ -338,7 +338,7 @@ class EMTools
 				break;
 
 			default:
-				Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
+				Tools::redirectAdmin('index.php?controller=AdminMarketing&token='.Tools::getAdminTokenLite('AdminMarketing'));
 				exit;
 		}
 
@@ -360,9 +360,9 @@ class EMTools
 				), 'campaign_id = '.(int)$campaign_id
 			);
 
-			Tools::redirectAdmin('index.php?controller=AdminMarketingX'.$media_letter.'Step'.$redirect_step.'&campaign_id='.
+			Tools::redirectAdmin('index.php?controller=AdminMarketing'.$media_letter.'Step'.$redirect_step.'&campaign_id='.
 				(int)$campaign_id.
-				'&token='.Tools::getAdminTokenLite('AdminMarketingX'.$media_letter.'Step'.$redirect_step));
+				'&token='.Tools::getAdminTokenLite('AdminMarketing'.$media_letter.'Step'.$redirect_step));
 			exit;
 		}
 
