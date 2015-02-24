@@ -338,7 +338,7 @@ class EMTools
 				break;
 
 			default:
-				Tools::redirectAdmin('index.php?controller=AdminMarketing&token='.Tools::getAdminTokenLite('AdminMarketing'));
+				Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
 				exit;
 		}
 
