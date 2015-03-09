@@ -33,7 +33,7 @@
 						type: "POST",
 						data: {
 							campaign_id: "{$campaign_id|escape:'intval'}",
-							guid_import: "{$guid_import|unescape}",
+							guid_import: "{$guid_import|escape}",
 							i: i++
 						},
 						success: function (output)

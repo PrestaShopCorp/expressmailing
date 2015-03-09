@@ -30,7 +30,7 @@
 					<div class="form-group">
 						<div class="col-lg-12" style="text-align: center">
 							{foreach $settled_pages as $page}
-								<div class="fax_preview" style="background-image: url({$page['page_url']|unescape}); background-size: 210px 297px; display: inline-block; width: 210px; height: 297px; border: 1px solid black; margin-left: .5em; margin-right: .5em">
+								<div class="fax_preview" style="background-image: url({$page['page_url']|escape}); background-size: 210px 297px; display: inline-block; width: 210px; height: 297px; border: 1px solid black; margin-left: .5em; margin-right: .5em">
 									<a class="fax_delete" onclick="return false" href="index.php?controller=AdminMarketingFStep2&campaign_id={$campaign_id|escape:'intval'}&token={Tools::getAdminTokenLite('AdminMarketingFStep2')|escape}&delete_page={$page['id']|escape:'intval'}" style="float: right; margin: .5em" title="{l s='Delete this page' mod='expressmailing'}"><img src="../img/admin/cross.png" border="0" /></a>
 								</div>
 							{/foreach}

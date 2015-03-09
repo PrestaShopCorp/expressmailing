@@ -13,22 +13,22 @@
 
 <script type="text/javascript">
 	$(function () {
-		var slider{$field_name|escape}Config = {
+		var slider{$field_name|escape:javascript}Config = {
 			range: false,
-			min: {$min_value|escape:'intval'},
-			max: {$max_value|escape:'intval'},
-			step: {$step|escape:'intval'},
-			{if $preset_value}value: {$preset_value|escape:'intval'},{/if}
+			min: {$min_value|escape:javascript},
+			max: {$max_value|escape:javascript},
+			step: {$step|escape:javascript},
+			{if $preset_value}value: {$preset_value|escape:javascript},{/if}
 			slide: function (event, ui) {
-				$("#{$field_name|escape}").val(ui.value);
+				$("#{$field_name|escape:javascript}").val(ui.value);
 			}
 		};
-		$("#slider-{$field_name|escape}").slider(slider{$field_name|escape}Config);
-		var change_{$field_name|escape} = function (evt) {
-			var {$field_name|escape} = $("#{$field_name|escape}");
-			$("#slider-{$field_name|escape}").slider("value", {$field_name|escape}.val());
+		$("#slider-{$field_name|escape:javascript}").slider(slider{$field_name|escape:javascript}Config);
+		var change_{$field_name|escape:javascript} = function (evt) {
+			var {$field_name|escape:javascript} = $("#{$field_name|escape}");
+			$("#slider-{$field_name|escape:javascript}").slider("value", {$field_name|escape:javascript}.val());
 		};
-		$("#{$field_name|escape}").change(change_{$field_name|escape});
+		$("#{$field_name|escape:javascript}").change(change_{$field_name|escape:javascript});
 	});
 </script>
 

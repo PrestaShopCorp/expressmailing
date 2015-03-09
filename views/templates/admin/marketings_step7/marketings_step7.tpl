@@ -56,7 +56,7 @@
 										<label class="control-label col-lg-4"> {l s='Sms content :' mod='expressmailing'} </label>
 										<div class="col-lg-8" style="height:10em;">
 											<!-- Attention pas de retour a la ligne dans le textarea -->
-											<textarea name="campaign_text" readonly="readonly" style="display: block; height: 100%;">{$campaign_text|unescape}</textarea>
+											<textarea name="campaign_text" readonly="readonly" style="display: block; height: 100%;">{$campaign_text|escape}</textarea>
 										</div>
 									</div>
 									<div class="form-group">

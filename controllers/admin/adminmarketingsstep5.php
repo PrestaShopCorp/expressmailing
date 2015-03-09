@@ -89,7 +89,7 @@ class AdminMarketingSStep5Controller extends ModuleAdminController
 		{
 			// On enregistre dans la BDD local l'id de la campagne Express-Mailing
 			Db::getInstance()->update('expressmailing_sms', array (
-				'campaign_api_message_id' => $response_array['campaign_id']
+				'campaign_api_message_id' => (int)$response_array['campaign_id']
 				), 'campaign_id = '.$this->campaign_id
 			);
 			$this->setInfoAPI($response_array['campaign_id']);

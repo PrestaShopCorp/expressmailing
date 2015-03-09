@@ -124,7 +124,7 @@ class AdminMarketingEStep6Controller extends ModuleAdminController
 			// ---------------------------------------
 			if (Db::getInstance()->update('expressmailing_email_recipients', array (
 					'uploaded' => '1'
-				), 'campaign_id = '.$this->campaign_id.' AND id IN ('.implode(',', $uploaded_id).')', 0, false, false
+				), 'campaign_id = '.$this->campaign_id.' AND id IN ('.implode(',', array_map('intval', $uploaded_id)).')', 0, false, false
 			))
 				die('continue');
 			else

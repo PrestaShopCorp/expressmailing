@@ -510,7 +510,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 								$inserts[] = array(
 									'campaign_id' => $this->campaign_id,
 									'promocode_type' => pSQL($promocode_type),
-									'promocode' => $value
+									'promocode' => pSQL($value)
 								);
 						Db::getInstance()->insert('expressmailing_email_promocodes', $inserts);
 						break;

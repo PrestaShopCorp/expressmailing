@@ -11,4 +11,4 @@
 * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
 *}
 
-<textarea style="display: block; height: 100%" readonly="readonly" name="campaign_text" >{$campaign_text|unescape}</textarea>
+<textarea style="display: block; height: 100%" readonly="readonly" name="campaign_text" >{$campaign_text|escape}</textarea>

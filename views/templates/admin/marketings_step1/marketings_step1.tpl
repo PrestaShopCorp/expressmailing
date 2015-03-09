@@ -29,7 +29,7 @@
                         <div class="col-lg-5">
 							<div class="panel" style="min-height: 24em; padding-bottom: 0; margin-bottom: 0">
                                 <div class="panel-heading">{l s='SMS content' mod='expressmailing'} <label class="control-label required" style=" padding-top: 0px;"></label></div>
-									{$sms_content|unescape}
+								{$sms_content|unescape}
                             </div>
 
                         </div>

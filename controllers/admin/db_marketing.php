@@ -27,7 +27,7 @@ class DBMarketing
 		$sql_calc_found = is_null($list_total) ? '' : 'SQL_CALC_FOUND_ROWS ';
 
 		$req = new DbQuery();
-		$req->select($sql_calc_found.$campaign_id.' as campaign_id, customer.id_customer, customer.id_lang,
+		$req->select($sql_calc_found.(int)$campaign_id.' as campaign_id, customer.id_customer, customer.id_lang,
 						customer.firstname, customer.lastname, customer.email,
 						INET_NTOA(connections.ip_address) as ip_address,
 						country.iso_code, address.postcode as zip, address.city,
@@ -40,10 +40,10 @@ class DBMarketing
 		$req->leftJoin('country', 'country', 'address.id_country = country.id_country');
 
 		if (!empty($checked_langs))
-			$req->where('customer.id_lang IN('.implode(', ', $checked_langs).')');
+			$req->where('customer.id_lang IN('.implode(', ', array_map('intval', $checked_langs)).')');
 
 		if (!empty($checked_groups))
-			$req->where('customer_group.id_group IN('.implode(', ', $checked_groups).')');
+			$req->where('customer_group.id_group IN('.implode(', ', array_map('intval', $checked_groups)).')');
 
 		if ($checked_campaign_optin)
 			$req->where('customer.optin = 1');
@@ -62,12 +62,12 @@ class DBMarketing
 			$req->leftJoin('cart_product', 'cart_product', 'cart_product.id_cart = cart.id_cart');
 
 			if (!empty($checked_products))
-				$where_products_categories[] = 'cart_product.id_product IN('.implode(', ', $checked_products).')';
+				$where_products_categories[] = 'cart_product.id_product IN('.implode(', ', array_map('intval', $checked_products)).')';
 
 			if (!empty($checked_categories))
 			{
 				$req->leftJoin('category_product', 'category_product', 'category_product.id_product = cart_product.id_product');
-				$where_products_categories[] = 'category_product.id_category IN('.implode(', ', $checked_categories).')';
+				$where_products_categories[] = 'category_product.id_category IN('.implode(', ', array_map('intval', $checked_categories)).')';
 			}
 
 			$req->where(implode(' OR ', $where_products_categories));
@@ -78,31 +78,31 @@ class DBMarketing
 				$req->where($birthday_sql);
 
 		if (isset($paying_filters['civilities']) && !empty($paying_filters['civilities']))
-			$req->where('customer.id_gender IN ('.implode(', ', $paying_filters['civilities']).')');
+			$req->where('customer.id_gender IN ('.implode(', ', array_map('intval', $paying_filters['civilities'])).')');
 
 		if (isset($paying_filters['countries']) && !empty($paying_filters['countries']))
-			$req->where('country.id_country IN ('.implode(', ', $paying_filters['countries']).')');
+			$req->where('country.id_country IN ('.implode(', ', array_map('intval', $paying_filters['countries'])).')');
 
 		if (isset($paying_filters['postcodes']) && !empty($paying_filters['postcodes']))
 		{
 			$where_or = array();
 			foreach ($paying_filters['postcodes'] as $value)
-				$where_or[] = 'address.id_country = '.$value['country_id'].' AND address.postcode LIKE "'.$value['postcode'].'%"';
+				$where_or[] = 'address.id_country = '.(int)$value['country_id'].' AND address.postcode LIKE "'.pSQL($value['postcode']).'%"';
 			$req->where('('.implode(' OR ', $where_or).')');
 		}
 
 		if (isset($paying_filters['buyingdates']) && !empty($paying_filters['buyingdates']))
 		{
 			$req->innerJoin('orders', 'orders', 'orders.id_customer = customer.id_customer AND (orders.date_add BETWEEN \''.
-				$paying_filters['buyingdates']['min_buyingdate'].'\' AND \''.
-				$paying_filters['buyingdates']['max_buyingdate'].'\' OR orders.date_upd BETWEEN \''.
-				$paying_filters['buyingdates']['min_buyingdate'].'\' AND \''.$paying_filters['buyingdates']['max_buyingdate'].'\')');
+				pSQL($paying_filters['buyingdates']['min_buyingdate']).'\' AND \''.
+				pSQL($paying_filters['buyingdates']['max_buyingdate']).'\' OR orders.date_upd BETWEEN \''.
+				pSQL($paying_filters['buyingdates']['min_buyingdate']).'\' AND \''.pSQL($paying_filters['buyingdates']['max_buyingdate']).'\')');
 		}
 
 		if (isset($paying_filters['accountdates']) && !empty($paying_filters['accountdates']))
 		{
-			$req->where('customer.date_add BETWEEN \''.$paying_filters['accountdates']['min_accountdate'].
-				'\' AND \''.$paying_filters['accountdates']['max_accountdate'].'\'');
+			$req->where('customer.date_add BETWEEN \''.pSQL($paying_filters['accountdates']['min_accountdate']).
+				'\' AND \''.pSQL($paying_filters['accountdates']['max_accountdate']).'\'');
 		}
 
 		if (isset($paying_filters['promocodes']) && !empty($paying_filters['promocodes']))
@@ -116,7 +116,7 @@ class DBMarketing
 			foreach ($paying_filters['promocodes'] as $value)
 			{
 				if ($value['promocode_type'] == 'specific')
-					$codes[] = $value['promocode'];
+					$codes[] = pSQL($value['promocode']);
 				elseif ($value['promocode_type'] == 'any')
 				{
 					$req->where('(cart_rule.code IS NOT NULL OR cart_rule.code <> \'\')');
@@ -178,7 +178,7 @@ class DBMarketing
 		$req = new DbQuery();
 		$req->select('birthday_type, birthday_start, birthday_end');
 		$req->from('expressmailing_email_birthdays');
-		$req->where('campaign_id = '.$campaign_id);
+		$req->where('campaign_id = '.(int)$campaign_id);
 		$birthday = Db::getInstance()->executeS($req, true, false);
 		if (!empty($birthday))
 			$paying_filters['birthday'] = $birthday[0];
@@ -187,7 +187,7 @@ class DBMarketing
 		$req = new DbQuery();
 		$req->select('civility_id');
 		$req->from('expressmailing_email_civilities');
-		$req->where('campaign_id = '.$campaign_id);
+		$req->where('campaign_id = '.(int)$campaign_id);
 		$civilities = Db::getInstance()->executeS($req, true, false);
 		$formated_civilites = array();
 		foreach ($civilities as $civility)
@@ -199,7 +199,7 @@ class DBMarketing
 		$req = new DbQuery();
 		$req->select('country_id');
 		$req->from('expressmailing_email_countries');
-		$req->where('campaign_id = '.$campaign_id);
+		$req->where('campaign_id = '.(int)$campaign_id);
 		$countries = Db::getInstance()->executeS($req, true, false);
 		$formated_countries = array();
 		foreach ($countries as $country)
@@ -211,7 +211,7 @@ class DBMarketing
 		$req = new DbQuery();
 		$req->select('country_id, postcode');
 		$req->from('expressmailing_email_postcodes');
-		$req->where('campaign_id = '.$campaign_id);
+		$req->where('campaign_id = '.(int)$campaign_id);
 		$postcodes = Db::getInstance()->executeS($req, true, false);
 		if (!empty($postcodes))
 			$paying_filters['postcodes'] = $postcodes;
@@ -220,7 +220,7 @@ class DBMarketing
 		$req = new DbQuery();
 		$req->select('min_buyingdate, max_buyingdate');
 		$req->from('expressmailing_email_buyingdates');
-		$req->where('campaign_id = '.$campaign_id);
+		$req->where('campaign_id = '.(int)$campaign_id);
 		$buyingdates = Db::getInstance()->executeS($req, true, false);
 		if (!empty($buyingdates))
 			$paying_filters['buyingdates'] = $buyingdates[0];
@@ -229,7 +229,7 @@ class DBMarketing
 		$req = new DbQuery();
 		$req->select('min_accountdate, max_accountdate');
 		$req->from('expressmailing_email_accountdates');
-		$req->where('campaign_id = '.$campaign_id);
+		$req->where('campaign_id = '.(int)$campaign_id);
 		$accountdates = Db::getInstance()->executeS($req, true, false);
 		if (!empty($accountdates))
 			$paying_filters['accountdates'] = $accountdates[0];
@@ -238,7 +238,7 @@ class DBMarketing
 		$req = new DbQuery();
 		$req->select('promocode_type, promocode');
 		$req->from('expressmailing_email_promocodes');
-		$req->where('campaign_id = '.$campaign_id);
+		$req->where('campaign_id = '.(int)$campaign_id);
 		$promocodes = Db::getInstance()->executeS($req, true, false);
 		if (!empty($promocodes))
 			$paying_filters['promocodes'] = $promocodes;
@@ -251,19 +251,19 @@ class DBMarketing
 		switch ($filter['birthday_type'])
 		{
 			case 'age':
-				$return = 'customer.birthday BETWEEN DATE_SUB(CURDATE(), INTERVAL '.$filter['birthday_end'].' YEAR)
-							AND DATE_SUB(CURDATE(), INTERVAL '.$filter['birthday_start'].' YEAR)';
+				$return = 'customer.birthday BETWEEN DATE_SUB(CURDATE(), INTERVAL '.pSQL($filter['birthday_end']).' YEAR)
+							AND DATE_SUB(CURDATE(), INTERVAL '.pSQL($filter['birthday_start']).' YEAR)';
 				break;
 			case 'day':
 				$day_start = explode('-', $filter['birthday_start'])[0];
 				$month_start = explode('-', $filter['birthday_start'])[1];
 				$day_end = explode('-', $filter['birthday_end'])[0];
 				$month_end = explode('-', $filter['birthday_end'])[1];
-				$return = '(MONTH(customer.birthday) BETWEEN '.$month_start.' AND '.$month_end.')
-							AND (DAY(customer.birthday) BETWEEN '.$day_start.' AND '.$day_end.')';
+				$return = '(MONTH(customer.birthday) BETWEEN '.pSQL($month_start).' AND '.pSQL($month_end).')
+							AND (DAY(customer.birthday) BETWEEN '.pSQL($day_start).' AND '.pSQL($day_end).')';
 				break;
 			case 'date':
-				$return = 'customer.birthday BETWEEN \''.$filter['birthday_start'].'\' AND \''.$filter['birthday_end'].'\'';
+				$return = 'customer.birthday BETWEEN \''.pSQL($filter['birthday_start']).'\' AND \''.pSQL($filter['birthday_end']).'\'';
 				break;
 			default:
 				$return = false;
@@ -281,7 +281,7 @@ class DBMarketing
 		$sql_calc_found = is_null($list_total) ? '' : 'SQL_CALC_FOUND_ROWS ';
 
 		$req = new DbQuery();
-		$req->select($sql_calc_found.$campaign_id.' as campaign_id, address.phone_mobile as target,
+		$req->select($sql_calc_found.(int)$campaign_id.' as campaign_id, address.phone_mobile as target,
 				address.phone_mobile as col_0, customer.lastname as col_1, customer.firstname as col_2,address.postcode as col_3,
 				address.city as col_4, \'prestashop\' as source');
 		$req->from('customer', 'customer');
@@ -295,9 +295,9 @@ class DBMarketing
 		$where[] = 'address.phone_mobile IS NOT NULL AND address.phone_mobile <> \'\'';
 
 		if (!empty($checked_langs))
-			$where[] = 'customer.id_lang IN('.implode(', ', $checked_langs).')';
+			$where[] = 'customer.id_lang IN('.implode(', ', array_map('intval', $checked_langs)).')';
 		if (!empty($checked_groups))
-			$where[] = 'customer_group.id_group IN('.implode(', ', $checked_groups).')';
+			$where[] = 'customer_group.id_group IN('.implode(', ', array_map('intval', $checked_groups)).')';
 		if ($checked_campaign_active)
 			$where[] = 'customer.active = 1';
 
@@ -308,12 +308,12 @@ class DBMarketing
 			$req->leftJoin('cart_product', 'cart_product', 'cart_product.id_cart = cart.id_cart');
 
 			if (!empty($checked_products))
-				$where_products_categories[] = 'cart_product.id_product IN('.implode(', ', $checked_products).')';
+				$where_products_categories[] = 'cart_product.id_product IN('.implode(', ', array_map('intval', $checked_products)).')';
 
 			if (!empty($checked_categories))
 			{
 				$req->leftJoin('category_product', 'category_product', 'category_product.id_product = cart_product.id_product');
-				$where_products_categories[] = 'category_product.id_category IN('.implode(', ', $checked_categories).')';
+				$where_products_categories[] = 'category_product.id_category IN('.implode(', ', array_map('intval', $checked_categories)).')';
 			}
 
 			$where[] = implode(' OR ', $where_products_categories);

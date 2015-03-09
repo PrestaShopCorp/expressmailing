@@ -36,7 +36,7 @@
 							{assign var="j" value=1 nocache}
 							{foreach $row as $cell}
 								<td class="col{$j++|escape:'intval'}" style="text-align: left; padding: 0.4em 0.7em 0.4em 0.7em">
-									{$cell|unescape}
+									{$cell|escape}
 								</td>
 							{/foreach}
 						</tr>

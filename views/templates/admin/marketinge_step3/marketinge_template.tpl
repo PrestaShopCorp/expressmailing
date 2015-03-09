@@ -53,7 +53,7 @@
 					<td align="left">&nbsp;</td>
 				</tr>
 				<tr>
-					{capture assign="site"}<a href="{$base_url|unescape}">{$domain_name|escape:'htmlall':'UTF-8'}</a>{/capture}
+					{capture assign="site"}<a href="{$base_url|escape:'url'}">{$domain_name|escape:'htmlall':'UTF-8'}</a>{/capture}
 					{capture assign="footer"}{l s='You are receiving this email because you have visited or ordered[br]on the website [www]' mod='expressmailing'}{/capture}
 					<td align="center">
 						<font size="1">

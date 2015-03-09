@@ -162,7 +162,7 @@ The editorial board', 'adminmarketingestep5')
 				// On mémorise l'id message dans la base locale
 				// --------------------------------------------
 				if (Db::getInstance()->update('expressmailing_email', array(
-					'campaign_api_message_id' => $response_array['campaign_id']
+					'campaign_api_message_id' => (int)$response_array['campaign_id']
 					), 'campaign_id = '.$this->campaign_id
 				))
 					return true;

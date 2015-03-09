@@ -22,8 +22,8 @@
 		  ">
 		{if $node['id_category'] != $root_category}
 			<input type="checkbox"
-				   name="{if isset($node['id_category'])}{$input_name}-categories{else}{$input_name}-products{/if}[]"
-				   value="{if isset($node['id_category'])}{$node['id_category']}{else}{$node['id_product']}{/if}"
+				   name="{if isset($node['id_category'])}{$input_name|escape}-categories{else}{$input_name|escape}-products{/if}[]"
+				   value="{if isset($node['id_category'])}{$node['id_category']|escape}{else}{$node['id_product']|escape}{/if}"
 				   {if isset($node['disabled']) && $node['disabled'] == true} disabled="disabled"{/if}
 				   {if isset($node['id_category']) && isset($selected_categories_em) && in_array($node['id_category'], $selected_categories_em)}
 					   checked="true"
@@ -34,7 +34,7 @@
 				   />
 		{/if}
 		<i class="icon-folder-close"></i>
-		<label class="tree-toggler">{$node['name']}{if isset($node['selected_childs']) && (int)$node['selected_childs'] > 0} {l s='(%s selected)' mod='expressmailing' sprintf=$node['selected_childs']}{/if}</label>
+		<label class="tree-toggler">{$node['name']|escape}{if isset($node['selected_childs']) && (int)$node['selected_childs'] > 0} {l s='(%s selected)' mod='expressmailing' sprintf=$node['selected_childs']}{/if}</label>
 	</span>
 	<ul class="tree">
 		{$children|unescape}

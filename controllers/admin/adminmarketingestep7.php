@@ -145,7 +145,7 @@ class AdminMarketingEStep7Controller extends ModuleAdminController
 			// On mémorise le dernier email de test dans la bdd locale
 			// -------------------------------------------------------
 			Db::getInstance()->update('expressmailing_email', array(
-				'campaign_last_tester' => $campaign_last_tester
+				'campaign_last_tester' => pSQL($campaign_last_tester)
 				), 'campaign_id = '.$this->campaign_id
 			);
 

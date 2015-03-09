@@ -72,7 +72,7 @@ class EMTools
 			$sql = new DbQuery();
 			$sql->select('call_prefix');
 			$sql->from('country');
-			$sql->where('id_country = '.$shop_prefixe);
+			$sql->where('id_country = '.(int)$shop_prefixe);
 			$prefix = Db::getInstance()->getValue($sql);
 		}
 
@@ -243,7 +243,7 @@ class EMTools
 						col_6, col_7, col_8, col_9, col_10,
 						col_11, col_12, col_13, col_14, col_15,
 						col_16, col_17, col_18, col_19';
-		$request = 'INSERT INTO '.$table.' ('.$str_fields.') VALUES ';
+		$request = 'INSERT INTO '.bqSQL($table).' ('.$str_fields.') VALUES ';
 
 		$data = EMTools::readCSV($file_name);
 
@@ -257,7 +257,7 @@ class EMTools
 
 			if (!empty($number))
 			{
-				$ligne = "('".$campaign_id."', '".$number."', ";
+				$ligne = "('".(int)$campaign_id."', '".pSQL($number)."', ";
 
 				for ($i = 0; $i <= 19; $i++)
 				{
@@ -386,8 +386,8 @@ class EMTools
 
 		$sql = new DbQuery();
 		$sql->select('*');
-		$sql->from('expressmailing_'.$media);
-		$sql->where('campaign_id = '.$campaign_id);
+		$sql->from('expressmailing_'.pSQL($media));
+		$sql->where('campaign_id = '.(int)$campaign_id);
 
 		$result = Db::getInstance()->getRow($sql);
 
@@ -401,12 +401,12 @@ class EMTools
 													(int)$idx_col, $code_iso_country);
 
 			return Db::getInstance()->execute($request)
-				&& Db::getInstance()->update('expressmailing_'.$media,
+				&& Db::getInstance()->update('expressmailing_'.pSQL($media),
 					array(
 						'campaign_date_update' => date('Y-m-d H:i:s'),
 						'recipients_modified' => '1',
 						'path_to_import' => null
-					), 'campaign_id = '.$campaign_id
+					), 'campaign_id = '.(int)$campaign_id
 				);
 		}
 

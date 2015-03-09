@@ -174,7 +174,7 @@ class AdminMarketingSStep6Controller extends ModuleAdminController
 				// We store the last fax number
 				// ----------------------------
 				Db::getInstance()->update('expressmailing_sms', array(
-					'campaign_last_tester' => $number
+					'campaign_last_tester' => pSQL($number)
 					), 'campaign_id = '.$this->campaign_id
 				);
 

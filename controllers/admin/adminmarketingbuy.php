@@ -276,10 +276,10 @@ class AdminMarketingBuyController extends ModuleAdminController
 		// Store the order_session into local database
 		// -------------------------------------------
 		Db::getInstance()->insert('expressmailing_order_cart', array(
-			'order_session' => $this->order_session,
-			'order_product' => $this->order_product,
-			'campaign_media' => $this->media,
-			'campaign_id' => $this->campaign_id
+			'order_session' => pSQL($this->order_session),
+			'order_product' => pSQL($this->order_product),
+			'campaign_media' => pSQL($this->media),
+			'campaign_id' => (int)$this->campaign_id
 		));
 
 		// Add the product into the cart
@@ -311,7 +311,7 @@ class AdminMarketingBuyController extends ModuleAdminController
 		$sql = new DbQuery();
 		$sql->select('*');
 		$sql->from('expressmailing_order_cart');
-		$sql->where('order_session = \''.$this->order_session.'\'');
+		$sql->where('order_session = \''.pSQL($this->order_session).'\'');
 
 		return Db::getInstance()->getRow($sql);
 	}
@@ -397,7 +397,7 @@ class AdminMarketingBuyController extends ModuleAdminController
 			'company_address2' => pSQL($company_address2),
 			'company_zipcode' => pSQL($company_zipcode),
 			'company_city' => pSQL($company_city),
-			'country_id' => $country_id,
+			'country_id' => (int)$country_id,
 			'company_country' => pSQL($company_country),
 			'company_phone' => pSQL($company_phone)
 			), false, false, Db::REPLACE

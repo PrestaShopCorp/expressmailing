@@ -32,7 +32,7 @@
 					<ul class="nav nav-pills">
 						{foreach $days as $day}
 							<li {if $select_day == $day['day_api']}class="active"{/if}>
-								<a href="{$current_index|escape:'quotes'}&stat_date={$day['day_api']|escape:'intval'}&token={$smarty.get.token}">
+								<a href="{$current_index|escape:'quotes'}&stat_date={$day['day_api']|escape:'intval'}&token={$smarty.get.token|escape}">
 									<i class="icon-eye-open"></i>
 									<span class="hidden-inline-xs">{$day['day_lang']|escape:'htmlall':'UTF-8'}</span>
 								</a>
@@ -50,7 +50,7 @@
     <div class="col-lg-12">
 		<form class="defaultForm form-horizontal AdminMarketingEStep6" action="#" method="post" enctype="multipart/form-data" novalidate="">
 		<div class="panel" id="fieldset_0">
-			<div class="panel-heading"><i class="icon-bar-chart"></i> {l s='Statistics for campaign' mod='expressmailing'} &laquo;&nbsp;{$campaign_name|unescape}&nbsp;&raquo;</div>
+			<div class="panel-heading"><i class="icon-bar-chart"></i> {l s='Statistics for campaign' mod='expressmailing'} &laquo;&nbsp;{$campaign_name|escape}&nbsp;&raquo;</div>
 			<table border="0" width="100%" cellspacing="5" cellpadding="5">
 			<tr>
 				<td class="stat_td">

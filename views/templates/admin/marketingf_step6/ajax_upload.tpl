@@ -21,38 +21,38 @@
 		var url_base = "index.php?controller=AdminMarketingFStep6";
 		var url_ajax = "&ajax=true";
 		var url_cpid = "&campaign_id={$campaign_id|escape:'intval'}";
-		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingFStep6')|escape}";
+		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingFStep6')|escape:javascript}";
 
 		upload();
 
 		function upload()
 		{
 			$.ajax(
+			{
+				url: url_base + url_ajax + url_token,
+				type: "POST",
+				data: {
+					campaign_id: "{$campaign_id|escape:'intval'}",
+					guid_import: "{$guid_import|escape}",
+					i: i++
+				},
+				success: function (output)
+				{
+					$("#progress").append("<img src='../modules/expressmailing/img/progress.gif' border='0' alt=''>");
+					if (output == 'continue')
+						upload();
+					else if (output == 'ended')
+						window.location = url_base + url_cpid + url_token;
+					else
 					{
-						url: url_base + url_ajax + url_token,
-						type: "POST",
-						data: {
-							campaign_id: "{$campaign_id|escape:'intval'}",
-							guid_import: "{$guid_import|unescape}",
-							i: i++
-						},
-						success: function (output)
-						{
-							$("#progress").append("<img src='../modules/expressmailing/img/progress.gif' border='0' alt=''>");
-							if (output == 'continue')
-								upload();
-							else if (output == 'ended')
-								window.location = url_base + url_cpid + url_token;
-							else
-							{
-								$("#progress").append("{l s='An error occurred for this block :' mod='expressmailing'}" + output + "<br>" + "{l s='We will try to resend it ...' mod='expressmailing'}" + "<br>");
-								if (i > 5)
-									return;
-								else
-									upload();
-							}
-						}
-					});
+						$("#progress").append("{l s='An error occurred for this block :' mod='expressmailing'}" + output + "<br>" + "{l s='We will try to resend it ...' mod='expressmailing'}" + "<br>");
+						if (i > 5)
+							return;
+						else
+							upload();
+					}
+				}
+			});
 		}
 	});
 

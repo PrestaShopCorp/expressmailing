@@ -82,7 +82,7 @@ class AdminMarketingEListController extends ModuleAdminController
 				Db::getInstance()->update('expressmailing_email', array(
 					'campaign_state' => 6,
 					'campaign_date_update' => date('Y-m-d H:i:s')
-					), 'campaign_id = '.$campaign_id
+					), 'campaign_id = '.(int)$campaign_id
 				);
 			}
 		}

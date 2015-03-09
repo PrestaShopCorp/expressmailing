@@ -26,7 +26,7 @@
 							{if isset($ticket.promo_desc) and !empty($ticket.promo_desc)}<font color="red" style="display: block"><b>{$ticket.promo_desc|escape}</b></font>{/if}
 							<div class="radio" {if isset($ticket.promo_ending)}style="margin-bottom: 8px"{/if}>
 								<label>
-									<input type="radio" name="product" value="{$ticket.product_ref|unescape}" />
+									<input type="radio" name="product" value="{$ticket.product_ref|escape}" />
 									<span style="width:170px; display:inline-block">
 										{if isset($ticket.promo_units) and ($ticket.promo_units > 0)}
 											<strike>{$ticket.product_units|number_format:0:",":"."} {l s='fax credits' mod='expressmailing'}</strike>
@@ -58,7 +58,7 @@
 							{if isset($ticket.promo_desc) and !empty($ticket.promo_desc)}<font color="red" style="display: block"><b>{$ticket.promo_desc|escape}</b></font>{/if}
 							<div class="radio" {if isset($ticket.promo_ending)}style="margin-bottom: 8px"{/if}>
 								<label>
-									<input type="radio" name="product" value="{$ticket.product_ref|unescape}" />
+									<input type="radio" name="product" value="{$ticket.product_ref|escape}" />
 									<span style="width:170px; display:inline-block">
 										{if isset($ticket.promo_units) and ($ticket.promo_units > 0)}
 											<strike>{$ticket.product_units|number_format:0:",":"."} {l s='sms credits' mod='expressmailing'}</strike>

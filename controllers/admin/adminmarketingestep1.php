@@ -18,7 +18,7 @@
 class AdminMarketingEStep1Controller extends ModuleAdminController
 {
 	private $campaign_id = null;
-	private $default_max_daily = 2000;
+	private $default_max_daily = 400;
 
 	public function __construct()
 	{
@@ -296,9 +296,9 @@ class AdminMarketingEStep1Controller extends ModuleAdminController
 					'campaign_date_update' => date('Y-m-d H:i:s'),
 					'campaign_date_send' => $campaign_date_send,
 					'campaign_name' => pSQL($campaign_name),
-					'campaign_tracking' => $campaign_tracking,
-					'campaign_linking' => $campaign_linking,
-					'campaign_redlist' => $campaign_redlist,
+					'campaign_tracking' => pSQL($campaign_tracking),
+					'campaign_linking' => pSQL($campaign_linking),
+					'campaign_redlist' => pSQL($campaign_redlist),
 					'campaign_day_limit' => $limit_daily,
 					'campaign_max_limit' => $limit_max,
 					'campaign_week_limit' => $limit_week
