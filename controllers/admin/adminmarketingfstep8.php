@@ -83,7 +83,7 @@ class AdminMarketingFStep8Controller extends ModuleAdminController
 	{
 		$this->context->smarty->assign(array (
 			'campaign_id' => $this->campaign_id,
-			'campaign_name' => $this->name,
+			'campaign_name' => Tools::htmlentitiesDecodeUTF8($this->name),
 			'campaign_sended' => $this->campaign_sended,
 			'count_planned' => $this->count_planned_recipients,
 			'count_cancelled' => $this->count_cancelled_recipients

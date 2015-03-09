@@ -233,7 +233,7 @@ class AdminMarketingSStatsController extends ModuleAdminController
 				$this->count_recipients_on_system_redlist = $response_array['count_recipients_on_system_redlist'];
 				$this->count_recipients_on_noads_redlist = $response_array['count_recipients_on_noads_redlist'];
 				$this->count_recipients_on_personnal_redlist = $response_array['count_recipients_on_personnal_redlist'];
-				$this->fields_value['campaign_name'] = $this->campaign_name;
+				$this->fields_value['campaign_name'] = Tools::htmlentitiesDecodeUTF8($this->campaign_name);
 				$this->fields_value['campaign_text'] = $this->campaign_text;
 				$this->fields_value['campaign_state'] = $this->campaign_state;
 			}

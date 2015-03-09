@@ -82,8 +82,8 @@ class AdminMarketingSStep2Controller extends ModuleAdminController
 						GROUP BY target
 						HAVING COUNT(target) > 1
 					) as dd';
-		$this->duplicate_count = Db::getInstance()->getValue($request, false);
-
+		$this->duplicate_count = (int)Db::getInstance()->getValue($request, false);
+		
 		// Total recipients will be stored in $this->list_total
 		// ----------------------------------------------------
 		$this->initCustomerFilters();

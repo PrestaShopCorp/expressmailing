@@ -95,7 +95,7 @@ class AdminMarketingSStep7Controller extends ModuleAdminController
 			'count_planned' => $this->count_planned_recipients,
 			'count_cancelled' => $this->count_cancelled_recipients,
 			'count_detail_array' => $this->cost_sms_detail,
-			'campaign_name' => $this->campaign_name,
+			'campaign_name' => Tools::htmlentitiesDecodeUTF8($this->campaign_name),
 			'campaign_text' => $this->campaign_text,
 			'campaign_sended' => $this->campaign_sended
 		));

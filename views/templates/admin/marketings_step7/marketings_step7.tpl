@@ -49,7 +49,7 @@
 									<div class="form-group">
 										<label class="control-label col-lg-4"> {l s='Campaign name :' mod='expressmailing'} </label>
 										<div class="col-lg-8">
-											<input id="campaign_name" type="text" readonly="readonly" value="{$campaign_name|escape:'htmlall':'UTF-8'}" name="campaign_name">
+											<input id="campaign_name" type="text" readonly="readonly" value="{$campaign_name|escape}" name="campaign_name">
 										</div>
 									</div>
 									<div class="form-group">
