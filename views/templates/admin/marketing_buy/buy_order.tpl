@@ -126,7 +126,7 @@
 				{elseif $order_btn_proceed == 'pay'}
 					{foreach $payments as $payment}
 						<div class="btn-group">
-							<a class="btn btn-default" href="{$payment.payment_url|escape:'url'}" style="margin: 0px 25px">
+							<a class="btn btn-default" href="{$payment.payment_url|escape}" style="margin: 0px 25px">
 								<img src="{$payment.payment_image|escape}" style="margin: 7px"><br>
 								<b>{l s='Pay with %s' mod='expressmailing' sprintf=$payment.payment_name}</b>
 							</a>
