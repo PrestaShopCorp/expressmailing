@@ -73,11 +73,14 @@ class AdminMarketingEStep1Controller extends ModuleAdminController
 		{
 			// On retrouve le max_daily depuis l'API Express-Mailing
 			// -----------------------------------------------------
-			$parameters = array();
+			$parameters = array(
+				'account_id' => $this->session_api->account_id
+			);
 			$response_array = array();
 
 			if ($this->session_api->call('email', 'account', 'get_formula', $parameters, $response_array))
-				$this->default_max_daily = $response_array['broadcast_max_daily'];
+				if ((int)$response_array['broadcast_max_daily'] > 0)
+					$this->default_max_daily = $response_array['broadcast_max_daily'];
 		}
 	}
 
