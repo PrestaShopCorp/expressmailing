@@ -26,13 +26,13 @@
     <div class="col-lg-12">
 		<form class="defaultForm form-horizontal AdminMarketingEStep6" action="#" method="post" enctype="multipart/form-data" novalidate="">
 		<div class="panel" id="fieldset_0">
-			<div class="panel-heading"><i class="icon-calendar-empty"></i> {l s='Broadcast days' mod='expressmailing'} <span class="badge">{count($days)|escape:'intval'}</span></div>
+			<div class="panel-heading"><i class="icon-calendar-empty"></i> {l s='Broadcast days' mod='expressmailing'} <span class="badge">{count($days)|intval}</span></div>
 			<section>
 				<nav>
 					<ul class="nav nav-pills">
 						{foreach $days as $day}
 							<li {if $select_day == $day['day_api']}class="active"{/if}>
-								<a href="{$current_index|escape:'quotes'}&stat_date={$day['day_api']|escape:'intval'}&token={$smarty.get.token|escape}">
+								<a href="{$current_index|escape:'quotes'}&stat_date={$day['day_api']|intval}&token={$smarty.get.token|escape:'html':'UTF-8'}">
 									<i class="icon-eye-open"></i>
 									<span class="hidden-inline-xs">{$day['day_lang']|escape:'htmlall':'UTF-8'}</span>
 								</a>
@@ -50,14 +50,14 @@
     <div class="col-lg-12">
 		<form class="defaultForm form-horizontal AdminMarketingEStep6" action="#" method="post" enctype="multipart/form-data" novalidate="">
 		<div class="panel" id="fieldset_0">
-			<div class="panel-heading"><i class="icon-bar-chart"></i> {l s='Statistics for campaign' mod='expressmailing'} &laquo;&nbsp;{$campaign_name|escape}&nbsp;&raquo;</div>
+			<div class="panel-heading"><i class="icon-bar-chart"></i> {l s='Statistics for campaign' mod='expressmailing'} &laquo;&nbsp;{$campaign_name|escape:'html':'UTF-8'}&nbsp;&raquo;</div>
 			<table border="0" width="100%" cellspacing="5" cellpadding="5">
 			<tr>
 				<td class="stat_td">
 					<div class="stat_list_block">
 						<span class="stat_label">{$l_sent|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
-							<span>{$sent|escape:'intval'}</span>
+							<span>{$sent|intval}</span>
 						</span>
 					</div>
 				</td>
@@ -65,7 +65,7 @@
 					<div class="stat_list_block">
 						<span class="stat_label">{$l_not_sent|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
-							<span>{$not_sent|escape:'intval'}</span>
+							<span>{$not_sent|intval}</span>
 						</span>
 					</div>
 				</td>
@@ -73,10 +73,10 @@
 					<div class="stat_list_block">
 						<span class="stat_label">{$l_delivrered|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
-							<span>{$delivered|escape:'intval'}</span>
+							<span>{$delivered|intval}</span>
 						</span>
 						<span class="ratio_label green">
-							<span>{$ratio_delivered|escape:'intval'}%</span>
+							<span>{$ratio_delivered|intval}%</span>
 						</span>
 					</div>
 				</td>
@@ -84,10 +84,10 @@
 					<div class="stat_list_block">
 						<span class="stat_label">{$l_not_delivrered|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
-							<span>{$not_delivered|escape:'intval'}</span>
+							<span>{$not_delivered|intval}</span>
 						</span>
 						<span class="ratio_label red">
-							<span>{$ratio_not_delivered|escape:'intval'}%</span>
+							<span>{$ratio_not_delivered|intval}%</span>
 						</span>
 					</div>
 				</td>
@@ -95,10 +95,10 @@
 					<div class="stat_list_block">
 						<span class="stat_label">{$l_opened|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
-							<span>{$opened|escape:'intval'}</span>
+							<span>{$opened|intval}</span>
 						</span>
 						<span class="ratio_label green">
-							<span>{$ratio_opened|escape:'intval'}%</span>
+							<span>{$ratio_opened|intval}%</span>
 						</span>
 					</div>
 				</td>
@@ -106,10 +106,10 @@
 					<div class="stat_list_block">
 						<span class="stat_label">{$l_not_opened|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
-							<span>{$not_opened|escape:'intval'}</span>
+							<span>{$not_opened|intval}</span>
 						</span>
 						<span class="ratio_label red">
-							<span>{$ratio_not_opened|escape:'intval'}%</span>
+							<span>{$ratio_not_opened|intval}%</span>
 						</span>
 					</div>
 				</td>
@@ -117,10 +117,10 @@
 					<div class="stat_list_block">
 						<span class="stat_label">{$l_clickers|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
-							<span>{$unique_clickers|escape:'intval'}</span>
+							<span>{$unique_clickers|intval}</span>
 						</span>
 						<span class="ratio_label green">
-							<span>{$ratio_unique_clickers|escape:'intval'}%</span>
+							<span>{$ratio_unique_clickers|intval}%</span>
 						</span>
 					</div>
 				</td>
@@ -128,7 +128,7 @@
 					<div class="stat_list_block">
 						<span class="stat_label">{$l_clicks|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
-							<span>{$all_clicks|escape:'intval'}</span>
+							<span>{$all_clicks|intval}</span>
 						</span>
 					</div>
 				</td>
@@ -136,10 +136,10 @@
 					<div class="stat_list_block">
 						<span class="stat_label">{$l_abuses|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
-							<span>{$abuses|escape:'intval'}</span>
+							<span>{$abuses|intval}</span>
 						</span>
 						<span class="ratio_label red">
-							<span>{$ratio_abuses|escape:'intval'}%</span>
+							<span>{$ratio_abuses|intval}%</span>
 						</span>
 					</div>
 				</td>
@@ -147,10 +147,10 @@
 					<div class="stat_list_block">
 						<span class="stat_label">{$l_unsubscribes|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
-							<span>{$unsubscribes|escape:'intval'}</span>
+							<span>{$unsubscribes|intval}</span>
 						</span>
 						<span class="ratio_label red">
-							<span>({$ratio_unsubscribes|escape:'intval'}%)</span>
+							<span>({$ratio_unsubscribes|intval}%)</span>
 						</span>
 					</div>
 				</td>

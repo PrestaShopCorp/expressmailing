@@ -13,7 +13,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller=AdminMarketingFStep2&token={Tools::getAdminTokenLite('AdminMarketingFStep2')|escape}" method="post" enctype="multipart/form-data" novalidate="">
+		<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller=AdminMarketingFStep2&token={Tools::getAdminTokenLite('AdminMarketingFStep2')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate="">
 			<div class="panel">
 				<div class="panel-heading">
                     <i class="icon-print"></i> {l s='Document preview' mod='expressmailing'}

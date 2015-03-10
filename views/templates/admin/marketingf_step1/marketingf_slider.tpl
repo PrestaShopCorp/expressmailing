@@ -17,10 +17,10 @@
 	{
 		var slider{$field_name|escape:javascript}Config = {
 			range: true,
-			min: {$min_value|escape:'intval'},
-			max: {$max_value|escape:'intval'},
-			values: [{$start_value|escape:'intval'}, {$end_value|escape:'intval'}],
-			step: {$step|escape:'intval'},
+			min: {$min_value|intval},
+			max: {$max_value|intval},
+			values: [{$start_value|intval}, {$end_value|intval}],
+			step: {$step|intval},
 			slide: function (event, ui) {
 				updateValue(ui.values[0], ui.values[1]);
 			}
@@ -69,7 +69,7 @@
 <input class="col-lg-1" type="hidden" id="start_hour_hidden" name="start_hour_hidden" style="width: 5em" />
 
 <div class="slider-container col-lg-4" style="margin: 9px 10px 0px 10px">
-	<div id="slider-{$field_name|escape}"></div>
+	<div id="slider-{$field_name|escape:'html':'UTF-8'}"></div>
 </div>
 
 <input class="col-lg-1" type="text" id="end_hour" name="end_hour" style="width: 5em" />

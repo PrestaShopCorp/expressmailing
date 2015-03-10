@@ -30,7 +30,7 @@
 
 				<div class="table-responsive">
 
-					<input type="text" name="order_session" id="campaign_id" value="{$order_session|escape}" class="hidden" readonly="readonly">
+					<input type="text" name="order_session" id="campaign_id" value="{$order_session|escape:'html':'UTF-8'}" class="hidden" readonly="readonly">
 
 					<table class="table" id="orderProducts">
 					<thead>
@@ -45,8 +45,8 @@
 					<tbody>
 					{foreach $cart.products as $product}
 						<tr>
-							<td>{$product.product_ref|escape}</td>
-							<td>{$product.product_desc|escape}</td>
+							<td>{$product.product_ref|escape:'html':'UTF-8'}</td>
+							<td>{$product.product_desc|escape:'html':'UTF-8'}</td>
 							<td class="text-center">
 								{if isset($product.promo_price) and ($product.promo_price > 0)}
 									{displayPrice price=$product.promo_price currency=$currency->id}
@@ -56,10 +56,10 @@
 							</td>
 							<td class="text-center" nowrap style="vertical-align: middle">
 								{if $order_btn_proceed == 'checkout'}
-									<input type="text" style="width: 3em; display: inline" name="qty_{$product.product_ref|escape}" value="{$product.product_quantity|escape:'intval'}">
-									<button class="btn btn-default" style="vertical-align: baseline;" name="submitQty[{$product.product_ref|escape}]" type="submit"><i class="icon-refresh"></i></button>
+									<input type="text" style="width: 3em; display: inline" name="qty_{$product.product_ref|escape:'html':'UTF-8'}" value="{$product.product_quantity|intval}">
+									<button class="btn btn-default" style="vertical-align: baseline;" name="submitQty[{$product.product_ref|escape:'html':'UTF-8'}]" type="submit"><i class="icon-refresh"></i></button>
 								{else}
-									{$product.product_quantity|escape:'intval'}
+									{$product.product_quantity|intval}
 								{/if}
 							</td>
 							<td class="text-center">{displayPrice price=$product.total_price currency=$currency->id}</td>
@@ -79,11 +79,11 @@
 							<div class="panel">
 								<div><b>{l s='Billing address :' mod='expressmailing'}</b></div>
 								<div class="table-responsive">
-									<div>{$inscription.company_name|escape}</div>
-									<div>{$inscription.company_address1|escape}</div>
-									{if $inscription.company_address2}<div>{$inscription.company_address2|escape}</div>{/if}
-									<div>{$inscription.company_zipcode|escape} {$inscription.company_city|escape}</div>
-									<div>{$inscription.company_country|escape}</div>
+									<div>{$inscription.company_name|escape:'html':'UTF-8'}</div>
+									<div>{$inscription.company_address1|escape:'html':'UTF-8'}</div>
+									{if $inscription.company_address2}<div>{$inscription.company_address2|escape:'html':'UTF-8'}</div>{/if}
+									<div>{$inscription.company_zipcode|escape:'html':'UTF-8'} {$inscription.company_city|escape:'html':'UTF-8'}</div>
+									<div>{$inscription.company_country|escape:'html':'UTF-8'}</div>
 								</div>
 							</div>
 						{/if}
@@ -126,8 +126,8 @@
 				{elseif $order_btn_proceed == 'pay'}
 					{foreach $payments as $payment}
 						<div class="btn-group">
-							<a class="btn btn-default" href="{$payment.payment_url|escape}" style="margin: 0px 25px">
-								<img src="{$payment.payment_image|escape}" style="margin: 7px"><br>
+							<a class="btn btn-default" href="{$payment.payment_url|escape:'html':'UTF-8'}" style="margin: 0px 25px">
+								<img src="{$payment.payment_image|escape:'html':'UTF-8'}" style="margin: 7px"><br>
 								<b>{l s='Pay with %s' mod='expressmailing' sprintf=$payment.payment_name}</b>
 							</a>
 						</div>

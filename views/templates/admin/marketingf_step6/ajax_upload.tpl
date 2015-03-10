@@ -20,7 +20,7 @@
 		var i = 1;
 		var url_base = "index.php?controller=AdminMarketingFStep6";
 		var url_ajax = "&ajax=true";
-		var url_cpid = "&campaign_id={$campaign_id|escape:'intval'}";
+		var url_cpid = "&campaign_id={$campaign_id|intval}";
 		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingFStep6')|escape:javascript}";
 
 		upload();
@@ -32,8 +32,8 @@
 				url: url_base + url_ajax + url_token,
 				type: "POST",
 				data: {
-					campaign_id: "{$campaign_id|escape:'intval'}",
-					guid_import: "{$guid_import|escape}",
+					campaign_id: "{$campaign_id|intval}",
+					guid_import: "{$guid_import|escape:'html':'UTF-8'}",
 					i: i++
 				},
 				success: function (output)
@@ -58,7 +58,7 @@
 
 </script>
 
-<form id="configuration_form" class="defaultForm form-horizontal AdminMarketingFStep6" action="index.php?controller=AdminMarketingFStep6&token={Tools::getAdminTokenLite('AdminMarketingFStep6')|escape}" method="post" enctype="multipart/form-data" novalidate="">
+<form id="configuration_form" class="defaultForm form-horizontal AdminMarketingFStep6" action="index.php?controller=AdminMarketingFStep6&token={Tools::getAdminTokenLite('AdminMarketingFStep6')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate="">
 	<div class="panel">
 		<div class="panel-heading">
 			<i class="icon process-icon-loading"></i>&nbsp;&nbsp;{l s='Recipients upload (step 5)' mod='expressmailing'}

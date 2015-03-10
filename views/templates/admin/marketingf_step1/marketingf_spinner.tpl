@@ -20,7 +20,7 @@
 			min: 0,
 		});
 
-		if ({$preset_value|escape:'intval'} == 0)
+		if ({$preset_value|intval} == 0)
 		{
 			spinner.spinner("disable");
 			spinner.spinner("value", 0);
@@ -28,7 +28,7 @@
 		else
 		{
 			spinner.spinner("enable");
-			spinner.spinner("value", {$preset_value|escape:'intval'});
+			spinner.spinner("value", {$preset_value|intval});
 			$("#enable_limit")[0].checked = true;
 		}
 

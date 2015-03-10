@@ -13,7 +13,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller=AdminMarketingFStep2&token={Tools::getAdminTokenLite('AdminMarketingFStep2')|escape}" method="post" enctype="multipart/form-data" novalidate="">
+		<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller=AdminMarketingFStep2&token={Tools::getAdminTokenLite('AdminMarketingFStep2')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate="">
 			<div class="panel">
 				<div class="panel-heading">
                     <i class="icon-file-text"></i> {l s='Document preview' mod='expressmailing'}
@@ -24,14 +24,14 @@
                             Ref :
                         </label>
                         <div class="col-lg-1">
-                            <input type="{if $mod_dev}text{else}hiden{/if}" name="campaign_id" id="campaign_id" value="{$campaign_id|escape:'intval'}" class="" readonly="readonly">
+                            <input type="{if $mod_dev}text{else}hiden{/if}" name="campaign_id" id="campaign_id" value="{$campaign_id|intval}" class="" readonly="readonly">
                         </div>
                     </div>
 					<div class="form-group">
 						<div class="col-lg-12" style="text-align: center">
 							{foreach $settled_pages as $page}
-								<div class="fax_preview" style="background-image: url({$page['page_url']|escape}); background-size: 210px 297px; display: inline-block; width: 210px; height: 297px; border: 1px solid black; margin-left: .5em; margin-right: .5em">
-									<a class="fax_delete" onclick="return false" href="index.php?controller=AdminMarketingFStep2&campaign_id={$campaign_id|escape:'intval'}&token={Tools::getAdminTokenLite('AdminMarketingFStep2')|escape}&delete_page={$page['id']|escape:'intval'}" style="float: right; margin: .5em" title="{l s='Delete this page' mod='expressmailing'}"><img src="../img/admin/cross.png" border="0" /></a>
+								<div class="fax_preview" style="background-image: url({$page['page_url']|escape:'html':'UTF-8'}); background-size: 210px 297px; display: inline-block; width: 210px; height: 297px; border: 1px solid black; margin-left: .5em; margin-right: .5em">
+									<a class="fax_delete" onclick="return false" href="index.php?controller=AdminMarketingFStep2&campaign_id={$campaign_id|intval}&token={Tools::getAdminTokenLite('AdminMarketingFStep2')|escape:'html':'UTF-8'}&delete_page={$page['id']|intval}" style="float: right; margin: .5em" title="{l s='Delete this page' mod='expressmailing'}"><img src="../img/admin/cross.png" border="0" /></a>
 								</div>
 							{/foreach}
 						</div>
@@ -41,7 +41,7 @@
 					<button type="submit" value="1" id="configuration_form_submit_btn" name="submitFaxStep2" class="btn btn-default pull-right">
 						<i class="process-icon-next"></i> {l s='Next' mod='expressmailing'}
 					</button>
-					<a href="index.php?controller=AdminMarketingFStep1&campaign_id={$campaign_id|escape:'intval'}&token={Tools::getAdminTokenLite('AdminMarketingFStep1')|escape}" class="btn btn-default"><i class="process-icon-back"></i> {l s='Back' mod='expressmailing'}</a>
+					<a href="index.php?controller=AdminMarketingFStep1&campaign_id={$campaign_id|intval}&token={Tools::getAdminTokenLite('AdminMarketingFStep1')|escape:'html':'UTF-8'}" class="btn btn-default"><i class="process-icon-back"></i> {l s='Back' mod='expressmailing'}</a>
 				</div>
 			</div>
 		</form>

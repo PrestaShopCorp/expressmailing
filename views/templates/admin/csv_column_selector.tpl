@@ -35,8 +35,8 @@
 						<tr>
 							{assign var="j" value=1 nocache}
 							{foreach $row as $cell}
-								<td class="col{$j++|escape:'intval'}" style="text-align: left; padding: 0.4em 0.7em 0.4em 0.7em">
-									{$cell|escape}
+								<td class="col{$j++|intval}" style="text-align: left; padding: 0.4em 0.7em 0.4em 0.7em">
+									{$cell|escape:'html':'UTF-8'}
 								</td>
 							{/foreach}
 						</tr>
@@ -45,7 +45,7 @@
 			</div>
 		</div>
 		<div class="panel-footer">
-			<a align="left" style="display:inline-block" id="previous" href="index.php?controller={$prev_page|escape}&campaign_id={$campaign_id|escape:'intval'}&token={Tools::getAdminTokenLite($prev_page)|escape}" class="btn btn-default">
+			<a align="left" style="display:inline-block" id="previous" href="index.php?controller={$prev_page|escape:'html':'UTF-8'}&campaign_id={$campaign_id|intval}&token={Tools::getAdminTokenLite($prev_page)|escape:'html':'UTF-8'}" class="btn btn-default">
 				<i class="process-icon-back"></i> {l s='Back' mod='expressmailing'}
 			</a>
 			<form class="pull-right" id="formsubmit" style="display:inline-block"  method="post" enctype="multipart/form-data" novalidate="">
@@ -68,7 +68,7 @@
 			$columnCellsRemove.removeClass('highlighted');
 			var $columnCells = $this.parents('table').find('tr td:nth-child(' + (index + 1) + ')');
 			$columnCells.addClass('highlighted');
-			document.getElementById("formsubmit").setAttribute("action", 'index.php?controller={$next_page|escape}&campaign_id={$campaign_id|escape:'intval'}&token={Tools::getAdminTokenLite($next_page)|escape}&indexCol=' + index);
+			document.getElementById("formsubmit").setAttribute("action", 'index.php?controller={$next_page|escape:'html':'UTF-8'}&campaign_id={$campaign_id|intval}&token={Tools::getAdminTokenLite($next_page)|escape:'html':'UTF-8'}&indexCol=' + index);
 
 			$('.' + $(this).attr('class').split(' ')[0]).each(function ()
 			{

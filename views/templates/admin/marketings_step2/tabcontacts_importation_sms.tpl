@@ -28,13 +28,13 @@
 			});
 		});
 </script>
-<form id="ps_expressmailing_sms_recipients_form" class="defaultForm form-horizontal AdminMarketingSStep2" action="index.php?controller=AdminMarketingSStep2&token={Tools::getAdminTokenLite('AdminMarketingSStep2')|escape}" method="post" enctype="multipart/form-data" novalidate>
+<form id="ps_expressmailing_sms_recipients_form" class="defaultForm form-horizontal AdminMarketingSStep2" action="index.php?controller=AdminMarketingSStep2&token={Tools::getAdminTokenLite('AdminMarketingSStep2')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate>
 	<input type="hidden" name="submitAddps_expressmailing_sms_recipients" value="1" />
-	<input type="hidden" name="campaign_id" value="{$campaign_id|escape:'intval'}" />
+	<input type="hidden" name="campaign_id" value="{$campaign_id|intval}" />
 
 	<div class="panel" id="fieldset_0">
 		<div class="panel-heading" style="margin-bottom: 0px; border-bottom: none">
-			<i class="icon-beaker"></i>	{$title|escape}
+			<i class="icon-beaker"></i>	{$title|escape:'html':'UTF-8'}
 		</div>
 		<div class="form-wrapper" style="margin-left: -20px; margin-right: -20px;">
 			<div class="form-group" style="margin-bottom: 0px;">

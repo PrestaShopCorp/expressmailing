@@ -15,7 +15,7 @@
 	$(function () {
 		countries_ids = new Array();
 	{foreach $grouped_target_list as $target_group}
-		countries_ids.push("{$target_group['country_id']|escape:'intval'}");
+		countries_ids.push("{$target_group['country_id']|intval}");
 	{/foreach}
 		var changeCheckboxAuthorize = function () {
 			var countryID = $(this).val();
@@ -64,7 +64,7 @@
 		});
 </script>
 
-<form id="configuration_form" class="defaultForm form-horizontal AdminMarketingSStep5" action="index.php?controller=AdminMarketingSStep5&token={Tools::getAdminTokenLite('AdminMarketingSStep5')|escape}" method="post" enctype="multipart/form-data" novalidate="">
+<form id="configuration_form" class="defaultForm form-horizontal AdminMarketingSStep5" action="index.php?controller=AdminMarketingSStep5&token={Tools::getAdminTokenLite('AdminMarketingSStep5')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate="">
 	<div class="panel">
 		<div class="panel-heading">
 			<i class="icon-trash"></i> {l s='Recipients cleaner (step 5)' mod='expressmailing'}
@@ -75,7 +75,7 @@
 					Ref :
 				</label>
 				<div class="col-lg-1">
-					<input type="{if $mod_dev}text{else}hiden{/if}" name="campaign_id" id="campaign_id" value="{$campaign_id|escape:'intval'}" class="" readonly="readonly">
+					<input type="{if $mod_dev}text{else}hiden{/if}" name="campaign_id" id="campaign_id" value="{$campaign_id|intval}" class="" readonly="readonly">
 				</div>
 			</div>
 			<div class="form-group">
@@ -98,19 +98,19 @@
 								{foreach $grouped_target_list as $target_group}
 									{if $target_group['country_id']}
 										<tr class="odd">
-											<td class="">{$countries_list[$target_group['country_id']]['country_name']|escape}</td>
-											<td class="">{$target_group['count_total_recipients']|escape:'intval'}</td>
+											<td class="">{$countries_list[$target_group['country_id']]['country_name']|escape:'html':'UTF-8'}</td>
+											<td class="">{$target_group['count_total_recipients']|intval}</td>
 											<td class="text-right">
 												<div class="btn-group-action">
 													<div class="btn-group pull-right">
 														<span class="switch prestashop-switch fixed-width-lg">
-															<input type="hidden" name="selected_countries[]" id="selected_countries_{$target_group['country_id']|escape:'intval'}" value=""/>
-															<input type="radio" name="country_{$target_group['country_id']|escape:'intval'}" id="country_{$target_group['country_id']|escape:'intval'}_authorize"
-																   value="{$target_group['country_id']|escape:'intval'}" {if $target_group['country_is_allowed'] == "True"} checked="checked"{/if}/>
-															<label  for="country_{$target_group['country_id']|escape:'intval'}_authorize">{l s='Authorize' mod='expressmailing'}</label>
-															<input type="radio" name="country_{$target_group['country_id']|escape:'intval'}" id="country_{$target_group['country_id']|escape:'intval'}_refuse"
-																   value="{$target_group['country_id']|escape:'intval'}" {if $target_group['country_is_allowed'] == "False"} checked="checked"{/if}/>
-															<label  for="country_{$target_group['country_id']|escape:'intval'}_refuse">{l s='Refuse' mod='expressmailing'}</label>
+															<input type="hidden" name="selected_countries[]" id="selected_countries_{$target_group['country_id']|intval}" value=""/>
+															<input type="radio" name="country_{$target_group['country_id']|intval}" id="country_{$target_group['country_id']|intval}_authorize"
+																   value="{$target_group['country_id']|intval}" {if $target_group['country_is_allowed'] == "True"} checked="checked"{/if}/>
+															<label  for="country_{$target_group['country_id']|intval}_authorize">{l s='Authorize' mod='expressmailing'}</label>
+															<input type="radio" name="country_{$target_group['country_id']|intval}" id="country_{$target_group['country_id']|intval}_refuse"
+																   value="{$target_group['country_id']|intval}" {if $target_group['country_is_allowed'] == "False"} checked="checked"{/if}/>
+															<label  for="country_{$target_group['country_id']|intval}_refuse">{l s='Refuse' mod='expressmailing'}</label>
 															<a class="slide-button btn"></a>
 														</span>
 													</div>
@@ -123,35 +123,35 @@
 								{if $campaign_infos['count_recipients_on_system_redlist'] > 0}
 									<tr class="odd">
 										<td class="">{l s='Recipients on system redlist' mod='expressmailing'}</td>
-										<td class="">{$campaign_infos['count_recipients_on_system_redlist']|escape:'intval'}</td>
+										<td class="">{$campaign_infos['count_recipients_on_system_redlist']|intval}</td>
 										<td class="text-right"></td>
 									</tr>
 								{/if}
 								{if $campaign_infos['count_recipients_on_noads_redlist'] > 0}
 									<tr class="odd">
 										<td class="">{l s='Recipients on  "No ad" list' mod='expressmailing'}</td>
-										<td class="">{$campaign_infos['count_recipients_on_noads_redlist']|escape:'intval'}</td>
+										<td class="">{$campaign_infos['count_recipients_on_noads_redlist']|intval}</td>
 										<td class="text-right"></td>
 									</tr>
 								{/if}
 								{if $campaign_infos['count_recipients_on_personnal_redlist'] > 0}
 									<tr class="odd">
 										<td class="">{l s='Recipients on personnal redlist' mod='expressmailing'}</td>
-										<td class="">{$campaign_infos['count_recipients_on_personnal_redlist']|escape:'intval'}</td>
+										<td class="">{$campaign_infos['count_recipients_on_personnal_redlist']|intval}</td>
 										<td class="text-right"></td>
 									</tr>
 								{/if}
 								{if $campaign_infos['count_duplicate_recipients'] > 0}
 									<tr class="odd">
 										<td class="">{l s='Recipients duplicates' mod='expressmailing'}</td>
-										<td class="">{$campaign_infos['count_duplicate_recipients']|escape:'intval'}</td>
+										<td class="">{$campaign_infos['count_duplicate_recipients']|intval}</td>
 										<td class="text-right"></td>
 									</tr>
 								{/if}
 								{if $campaign_infos['count_invalid_recipients'] > 0}
 									<tr class="odd">
 										<td class="">{l s='Invalid recipients' mod='expressmailing'}</td>
-										<td class="">{$campaign_infos['count_invalid_recipients']|escape:'intval'}</td>
+										<td class="">{$campaign_infos['count_invalid_recipients']|intval}</td>
 										<td class="text-right"></td>
 									</tr>
 								{/if}
@@ -162,7 +162,7 @@
 			</div>
 		</div>
 		<div class="panel-footer">
-			<a href="index.php?controller=AdminMarketingSStep2&campaign_id={$campaign_id|escape:'intval'}&token={Tools::getAdminTokenLite('AdminMarketingSStep2')|escape}" class="btn btn-default">
+			<a href="index.php?controller=AdminMarketingSStep2&campaign_id={$campaign_id|intval}&token={Tools::getAdminTokenLite('AdminMarketingSStep2')|escape:'html':'UTF-8'}" class="btn btn-default">
 				<i class="process-icon-back"></i> {l s='Back' mod='expressmailing'}
 			</a>
 			<button type="submit" value="1"	id="configuration_form_submit_btn" name="submitSmsStep5" class="btn btn-default pull-right">

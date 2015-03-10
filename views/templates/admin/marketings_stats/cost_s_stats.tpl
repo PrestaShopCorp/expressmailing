@@ -27,13 +27,13 @@
 	{foreach $count_detail_array as $row}
 		<tr >
 			<td style="padding: 0.5em; padding-left: .8em; padding-right: .8em; border: 1px solid #E6E6E6;">
-				{$row['count_recipients']|escape:'intval'}
+				{$row['count_recipients']|intval}
 			</td>
 			<td style="padding: 0.5em; padding-left: .8em; padding-right: .8em; border: 1px solid #E6E6E6;">
-				{$row['count_sms']|escape:'intval'}
+				{$row['count_sms']|intval}
 			</td>
 			<td style="padding: 0.5em; padding-left: .8em; padding-right: .8em; border: 1px solid #E6E6E6;">
-				{($row['count_recipients'] * $row['count_sms'])|escape:'intval'} sms
+				{($row['count_recipients'] * $row['count_sms'])|intval} sms
 			</td>
 		</tr>
 	{/foreach}

@@ -17,7 +17,7 @@
 
 	{foreach from=$delivered item=deliver_stat}
     	series1.push({
-            x: {$deliver_stat.x|escape:'intval'} * 1000, y: {$deliver_stat.y|escape:'intval'}
+            x: {$deliver_stat.x|intval} * 1000, y: {$deliver_stat.y|intval}
         });
 	{/foreach}
 

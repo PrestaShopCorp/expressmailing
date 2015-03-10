@@ -12,7 +12,7 @@
 *}
 
 {if is_array($smarty_fax_tickets) || is_array($smarty_sms_tickets)}
-<form id="buy_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller=AdminMarketingBuy&token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape}" method="post" enctype="multipart/form-data" novalidate>
+<form id="buy_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller=AdminMarketingBuy&token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate>
 	<div class="panel" id="fieldset_0">
 		<div class="panel-heading">
 			<i class="icon-shopping-cart"></i>&nbsp;{l s='Buy credit packs' mod='expressmailing'}
@@ -23,17 +23,17 @@
 					<div class="col-lg-6 ">
 						{foreach $smarty_fax_tickets as $ticket}
 							{if isset($ticket.promo_ending)}<font color="red" style="display: block">{l s='Promotion until' mod='expressmailing'} {$tool_date->getLocalizableDate($ticket.promo_ending)}</font>{/if}
-							{if isset($ticket.promo_desc) and !empty($ticket.promo_desc)}<font color="red" style="display: block"><b>{$ticket.promo_desc|escape}</b></font>{/if}
+							{if isset($ticket.promo_desc) and !empty($ticket.promo_desc)}<font color="red" style="display: block"><b>{$ticket.promo_desc|escape:'html':'UTF-8'}</b></font>{/if}
 							<div class="radio" {if isset($ticket.promo_ending)}style="margin-bottom: 8px"{/if}>
 								<label>
-									<input type="radio" name="product" value="{$ticket.product_ref|escape}" />
+									<input type="radio" name="product" value="{$ticket.product_ref|escape:'html':'UTF-8'}" />
 									<span style="width:170px; display:inline-block">
 										{if isset($ticket.promo_units) and ($ticket.promo_units > 0)}
 											<strike>{$ticket.product_units|number_format:0:",":"."} {l s='fax credits' mod='expressmailing'}</strike>
-											<br><font color="red"><b>{$ticket.promo_units|number_format:0:",":"."} {l s='fax credits' mod='expressmailing'}</b></font><br>{$ticket.product_desc|escape}
+											<br><font color="red"><b>{$ticket.promo_units|number_format:0:",":"."} {l s='fax credits' mod='expressmailing'}</b></font><br>{$ticket.product_desc|escape:'html':'UTF-8'}
 											{$ticket.product_units = $ticket.promo_units}
 										{else}
-											{$ticket.product_units|number_format:0:",":"."} {l s='fax credits' mod='expressmailing'}<br>{$ticket.product_desc|escape}
+											{$ticket.product_units|number_format:0:",":"."} {l s='fax credits' mod='expressmailing'}<br>{$ticket.product_desc|escape:'html':'UTF-8'}
 										{/if}
 									</span>
 									<span style="width:170px; display:inline-block">
@@ -55,17 +55,17 @@
 					<div class="col-lg-6 ">
 						{foreach $smarty_sms_tickets as $ticket}
 							{if isset($ticket.promo_ending)}<font color="red" style="display: block">{l s='Promotion until' mod='expressmailing'} {$tool_date->getLocalizableDate($ticket.promo_ending)}</font>{/if}
-							{if isset($ticket.promo_desc) and !empty($ticket.promo_desc)}<font color="red" style="display: block"><b>{$ticket.promo_desc|escape}</b></font>{/if}
+							{if isset($ticket.promo_desc) and !empty($ticket.promo_desc)}<font color="red" style="display: block"><b>{$ticket.promo_desc|escape:'html':'UTF-8'}</b></font>{/if}
 							<div class="radio" {if isset($ticket.promo_ending)}style="margin-bottom: 8px"{/if}>
 								<label>
-									<input type="radio" name="product" value="{$ticket.product_ref|escape}" />
+									<input type="radio" name="product" value="{$ticket.product_ref|escape:'html':'UTF-8'}" />
 									<span style="width:170px; display:inline-block">
 										{if isset($ticket.promo_units) and ($ticket.promo_units > 0)}
 											<strike>{$ticket.product_units|number_format:0:",":"."} {l s='sms credits' mod='expressmailing'}</strike>
-											<br><font color="red"><b>{$ticket.promo_units|number_format:0:",":"."} {l s='sms credits' mod='expressmailing'}</b></font><br>{$ticket.product_desc|escape}
+											<br><font color="red"><b>{$ticket.promo_units|number_format:0:",":"."} {l s='sms credits' mod='expressmailing'}</b></font><br>{$ticket.product_desc|escape:'html':'UTF-8'}
 											{$ticket.product_units = $ticket.promo_units}
 										{else}
-											{$ticket.product_units|number_format:0:",":"."} {l s='sms credits' mod='expressmailing'}<br>{$ticket.product_desc|escape}</span>
+											{$ticket.product_units|number_format:0:",":"."} {l s='sms credits' mod='expressmailing'}<br>{$ticket.product_desc|escape:'html':'UTF-8'}</span>
 										{/if}
 									</span>
 									<span style="width:170px; display:inline-block">

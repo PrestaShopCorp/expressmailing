@@ -14,20 +14,20 @@
 <script type="text/javascript">
 	var chartData = [
 		{
-			"label": String.fromCharCode(160) + "{$count_delivered|escape:'intval'} {l s='delivered' mod='expressmailing'}",
-			"value": {$count_delivered|escape:'intval'}
+			"label": String.fromCharCode(160) + "{$count_delivered|intval} {l s='delivered' mod='expressmailing'}",
+			"value": {$count_delivered|intval}
 		},
 		{
-			"label": String.fromCharCode(160) + "{$count_not_delivered|escape:'intval'} {l s='failed' mod='expressmailing'}",
-			"value": {$count_not_delivered|escape:'intval'}
+			"label": String.fromCharCode(160) + "{$count_not_delivered|intval} {l s='failed' mod='expressmailing'}",
+			"value": {$count_not_delivered|intval}
 		},
 		{
-			"label": String.fromCharCode(160) + "{$count_planned|escape:'intval'} {l s='planned' mod='expressmailing'}",
-			"value": {$count_planned|escape:'intval'}
+			"label": String.fromCharCode(160) + "{$count_planned|intval} {l s='planned' mod='expressmailing'}",
+			"value": {$count_planned|intval}
 		},
 		{
-			"label": String.fromCharCode(160) + "{$count_cancelled|escape:'intval'} {l s='cancelled' mod='expressmailing'}",
-			"value": {$count_cancelled|escape:'intval'}
+			"label": String.fromCharCode(160) + "{$count_cancelled|intval} {l s='cancelled' mod='expressmailing'}",
+			"value": {$count_cancelled|intval}
 		}
 	];
 </script>

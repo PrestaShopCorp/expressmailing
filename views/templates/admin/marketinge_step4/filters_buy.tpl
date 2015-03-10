@@ -60,6 +60,6 @@
 			</div>
 		</div>
 		<div>&nbsp;</div>
-		<a class="btn btn-default" href="index.php?controller=AdminMarketingBuy&product=email-filter-12-months&media=AdminMarketingEStep4&campaign_id={$campaign_id|escape:'intval'}token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape}"><i class="icon-shopping-cart"></i> &nbsp;{l s='49,00 € per year' mod='expressmailing'}</a>
+		<a class="btn btn-default" href="index.php?controller=AdminMarketingBuy&product=email-filter-12-months&media=AdminMarketingEStep4&campaign_id={$campaign_id|intval}token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape:'html':'UTF-8'}"><i class="icon-shopping-cart"></i> &nbsp;{l s='49,00 € per year' mod='expressmailing'}</a>
 	</div>
 </div>

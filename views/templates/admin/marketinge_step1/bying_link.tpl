@@ -27,8 +27,8 @@
 	{
 		var url_base = "index.php?controller=AdminMarketingEStep1";
 		var url_ajax = "&ajax=true";
-		var url_cpid = "&campaign_id={$campaign_id|escape:'intval'}";
-		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingEStep1')|escape}";
+		var url_cpid = "&campaign_id={$campaign_id|intval}";
+		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingEStep1')|escape:'html':'UTF-8'}";
 
 		var dialogByingConfig =
 		{
@@ -36,8 +36,8 @@
 			resizable: true,
 			position: 'center',
 			modal: true,
-			height: 625,
-			width: 500,
+			width: 820,
+			height: 450,
 			buttons: {
 				"{l s='Close' mod='expressmailing'}": function () {
 					$(this).dialog("close");

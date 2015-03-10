@@ -11,7 +11,7 @@
 * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
 *}
 
-<form id="configuration_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape}" method="post" enctype="multipart/form-data" novalidate>
+<form id="configuration_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate>
 	<div class="center small">
 		<img src="../modules/expressmailing/img/{l s='config_en.png' mod='expressmailing'}" border="0"><br>&nbsp;
 	</div>
@@ -21,7 +21,7 @@
 			{if !empty($tool_tip)}
 			<span class="panel-heading-action">
 				<a class="list-toolbar-btn" href="#">
-					<span class="label-tooltip" data-placement="left" data-html="true" data-original-title="{$tool_tip|escape}" data-toggle="tooltip" title="">
+					<span class="label-tooltip" data-placement="left" data-html="true" data-original-title="{$tool_tip|escape:'html':'UTF-8'}" data-toggle="tooltip" title="">
 						<i class="process-icon-help"></i>
 					</span>
 				</a>
@@ -73,9 +73,9 @@
 					{l s='My statistics' mod='expressmailing'}
 				</a>
 				<ul class="dropdown-menu pull-left">
-					<li><a class="sorter sort-name" href="index.php?controller=AdminMarketingEList&token={Tools::getAdminTokenLite('AdminMarketingEList')|escape}">{l s='My emailing statistics' mod='expressmailing'}</a></li>
-					<li><a class="sorter sort-date" href="index.php?controller=AdminMarketingFList&token={Tools::getAdminTokenLite('AdminMarketingFList')|escape}">{l s='My fax statistics' mod='expressmailing'}</a></li>
-					<li><a class="sorter sort-size" href="index.php?controller=AdminMarketingSList&token={Tools::getAdminTokenLite('AdminMarketingSList')|escape}">{l s='My sms statistics' mod='expressmailing'}</a></li>
+					<li><a class="sorter sort-name" href="index.php?controller=AdminMarketingEList&token={Tools::getAdminTokenLite('AdminMarketingEList')|escape:'html':'UTF-8'}">{l s='My emailing statistics' mod='expressmailing'}</a></li>
+					<li><a class="sorter sort-date" href="index.php?controller=AdminMarketingFList&token={Tools::getAdminTokenLite('AdminMarketingFList')|escape:'html':'UTF-8'}">{l s='My fax statistics' mod='expressmailing'}</a></li>
+					<li><a class="sorter sort-size" href="index.php?controller=AdminMarketingSList&token={Tools::getAdminTokenLite('AdminMarketingSList')|escape:'html':'UTF-8'}">{l s='My sms statistics' mod='expressmailing'}</a></li>
 				</ul>
 			</div>
 			{/if}

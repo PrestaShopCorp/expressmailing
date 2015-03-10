@@ -13,7 +13,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <form id="configuration_form" class="defaultForm form-horizontal AdminMarketingSStep1" action="index.php?controller=AdminMarketingSStep1&token={Tools::getAdminTokenLite('AdminMarketingSStep1')|escape}" method="post" enctype="multipart/form-data" novalidate="">
+        <form id="configuration_form" class="defaultForm form-horizontal AdminMarketingSStep1" action="index.php?controller=AdminMarketingSStep1&token={Tools::getAdminTokenLite('AdminMarketingSStep1')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate="">
             <div class="panel" id="fieldset_0">
                 <div class="panel-heading">
                     <i class="icon-cogs"></i> {l s='Campaign configuration (step 1)' mod='expressmailing'}

@@ -25,14 +25,14 @@
 		};
 		$("#slider-{$field_name|escape:javascript}").slider(slider{$field_name|escape:javascript}Config);
 		var change_{$field_name|escape:javascript} = function (evt) {
-			var {$field_name|escape:javascript} = $("#{$field_name|escape}");
+			var {$field_name|escape:javascript} = $("#{$field_name|escape:'html':'UTF-8'}");
 			$("#slider-{$field_name|escape:javascript}").slider("value", {$field_name|escape:javascript}.val());
 		};
 		$("#{$field_name|escape:javascript}").change(change_{$field_name|escape:javascript});
 	});
 </script>
 
-<input class="col-lg-1" type="text" id="{$field_name|escape}" name="{$field_name|escape}" style="width: 4em" value="{$preset_value|escape:'intval'}"/>
+<input class="col-lg-1" type="text" id="{$field_name|escape:'html':'UTF-8'}" name="{$field_name|escape:'html':'UTF-8'}" style="width: 4em" value="{$preset_value|intval}"/>
 <div class="slider-container col-lg-4" style="margin-top: 9px; margin-left: 10px; margin-right: 10px">
-	<div id="slider-{$field_name|escape}"></div>
+	<div id="slider-{$field_name|escape:'html':'UTF-8'}"></div>
 </div>

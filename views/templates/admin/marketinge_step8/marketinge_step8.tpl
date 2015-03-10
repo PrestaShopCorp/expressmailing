@@ -14,20 +14,20 @@
 <script type="text/javascript">
 	var chartData = [
 		{
-			"label": String.fromCharCode(160) + "{$nb_redlist|escape:'intval'} {l s='redlist' mod='expressmailing'}",
-			"value": {$nb_redlist|escape:'intval'}
+			"label": String.fromCharCode(160) + "{$nb_redlist|intval} {l s='redlist' mod='expressmailing'}",
+			"value": {$nb_redlist|intval}
 		},
 		{
-			"label": String.fromCharCode(160) + "{$nb_suspended|escape:'intval'} {l s='suspended' mod='expressmailing'}",
-			"value": {$nb_suspended|escape:'intval'}
+			"label": String.fromCharCode(160) + "{$nb_suspended|intval} {l s='suspended' mod='expressmailing'}",
+			"value": {$nb_suspended|intval}
 		},
 		{
-			"label": String.fromCharCode(160) + "{$nb_already_sent|escape:'intval'} {l s='already sent' mod='expressmailing'}",
-			"value": {$nb_already_sent|escape:'intval'}
+			"label": String.fromCharCode(160) + "{$nb_already_sent|intval} {l s='already sent' mod='expressmailing'}",
+			"value": {$nb_already_sent|intval}
 		},
 		{
-			"label": String.fromCharCode(160) + "{$nb_to_send|escape:'intval'} {l s='to send' mod='expressmailing'}",
-			"value": {$nb_to_send|escape:'intval'}
+			"label": String.fromCharCode(160) + "{$nb_to_send|intval} {l s='to send' mod='expressmailing'}",
+			"value": {$nb_to_send|intval}
 		}
 	];
 </script>
@@ -37,7 +37,7 @@
 
 		{if !$campaign_sended}
 
-			<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller=AdminMarketingEStep8&token={Tools::getAdminTokenLite('AdminMarketingEStep8')|escape}" method="post" enctype="multipart/form-data" novalidate="">
+			<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller=AdminMarketingEStep8&token={Tools::getAdminTokenLite('AdminMarketingEStep8')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate="">
 				<div class="panel" id="fieldset_0">
 					<div class="panel-heading">
 						<i class="icon-envelope-alt"></i> {l s='Final validation before sending (step 8)' mod='expressmailing'}
@@ -48,7 +48,7 @@
 								Ref :
 							</label>
 							<div class="col-lg-1">
-								<input type="text" name="campaign_id" id="campaign_id" value="{$campaign_id|escape:'intval'}" class="" readonly="readonly">
+								<input type="text" name="campaign_id" id="campaign_id" value="{$campaign_id|intval}" class="" readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group">
@@ -61,7 +61,7 @@
 												{l s='Redlisted emails :' mod='expressmailing'}
 											</label>
 											<label class="control-label col-lg-2">
-												{$nb_redlist|escape:'intval'}
+												{$nb_redlist|intval}
 											</label>
 										</div>
 										<div class="form-group">
@@ -69,7 +69,7 @@
 												{l s='Unsubscribed / suspended emails :' mod='expressmailing'}
 											</label>
 											<label class="control-label col-lg-2">
-												{$nb_suspended|escape:'intval'}
+												{$nb_suspended|intval}
 											</label>
 										</div>
 										<div class="form-group">
@@ -77,7 +77,7 @@
 												{l s='Already sent emails :' mod='expressmailing'}
 											</label>
 											<label class="control-label col-lg-2">
-												{$nb_already_sent|escape:'intval'}
+												{$nb_already_sent|intval}
 											</label>
 										</div>
 										<div class="form-group">
@@ -85,7 +85,7 @@
 												{l s='Emails ready to send :' mod='expressmailing'}
 											</label>
 											<label class="control-label col-lg-2">
-												{$nb_to_send|escape:'intval'}
+												{$nb_to_send|intval}
 											</label>
 										</div>
 										<div class="form-group">
@@ -93,7 +93,7 @@
 												{l s='Email weight :' mod='expressmailing'}
 											</label>
 											<label class="control-label col-lg-2">
-												{$mail_weight|escape:'intval'}
+												{$mail_weight|intval}
 											</label>
 										</div>
 										<div class="form-group">
@@ -101,7 +101,7 @@
 												{l s='Email cost :' mod='expressmailing'}
 											</label>
 											<label class="control-label col-lg-2">
-												{$mail_cost|escape:'intval'}
+												{$mail_cost|intval}
 											</label>
 										</div>
 									</div>
@@ -124,7 +124,7 @@
 
 			<!-- Stats -->
 			<div class="panel" id="fieldset_0">
-				<a class="btn btn-default" href="index.php?controller=AdminMarketingEList&token={Tools::getAdminTokenLite('AdminMarketingEList')|escape}">
+				<a class="btn btn-default" href="index.php?controller=AdminMarketingEList&token={Tools::getAdminTokenLite('AdminMarketingEList')|escape:'html':'UTF-8'}">
 					<i class="process-icon-stats"></i> {l s='Display statistics' mod='expressmailing'}
 				</a>
 			</div>

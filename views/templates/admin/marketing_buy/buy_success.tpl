@@ -11,7 +11,7 @@
 * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
 *}
 
-<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller={$order.campaign_media|escape}&campaign_id={$order.campaign_id|escape:'intval'}&&token={Tools::getAdminTokenLite($order.campaign_media)|escape}" method="post" enctype="multipart/form-data" novalidate="">
+<form id="configuration_form" class="defaultForm form-horizontal" action="index.php?controller={$order.campaign_media|escape:'html':'UTF-8'}&campaign_id={$order.campaign_id|intval}&&token={Tools::getAdminTokenLite($order.campaign_media)|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate="">
 
 	<div class="panel">
 		<div class="panel-heading">
@@ -58,8 +58,8 @@
 		var i = 1;
 		var url_base = "index.php?controller=AdminMarketingBuy";
 		var url_ajax = "&ajax=true";
-		var url_guid = "&order_session={$order_session|escape}";
-		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape}";
+		var url_guid = "&order_session={$order_session|escape:'html':'UTF-8'}";
+		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape:'html':'UTF-8'}";
 
 		check();
 

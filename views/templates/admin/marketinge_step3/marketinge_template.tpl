@@ -27,7 +27,7 @@
 				<tr>
 					<td align="left">
 						<div id="header_logo">
-							<a href="{$base_url|escape}" title="{$shop_name|escape:'htmlall':'UTF-8'}"><img src="{$base_url|escape}{$img_dir|escape}{$logo_name|escape}" border="0" alt="{$shop_name|escape:'htmlall':'UTF-8'}" {if $logo_width}width="{$logo_width|escape:'intval'}"{/if} {if $logo_height}height="{$logo_height|escape:'intval'}"{/if} /></a>
+							<a href="{$base_url|escape:'html':'UTF-8'}" title="{$shop_name|escape:'htmlall':'UTF-8'}"><img src="{$base_url|escape:'html':'UTF-8'}{$img_dir|escape:'html':'UTF-8'}{$logo_name|escape:'html':'UTF-8'}" border="0" alt="{$shop_name|escape:'htmlall':'UTF-8'}" {if $logo_width}width="{$logo_width|intval}"{/if} {if $logo_height}height="{$logo_height|intval}"{/if} /></a>
 						</div>
 					</td>
 				</tr>
@@ -53,7 +53,7 @@
 					<td align="left">&nbsp;</td>
 				</tr>
 				<tr>
-					{capture assign="site"}<a href="{$base_url|escape}">{$domain_name|escape:'htmlall':'UTF-8'}</a>{/capture}
+					{capture assign="site"}<a href="{$base_url|escape:'html':'UTF-8'}">{$domain_name|escape:'htmlall':'UTF-8'}</a>{/capture}
 					{capture assign="footer"}{l s='You are receiving this email because you have visited or ordered[br]on the website [www]' mod='expressmailing'}{/capture}
 					<td align="center">
 						<font size="1">
