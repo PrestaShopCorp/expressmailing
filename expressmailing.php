@@ -30,7 +30,7 @@ class ExpressMailing extends Module
 		$this->version = '1.0.0';
 		$this->author = 'Axalone France';
 		$this->need_instance = 0;
-		$this->ps_versions_compliancy = array ('min' => '1.5', 'max' => _PS_VERSION_);
+		//$this->ps_versions_compliancy = array ('min' => '1.5', 'max' => _PS_VERSION_);
 		$this->limited_countries = array ('fr', 'pl');
 
 		parent::__construct();
