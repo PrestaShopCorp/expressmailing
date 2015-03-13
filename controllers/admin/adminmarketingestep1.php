@@ -381,7 +381,8 @@ class AdminMarketingEStep1Controller extends ModuleAdminController
 			'application_id' => $this->session_api->application_id,
 			'category_code' => 'email_daily',
 			'module_version' => $this->module->version,
-			'prestashop_version' => _PS_VERSION_
+			'prestashop_version' => _PS_VERSION_,
+			'language' => $this->context->language->iso_code
 		);
 
 		if ($this->session_api->connectFromCredentials('email'))

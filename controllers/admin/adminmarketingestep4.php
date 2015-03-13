@@ -519,10 +519,10 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 				}
 			}
 
-			// Rebuilt the recipients selection
+			// Rebuild the recipients selection
 			// --------------------------------
 			if (empty($this->expiration_date))
-				$this->getPayingFiltersTplAPI();
+				$this->renderPayingFilters();
 
 			$extended = $this->expiration_date > time() ? true : false;
 			$paying_filters = DBMarketing::getPayingFiltersEmailDB($this->campaign_id);
