@@ -79,8 +79,8 @@ class AdminMarketingEStep1Controller extends ModuleAdminController
 			$response_array = array();
 
 			if ($this->session_api->call('email', 'account', 'get_formula', $parameters, $response_array))
-				if ((int)$response_array['broadcast_max_daily'] > 0)
-					$this->default_max_daily = $response_array['broadcast_max_daily'];
+				if ((int)$response_array['broadcast_max_campaign'] > 0)
+					$this->default_max_daily = $response_array['broadcast_max_campaign'];
 		}
 	}
 

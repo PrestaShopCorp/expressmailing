@@ -40,15 +40,15 @@
 
 					<table style="margin: 3px">
 					<tr>
-						<td style="width:25px; vertical-align: top"><input type="radio" name="campaign_type" id="marketing_e" value="marketing_e" {if $smarty_email_disabled}disabled="disabled"{/if} {if ($smarty_email_checked || (!$smarty_fax_checked && !$smarty_sms_checked))}checked="checked"{/if} /></td>
+						<td style="width:25px; vertical-align: top"><input type="radio" name="campaign_type" id="marketing_e" value="marketing_e" {if $smarty_email_disabled}disabled="disabled"{/if} {if ($smarty_media_checked === 'email')}checked="checked"{/if} /></td>
 						<td style="width:170px; vertical-align: top; padding-top: 1px"><label for="marketing_e">{l s='An emailing' mod='expressmailing'}</label></td>
-						<td style="width:300px; vertical-align: top; padding-top: 1px"><label for="marketing_e">{l s='Free of charge' mod='expressmailing'} {l s='up to %d email per day' mod='expressmailing' sprintf=$broadcast_max_daily}</label></td>
+						<td style="width:300px; vertical-align: top; padding-top: 1px"><label for="marketing_e">{$smarty_email_credits|unescape}</label></td>
 					</tr>
 					</table>
 
 					<table style="margin: 3px">
 					<tr>
-						<td style="width:25px; vertical-align: top"><input type="radio" name="campaign_type" id="marketing_f" value="marketing_f" {if $smarty_fax_disabled}disabled="disabled"{/if} {if ($smarty_fax_checked)}checked="checked"{/if} /></td>
+						<td style="width:25px; vertical-align: top"><input type="radio" name="campaign_type" id="marketing_f" value="marketing_f" {if $smarty_fax_disabled}disabled="disabled"{/if} {if ($smarty_media_checked === 'fax')}checked="checked"{/if} /></td>
 						<td style="width:170px; vertical-align: top; padding-top: 1px"><label for="marketing_f">{l s='A fax-mailing' mod='expressmailing'}</label></td>
 						<td style="width:300px; vertical-align: top; padding-top: 1px"><label for="marketing_f"><span class="no-bold">{$smarty_fax_credits|unescape}</span></label></td>
 					</tr>
@@ -56,7 +56,7 @@
 
 					<table style="margin: 3px">
 					<tr>
-						<td style="width:25px; vertical-align: top"><input type="radio" name="campaign_type" id="marketing_s" value="marketing_s" {if $smarty_sms_disabled}disabled="disabled"{/if} {if ($smarty_sms_checked)}checked="checked"{/if} /></td>
+						<td style="width:25px; vertical-align: top"><input type="radio" name="campaign_type" id="marketing_s" value="marketing_s" {if $smarty_sms_disabled}disabled="disabled"{/if} {if ($smarty_media_checked === 'sms')}checked="checked"{/if} /></td>
 						<td style="width:170px; vertical-align: top; padding-top: 1px"><label for="marketing_s">{l s='A sms-mailing' mod='expressmailing'}</label></td>
 						<td style="width:300px; vertical-align: top; padding-top: 1px"><label for="marketing_s"><span class="no-bold">{$smarty_sms_credits|unescape}</span></label></td>
 					</tr>
