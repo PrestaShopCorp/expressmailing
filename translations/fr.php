@@ -243,6 +243,8 @@ $_MODULE['<{expressmailing}prestashop>adminmarketingx_2c383e45c9a652d0aef858c430
 $_MODULE['<{expressmailing}prestashop>adminmarketingx_32fd162d9e286172a3c0967e6d36c887'] = 'Mes stats email';
 $_MODULE['<{expressmailing}prestashop>adminmarketingx_5a342df795bebbd2303f74eff0e8bbe6'] = 'Mes stats fax';
 $_MODULE['<{expressmailing}prestashop>adminmarketingx_32da6143efc823c3ce22a057b4b56d1b'] = 'Mes stats sms';
+$_MODULE['<{expressmailing}prestashop>adminmarketingx_ced9bd749040074979e88a3d1c04fd1d'] = 'Gratuit';
+$_MODULE['<{expressmailing}prestashop>adminmarketingx_9e41b74e812fb64fac6eab3e3c00b548'] = 'jusqu\'à %d email / jour';
 $_MODULE['<{expressmailing}prestashop>adminmarketingx_909f52064be77ef5051de73aac8e9dd8'] = 'Vous n\'avez plus de crédit %s';
 $_MODULE['<{expressmailing}prestashop>adminmarketingx_1e4d17dcdf2ce1bd0192d8f9ed293625'] = 'Il vous reste 1 crédit %s';
 $_MODULE['<{expressmailing}prestashop>adminmarketingx_2cd200077f53136bf2aabc22a481caae'] = 'Vous avez %s credits %s';
@@ -309,8 +311,6 @@ $_MODULE['<{expressmailing}prestashop>marketing_step0_b1bb12421687b1079c065c2229
 $_MODULE['<{expressmailing}prestashop>marketing_step0_eb360333328a36cfedee877e57fc1868'] = 'Pour plus de simplicité, nous avons installé un lien \"EXPRESS-MAILING\" dans votre menu \"MODULES\" sur la gauche !';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_c2d779f685ba921c0e1bbbe09c1d6be9'] = 'Je souhaite';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_8be57c351b7cf2cb1a790f733d1c8a8d'] = 'Envoyer un e-mailing';
-$_MODULE['<{expressmailing}prestashop>marketing_step0_ced9bd749040074979e88a3d1c04fd1d'] = 'Gratuit';
-$_MODULE['<{expressmailing}prestashop>marketing_step0_9e41b74e812fb64fac6eab3e3c00b548'] = 'jusqu\'à %d email / jour';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_a12baad9d5b2584d5cf98ed72307cd4b'] = 'Envoyer un fax-mailing';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_f5eac90aeff7e341177d66e435d6c6c3'] = 'Envoyer un sms-mailing';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_70d3fb4bab0ebc347c2459fbf5d63eb8'] = 'Mes statistiques';

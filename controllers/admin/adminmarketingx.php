@@ -25,6 +25,7 @@ class AdminMarketingXController extends ModuleAdminController
 		$this->lang = false;
 		$this->default_form_language = $this->context->language->id;
 		$this->display = 'view';
+		$this->broadcast_max_daily = 400;
 
 		parent::__construct();
 
@@ -77,13 +78,12 @@ class AdminMarketingXController extends ModuleAdminController
 		$smarty_fax_disabled = false;
 		$smarty_sms_disabled = false;
 
-		$smarty_email_checked = ($this->context->controller->controller_name == 'AdminMarketingE');
-		$smarty_fax_checked = ($this->context->controller->controller_name == 'AdminMarketingF');
-		$smarty_sms_checked = ($this->context->controller->controller_name == 'AdminMarketingS');
+		$smarty_media_checked = '';
 
-		$broadcast_max_daily = 2000;
 		$smarty_fax_credits = '';
 		$smarty_sms_credits = '';
+		$smarty_email_credits = $this->module->l('Free of charge', 'adminmarketingx').' '.
+						sprintf($this->module->l('up to %d email per day', 'adminmarketingx'), $this->broadcast_max_daily);
 
 		$smarty_fax_tickets = '';
 		$smarty_sms_tickets = '';
@@ -95,6 +95,7 @@ class AdminMarketingXController extends ModuleAdminController
 		// ------------------------
 		if ($this->session_api->connectFromCredentials('email'))
 		{
+			$smarty_media_checked = 'email';
 			$credential_email = $this->session_api->account_login;
 			$api_connected = true;
 
@@ -107,10 +108,25 @@ class AdminMarketingXController extends ModuleAdminController
 			{
 				// Email account can have different name than API login !
 				if (isset($response_array['account_name'])) $credential_email = $response_array['account_name'];
-				if (isset($response_array['broadcast_max_daily'])) $broadcast_max_daily = $response_array['broadcast_max_daily'];
+				if (isset($response_array['broadcast_max_daily']))
+				{
+					$this->broadcast_max_daily = $response_array['broadcast_max_daily'];
+					$smarty_email_credits = $this->module->l('Free of charge', 'adminmarketingx').' '.
+						sprintf($this->module->l('up to %d email per day', 'adminmarketingx'), $this->broadcast_max_daily);
+				}
 				if (isset($response_array['broadcast_restrictions']))
-					if ($response_array['broadcast_restrictions'] == 'BLOCKED') $smarty_email_disabled = true;
+					if ($response_array['broadcast_restrictions'] == 'BLOCKED')
+					{
+						$smarty_email_disabled = true;
+						$smarty_media_checked = '';
+					}
 			}
+			else
+			{
+				$smarty_email_disabled = true;
+				$smarty_media_checked = '';
+			}
+
 		}
 
 		// Checking the fax session
@@ -132,12 +148,19 @@ class AdminMarketingXController extends ModuleAdminController
 					switch ((string)$credit['balance'])
 					{
 						case '0':
+							$smarty_fax_disabled = false;
 							$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketingx').'</span>';
 							break;
 						case '1':
+							if (empty($smarty_media_checked) || ($this->context->controller->controller_name == 'AdminMarketingF'))
+								$smarty_media_checked = 'fax';
+							$smarty_fax_disabled = false;
 							$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketingx');
 							break;
 						default:
+							if (empty($smarty_media_checked) || ($this->context->controller->controller_name == 'AdminMarketingF'))
+								$smarty_media_checked = 'fax';
+							$smarty_fax_disabled = false;
 							$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketingx'), $credit['balance'], '%s');
 							break;
 					}
@@ -146,7 +169,7 @@ class AdminMarketingXController extends ModuleAdminController
 			}
 		}
 
-		// Checking the sms session
+				// Checking the sms session
 		// ------------------------
 		if ($this->session_api->connectFromCredentials('sms'))
 		{
@@ -165,12 +188,20 @@ class AdminMarketingXController extends ModuleAdminController
 					switch ((string)$credit['balance'])
 					{
 						case '0':
+							$smarty_sms_checked = false;
+							$smarty_sms_disabled = false;
 							$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketingx').'</span>';
 							break;
 						case '1':
+							if (empty($smarty_media_checked) || ($this->context->controller->controller_name == 'AdminMarketingS'))
+								$smarty_media_checked = 'sms';
+							$smarty_sms_disabled = false;
 							$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketingx');
 							break;
 						default:
+							if (empty($smarty_media_checked) || ($this->context->controller->controller_name == 'AdminMarketingS'))
+								$smarty_media_checked = 'sms';
+							$smarty_sms_disabled = false;
 							$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketingx'), $credit['balance'], '%s');
 							break;
 					}
@@ -213,6 +244,9 @@ class AdminMarketingXController extends ModuleAdminController
 			if (empty($smarty_sms_credits))
 				$smarty_sms_credits = '<span class="red">'.sprintf($this->module->l('You have no credit %s', 'adminmarketingx'), 'sms').'</span>';
 
+			if ($smarty_email_disabled)
+				$smarty_email_credits = '<span class="red no-bold">'.sprintf($this->module->l('You have no credit %s', 'adminmarketingx'), 'email').'</span>';
+
 			// Get all the tickets available for Prestashop
 			// --------------------------------------------
 			$response_array = array();
@@ -240,9 +274,8 @@ class AdminMarketingXController extends ModuleAdminController
 				'smarty_email_disabled' => $smarty_email_disabled,
 				'smarty_fax_disabled' => $smarty_fax_disabled,
 				'smarty_sms_disabled' => $smarty_sms_disabled,
-				'smarty_email_checked' => $smarty_email_checked,
-				'smarty_fax_checked' => $smarty_fax_checked,
-				'smarty_sms_checked' => $smarty_sms_checked,
+				'smarty_media_checked' => $smarty_media_checked,
+				'smarty_email_credits' => $smarty_email_credits,
 				'smarty_fax_credits' => $smarty_fax_credits,
 				'smarty_sms_credits' => $smarty_sms_credits,
 				'smarty_fax_tickets' => $smarty_fax_tickets,
@@ -250,7 +283,7 @@ class AdminMarketingXController extends ModuleAdminController
 				'credential_email' => $credential_email,
 				'credential_fax' => $credential_fax,
 				'credential_sms' => $credential_sms,
-				'broadcast_max_daily' => $broadcast_max_daily,
+				'broadcast_max_daily' => $this->broadcast_max_daily,
 				'tool_tip' => $tool_tip,
 				'tool_date' => $tools
 			)
@@ -318,11 +351,10 @@ class AdminMarketingXController extends ModuleAdminController
 					'&token='.Tools::getAdminTokenLite('AdminMarketingSStep1'));
 				exit;
 			}
-			else
+			elseif (Tools::getValue('campaign_type') == 'marketing_e')
 			{
 				// Recovering the max broadcast limit per day
 				// ------------------------------------------
-				$broadcast_max_daily = 2000;
 
 				if ($this->session_api->connectFromCredentials('email'))
 				{
@@ -330,8 +362,8 @@ class AdminMarketingXController extends ModuleAdminController
 					$parameters = array('account_id' => $this->session_api->account_id);
 
 					if ($this->session_api->call('email', 'account', 'get_formula', $parameters, $response_array))
-						if (isset($response_array['broadcast_max_daily']))
-							$broadcast_max_daily = (int)$response_array['broadcast_max_daily'];
+						if (isset($response_array['broadcast_max_campaign']))
+							$this->broadcast_max_daily = (int)$response_array['broadcast_max_campaign'];
 				}
 
 				// Create a new emailing campaign
@@ -341,7 +373,7 @@ class AdminMarketingXController extends ModuleAdminController
 					'campaign_lang' => Context::getContext()->country->iso_code,
 					'campaign_date_create' => date('Y-m-d H:i:s'),
 					'campaign_date_send' => date('Y-m-d H:i:00', time() + 60),
-					'campaign_day_limit' => $broadcast_max_daily * 75 / 100,
+					'campaign_day_limit' => $this->broadcast_max_daily * 75 / 100,
 					'campaign_week_limit' => 'LMCJVS'
 				));
 
@@ -352,6 +384,13 @@ class AdminMarketingXController extends ModuleAdminController
 				Tools::redirectAdmin('index.php?controller=AdminMarketingEStep1&campaign_id='.
 					$this->campaign_id.
 					'&token='.Tools::getAdminTokenLite('AdminMarketingEStep1'));
+				exit;
+			}
+			else
+			{
+				// Redirect to home
+				// ----------------
+				Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
 				exit;
 			}
 		}
