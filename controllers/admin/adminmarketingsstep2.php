@@ -59,7 +59,7 @@ class AdminMarketingSStep2Controller extends ModuleAdminController
 	public function setMedia()
 	{
 		parent::setMedia();
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
 		$this->addJqueryUI('ui.tabs');
 	}
 
@@ -83,7 +83,7 @@ class AdminMarketingSStep2Controller extends ModuleAdminController
 						HAVING COUNT(target) > 1
 					) as dd';
 		$this->duplicate_count = (int)Db::getInstance()->getValue($request, false);
-		
+
 		// Total recipients will be stored in $this->list_total
 		// ----------------------------------------------------
 		$this->initCustomerFilters();

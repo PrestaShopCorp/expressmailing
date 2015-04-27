@@ -52,7 +52,7 @@ class AdminMarketingFStep2Controller extends ModuleAdminController
 	public function setMedia()
 	{
 		parent::setMedia();
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
 		$this->addJqueryUI('ui.dialog');
 	}
 

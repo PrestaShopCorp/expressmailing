@@ -16,7 +16,7 @@
 <div id="bying_dialog" title="{l s='Increase capacity ?' mod='expressmailing'}">
 
 	<div style="width: 100%; margin-right: auto; margin-left: auto; text-align: center">
-		<br><img src="../modules/expressmailing/img/progress-bar.gif" alt="" />
+		<br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />
 	</div>
 
 </div>

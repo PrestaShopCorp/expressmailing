@@ -33,7 +33,7 @@ jQuery(document).ready(function()
 				var row = $(this).closest('tr');
 				var color = row.attr("class");
 				
-				row.after('<tr class="' + color + '"><td colspan="4" id="stats_details_' + id + '" align="center" style="width: 60%; padding: 20px 20px 20px 50px; background-color: #A0D0EB"><img src="../modules/expressmailing/img/progress-bar.gif" border="0"></td></tr>');
+				row.after('<tr class="' + color + '"><td colspan="4" id="stats_details_' + id + '" align="center" style="width: 60%; padding: 20px 20px 20px 50px; background-color: #A0D0EB"><img src="../modules/expressmailing/views/img/progress-bar.gif" border="0"></td></tr>');
 
 				$('#stats_details_' + id).load($(this).attr("href"), function(response, status, xhr)
 				{
