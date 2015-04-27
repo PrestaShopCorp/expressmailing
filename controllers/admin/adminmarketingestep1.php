@@ -93,8 +93,8 @@ class AdminMarketingEStep1Controller extends ModuleAdminController
 	public function setMedia()
 	{
 		parent::setMedia();
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css');
-		$this->addJS(_PS_MODULE_DIR_.'expressmailing/js/marketinge_step1.js');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
+		$this->addJS(_PS_MODULE_DIR_.'expressmailing/views/js/marketinge_step1.js');
 		$this->addJqueryUI('ui.slider');
 		$this->addJqueryUI('ui.dialog');
 		$this->addJqueryUI('ui.draggable');
@@ -365,13 +365,8 @@ class AdminMarketingEStep1Controller extends ModuleAdminController
 
 	private function generateByingLink()
 	{
-		if ($this->session_api->account_id)
-		{
-			$template_path = $this->getTemplatePath().'marketinge_step1/bying_link.tpl';
-			return $this->context->smarty->fetch($template_path);
-		}
-		else
-			return '';
+		$template_path = $this->getTemplatePath().'marketinge_step1/bying_link.tpl';
+		return $this->context->smarty->fetch($template_path);
 	}
 
 	public function displayAjax()

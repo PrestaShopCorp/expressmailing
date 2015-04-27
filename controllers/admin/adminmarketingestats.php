@@ -38,7 +38,7 @@ class AdminMarketingEStatsController extends ModuleAdminController
 
 	public function setMedia()
 	{
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css', 'all');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css', 'all');
 		parent::setMedia();
 	}
 
@@ -78,7 +78,7 @@ class AdminMarketingEStatsController extends ModuleAdminController
 						'days' => $days,
 						'current_index' => AdminController::$currentIndex.'&campaign_id='.$response_array[0]['campaign_id'],
 						'campaign_id' => $response_array[0]['campaign_id'],
-						'campaign_name' => $response_array[0]['name']
+						'campaign_name' => Tools::htmlentitiesDecodeUTF8($response_array[0]['name'])
 					));
 
 					// S'il y a un stat_date, il faut ré-intéroger l'API pour obtenir les stats du jour sélectionné

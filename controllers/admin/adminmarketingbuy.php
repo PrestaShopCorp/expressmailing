@@ -31,6 +31,7 @@ class AdminMarketingBuyController extends ModuleAdminController
 		$this->default_form_language = $this->context->language->id;
 
 		$this->media = (string)Tools::getValue('media', 'AdminMarketingX');
+
 		$this->campaign_id = (int)Tools::getValue('campaign_id', '0');
 		$this->order_session = (string)Tools::getValue('order_session');
 		$this->order_product = (string)Tools::getValue('product');
@@ -131,6 +132,11 @@ class AdminMarketingBuyController extends ModuleAdminController
 		// ---------------------------------------------
 		if (Tools::isSubmit('submitCheckout'))
 		{
+			$order = $this->getOrder();
+			$media = Tools::substr($order['order_product'], 0, Tools::strpos($order['order_product'], '-'));
+			if (!$this->session_api->connectFromCredentials($media))
+				Tools::redirectAdmin('index.php?controller=AdminMarketingInscription&product='.$order['order_product'].'&token='.
+					Tools::getAdminTokenLite('AdminMarketingInscription'));
 			$this->order_btn_proceed = 'address';
 			$this->getAddress();
 			$this->displayAddress();
@@ -423,7 +429,7 @@ class AdminMarketingBuyController extends ModuleAdminController
 	{
 		// Need to center button into footer-panel
 		// ---------------------------------------
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/footer-center.css');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/footer-center.css');
 
 		// Build the form
 		// --------------
@@ -518,7 +524,7 @@ class AdminMarketingBuyController extends ModuleAdminController
 				'title' => $this->module->l('Proceed to Payment ...', 'adminmarketingbuy'),
 				'name' => 'submitAddress',
 				'icon' => 'process-icon-payment',
-				'class' => 'btn btn-default'
+				'class' => 'btn btn-default center-block'
 			)
 		);
 	}

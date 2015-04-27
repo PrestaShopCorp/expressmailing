@@ -23,7 +23,7 @@
 
 					<span id="waiting">
 						{l s='Please wait, your payment is being processed' mod='expressmailing'} <span id="progress"></span>
-						<br><img src="../modules/expressmailing/img/progress-bar.gif" alt="" />
+						<br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />
 					</span>
 
 					<div id="success" style="display: none;">

@@ -41,13 +41,13 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 		parent::__construct();
 
-		if(!function_exists('curl_version'))
+		if (!function_exists('curl_version'))
 		{
-			$warning =
-			$this->module->l('In order to fetch images over http, you need to activate the PHP CURL extension on your server.', 'adminmarketingestep3');
+			$warning = $this->module->l('In order to fetch images over http, you need to activate the PHP CURL extension on your server.',
+				'adminmarketingestep3');
 			$warning .= '<br/>';
-			$warning .=
-			$this->module->l('Otherwise this functionnality may not work properly and you will have to upload your images.', 'adminmarketingestep3');
+			$warning .= $this->module->l('Otherwise this functionnality may not work properly and you will have to upload your images.',
+				'adminmarketingestep3');
 			$this->warnings[] = $warning;
 		}
 	}
@@ -60,8 +60,8 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 	public function setMedia()
 	{
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css');
-		$this->addJS(_PS_MODULE_DIR_.'expressmailing/js/tinymce.js');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
+		$this->addJS(_PS_MODULE_DIR_.'expressmailing/views/js/tinymce.js');
 		parent::setMedia();
 	}
 
@@ -125,9 +125,16 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			if (!empty($this->html_content))
 			{
 				$this->html_content = $this->copyImagesAndUpdateHTML($this->html_content);
-
 				if ($this->saveHTML())
 				{
+					if ($found = $this->checkLocalUrls($this->html_content))
+					{
+						$a = $this->module->l('You are currently testing your Prestashop on a local server :', 'adminmarketingestep1');
+						$b = $this->module->l('To enjoy the full IMAGE & TRACKING features, you need use a Prestashop online server !', 'adminmarketingestep1');
+						$this->errors[] = $a.' http'.$found;
+						$this->errors[] = $b;
+						return false;
+					}
 					$images_to_upload = $this->parseImagesToUpload($this->html_content);
 
 					if (Tools::isSubmit('nextEmailingStep3') && (count($images_to_upload) == 0))
@@ -145,6 +152,30 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		}
 	}
 
+	/**
+	 * Check if the $text contains a local URL like http://127.0.0.1/
+	 * @param string $text
+	 * @return boolean
+	 */
+	private function checkLocalUrls($text)
+	{
+		if (preg_match_all('#://localhost#i', $text, $matches))
+			return $matches[0][0];
+		if (preg_match_all('#://10\.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}#', $text, $matches))
+			return $matches[0][0];
+		if (preg_match_all('#://127\.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}#', $text, $matches))
+			return $matches[0][0];
+		if (preg_match_all('#://172\.[(16)(17)(18)(19)(20)(21)(22)(23)(24)(25)(26)(27)(28)(29)(30)(31)].[0-9]{1,3}.[0-9]{1,3}#', $text, $matches))
+			return $matches[0][0];
+		if (preg_match_all('#://192\.168.[0-9]{1,3}.[0-9]{1,3}#', $text, $matches))
+			return $matches[0][0];
+		if (preg_match_all('#://192\.168.[0-9]{1,3}.[0-9]{1,3}#', $text, $matches))
+			return $matches[0][0];
+		if (preg_match_all('#://::1#',$text, $matches))
+			return $matches[0][0];
+
+		return false;
+	}
 	/**
 	 * Generate the import form
 	 * @return string The HTML string containing the form
@@ -517,7 +548,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 			if (!empty($image_url) && $this->copyFileToStorage($image_url, $filename))
 			{
-				$final_img_url = _PS_BASE_URL_.__PS_BASE_URI__.'/modules/expressmailing/campaigns/'.$this->campaign_id.'/';
+				$final_img_url = _PS_BASE_URL_.__PS_BASE_URI__.'modules/expressmailing/campaigns/'.$this->campaign_id.'/';
 				if ($filename)
 					$final_img_url .= $filename;
 				else
@@ -599,12 +630,12 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
 			$raw = curl_exec($ch);
 			curl_close ($ch);
-			if(file_exists($dest))
+			if (file_exists($dest))
 				unlink($dest);
-			$fp = fopen($dest,'x');
+			$fp = fopen($dest, 'x');
 			fwrite($fp, $raw);
 			fclose($fp);
-			if(file_exists($dest))
+			if (file_exists($dest))
 				return $dest;
 		}
 		else

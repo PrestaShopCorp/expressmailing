@@ -69,7 +69,7 @@ class AdminMarketingEStep8Controller extends ModuleAdminController
 	public function setMedia()
 	{
 		parent::setMedia();
-		$this->addJS(_PS_MODULE_DIR_.$this->module->name.'/js/emcharts_e_step8.js', 'all');
+		$this->addJS(_PS_MODULE_DIR_.$this->module->name.'/views/js/emcharts_e_step8.js', 'all');
 	}
 
 	public function renderList()

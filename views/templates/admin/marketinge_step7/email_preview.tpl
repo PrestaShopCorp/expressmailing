@@ -23,7 +23,7 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<div id="waiting" style="width: 100%; height: 60px; text-align: center; margin-left: auto; margin-right: auto">
-						<br><img src="../modules/expressmailing/img/progress-bar.gif" alt="" />
+						<br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />
 					</div>
 					<iframe id="preview" style="display: none; width: 100%; height: 350px; border: 0px; padding: 0px" src="index.php?controller=AdminMarketingEStep7&campaign_id={$campaign_id|intval}&ajax=true&token={Tools::getAdminTokenLite('AdminMarketingEStep7')|escape:'html':'UTF-8'}" style="border: 0;"></iframe>
 				</div>

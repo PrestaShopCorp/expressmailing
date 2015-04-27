@@ -74,8 +74,8 @@ class AdminMarketingFStatsController extends ModuleAdminController
 	public function setMedia()
 	{
 		parent::setMedia();
-		$this->addJS(_PS_MODULE_DIR_.'expressmailing/js/emcharts_f_stats.js', 'all');
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css');
+		$this->addJS(_PS_MODULE_DIR_.'expressmailing/views/js/emcharts_f_stats.js', 'all');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
 		$this->addJqueryUI('ui.dialog');
 	}
 
