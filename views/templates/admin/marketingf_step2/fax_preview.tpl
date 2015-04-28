@@ -49,7 +49,7 @@
 </div>
 
 <div id="dialog-message" title="Page preview" style="display: none">
-	<img id="dialog-preview" src="../modules/expressmailing/img/progress-bar.gif" alt="" />
+	<img id="dialog-preview" src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />
 </div>
 
 <script>

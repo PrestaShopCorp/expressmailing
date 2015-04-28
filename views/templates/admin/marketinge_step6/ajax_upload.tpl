@@ -37,7 +37,7 @@
 						},
 						success: function (output)
 						{
-							$("#progress").append("<img src='../modules/expressmailing/img/progress.gif' border='0' alt=''>");
+							$("#progress").append("<img src='../modules/expressmailing/views/img/progress.gif' border='0' alt=''>");
 							if (output == 'continue')
 								upload();
 							else if (output == 'ended')

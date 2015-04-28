@@ -35,31 +35,31 @@ $(function ()
 	$('#week_day_limit_S').change(onChange_Checkbox_Day);
 	$('#week_day_limit_D').change(onChange_Checkbox_Day);
 
-	if($('#week_day_limit_L').is(':checked'))
+	if ($('#week_day_limit_L').is(':checked'))
 		$('#week_day_limit_L').parent().addClass('green');
 	else
 		$('#week_day_limit_L').parent().addClass('red');
-	if($('#week_day_limit_M').is(':checked'))
+	if ($('#week_day_limit_M').is(':checked'))
 		$('#week_day_limit_M').parent().addClass('green');
 	else
 		$('#week_day_limit_M').parent().addClass('red');
-	if($('#week_day_limit_C').is(':checked'))
+	if ($('#week_day_limit_C').is(':checked'))
 		$('#week_day_limit_C').parent().addClass('green');
 	else
 		$('#week_day_limit_C').parent().addClass('red');
-	if($('#week_day_limit_J').is(':checked'))
+	if ($('#week_day_limit_J').is(':checked'))
 		$('#week_day_limit_J').parent().addClass('green');
 	else
 		$('#week_day_limit_J').parent().addClass('red');
-	if($('#week_day_limit_V').is(':checked'))
+	if ($('#week_day_limit_V').is(':checked'))
 		$('#week_day_limit_V').parent().addClass('green');
 	else
 		$('#week_day_limit_V').parent().addClass('red');
-	if($('#week_day_limit_S').is(':checked'))
+	if ($('#week_day_limit_S').is(':checked'))
 		$('#week_day_limit_S').parent().addClass('green');
 	else
 		$('#week_day_limit_S').parent().addClass('red');
-	if($('#week_day_limit_D').is(':checked'))
+	if ($('#week_day_limit_D').is(':checked'))
 		$('#week_day_limit_D').parent().addClass('green');
 	else
 		$('#week_day_limit_D').parent().addClass('red');

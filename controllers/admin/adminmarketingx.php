@@ -61,9 +61,12 @@ class AdminMarketingXController extends ModuleAdminController
 
 	public function setMedia()
 	{
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/icon-marketing.css');
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css');
 		parent::setMedia();
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/icon-marketing.css');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
+		$this->addJqueryUI('ui.dialog');
+		$this->addJqueryUI('ui.draggable');
+		$this->addJqueryUI('ui.resizable');
 	}
 
 	public function renderView()
@@ -80,13 +83,18 @@ class AdminMarketingXController extends ModuleAdminController
 
 		$smarty_media_checked = '';
 
-		$smarty_fax_credits = '';
-		$smarty_sms_credits = '';
-		$smarty_email_credits = $this->module->l('Free of charge', 'adminmarketingx').' '.
+		$smarty_email_capacity = $this->module->l('Free of charge', 'adminmarketingx').' '.
 						sprintf($this->module->l('up to %d email per day', 'adminmarketingx'), $this->broadcast_max_daily);
 
-		$smarty_fax_tickets = '';
-		$smarty_sms_tickets = '';
+		$smarty_remaining_email_credits = '';
+		$smarty_remaining_fax_credits = '';
+		$smarty_remaining_sms_credits = '';
+		
+		$smarty_count_fax_credits = 0;
+		$smarty_count_sms_credits = 0;
+
+		$smarty_fax_promotion = '';
+		$smarty_sms_promotion = '';
 
 		$tool_tip = '';
 		$output = '';
@@ -111,7 +119,7 @@ class AdminMarketingXController extends ModuleAdminController
 				if (isset($response_array['broadcast_max_daily']))
 				{
 					$this->broadcast_max_daily = $response_array['broadcast_max_daily'];
-					$smarty_email_credits = $this->module->l('Free of charge', 'adminmarketingx').' '.
+					$smarty_email_capacity = $this->module->l('Free of charge', 'adminmarketingx').' '.
 						sprintf($this->module->l('up to %d email per day', 'adminmarketingx'), $this->broadcast_max_daily);
 				}
 				if (isset($response_array['broadcast_restrictions']))
@@ -120,13 +128,28 @@ class AdminMarketingXController extends ModuleAdminController
 						$smarty_email_disabled = true;
 						$smarty_media_checked = '';
 					}
+
+				if (isset($response_array['balance']))
+				{
+					switch ((string)$response_array['balance'])
+					{
+						case '0':
+							$smarty_remaining_email_credits = $this->module->l('0 credit', 'adminmarketingx');
+							break;
+						case '1':
+							$smarty_remaining_email_credits = $this->module->l('1 credit', 'adminmarketingx');
+							break;
+						default:
+							$smarty_remaining_email_credits = sprintf($this->module->l('%s credits', 'adminmarketingx'), (string)$response_array['balance']);
+							break;
+					}
+				}
 			}
 			else
 			{
 				$smarty_email_disabled = true;
 				$smarty_media_checked = '';
 			}
-
 		}
 
 		// Checking the fax session
@@ -143,33 +166,37 @@ class AdminMarketingXController extends ModuleAdminController
 
 			if ($this->session_api->call('fax', 'account', 'enum_credit_balances', $parameters, $response_array))
 			{
+				if (empty($response_array))
+					$smarty_remaining_fax_credits = $this->module->l('0 credit', 'adminmarketingx');
+
 				foreach ($response_array as $credit)
 				{
 					switch ((string)$credit['balance'])
 					{
 						case '0':
 							$smarty_fax_disabled = false;
-							$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketingx').'</span>';
+							$remaining_tmp = $this->module->l('0 credit %s', 'adminmarketingx');
 							break;
 						case '1':
 							if (empty($smarty_media_checked) || ($this->context->controller->controller_name == 'AdminMarketingF'))
 								$smarty_media_checked = 'fax';
 							$smarty_fax_disabled = false;
-							$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketingx');
+							$remaining_tmp = $this->module->l('1 credit %s', 'adminmarketingx');
 							break;
 						default:
 							if (empty($smarty_media_checked) || ($this->context->controller->controller_name == 'AdminMarketingF'))
 								$smarty_media_checked = 'fax';
 							$smarty_fax_disabled = false;
-							$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketingx'), $credit['balance'], '%s');
+							$remaining_tmp = sprintf($this->module->l('%s credits %s', 'adminmarketingx'), $credit['balance'], '%s');
 							break;
 					}
-					$smarty_fax_credits .= sprintf($tmp_credits, '&laquo;&nbsp;'.$credit['credit_name'].'&nbsp;&raquo;<br>');
+					$smarty_remaining_fax_credits .= sprintf($remaining_tmp, '&laquo;&nbsp;'.$credit['credit_name'].'&nbsp;&raquo;<br>');
+					$smarty_count_fax_credits += $remaining_tmp;
 				}
 			}
 		}
 
-				// Checking the sms session
+		// Checking the sms session
 		// ------------------------
 		if ($this->session_api->connectFromCredentials('sms'))
 		{
@@ -183,41 +210,38 @@ class AdminMarketingXController extends ModuleAdminController
 
 			if ($this->session_api->call('sms', 'account', 'enum_credit_balances', $parameters, $response_array))
 			{
+				if (empty($response_array))
+					$smarty_remaining_sms_credits = $this->module->l('0 credit', 'adminmarketingx');
+
 				foreach ($response_array as $credit)
 				{
 					switch ((string)$credit['balance'])
 					{
 						case '0':
-							$smarty_sms_checked = false;
 							$smarty_sms_disabled = false;
-							$tmp_credits = '<span class="red no-bold">'.$this->module->l('You have no credit %s', 'adminmarketingx').'</span>';
+							$remaining_tmp = $this->module->l('0 credit', 'adminmarketingx');
 							break;
 						case '1':
 							if (empty($smarty_media_checked) || ($this->context->controller->controller_name == 'AdminMarketingS'))
 								$smarty_media_checked = 'sms';
 							$smarty_sms_disabled = false;
-							$tmp_credits = $this->module->l('You have 1 credit %s', 'adminmarketingx');
+							$remaining_tmp = $this->module->l('1 credit %s', 'adminmarketingx');
 							break;
 						default:
 							if (empty($smarty_media_checked) || ($this->context->controller->controller_name == 'AdminMarketingS'))
 								$smarty_media_checked = 'sms';
 							$smarty_sms_disabled = false;
-							$tmp_credits = sprintf($this->module->l('You have %s credits %s', 'adminmarketingx'), $credit['balance'], '%s');
+							$remaining_tmp = sprintf($this->module->l('%s credits %s', 'adminmarketingx'), $credit['balance'], '%s');
 							break;
 					}
-					$smarty_sms_credits .= sprintf($tmp_credits, '&laquo;&nbsp;'.$credit['credit_name'].'&nbsp;&raquo;<br>');
+					$smarty_remaining_sms_credits .= sprintf($remaining_tmp, '&laquo;&nbsp;'.$credit['credit_name'].'&nbsp;&raquo;<br>');
+					$smarty_count_sms_credits += $remaining_tmp;
 				}
 			}
 		}
 
 		if (!$api_connected)
 		{
-			// If the subscriber has not yet opened an account
-			// We display the TPL with prices but without buying block (needs to be connected)
-			// -------------------------------------------------------------------------------
-			$smarty_fax_credits = $this->module->l('0,035 € per page (to France Metropolitan)', 'adminmarketingx');
-			$smarty_sms_credits = $this->module->l('0,065 € per sms (to France Metropolitan)', 'adminmarketingx');
-
 			// Remove the stats toolbar buttons
 			// --------------------------------
 			$this->page_header_toolbar_btn = array();
@@ -238,16 +262,12 @@ class AdminMarketingXController extends ModuleAdminController
 				$tool_tip .= empty($credential_sms) ? $this->module->l('None', 'adminmarketingx') : $credential_sms;
 			}
 
-			if (empty($smarty_fax_credits))
-				$smarty_fax_credits = '<span class="red">'.sprintf($this->module->l('You have no credit %s', 'adminmarketingx'), 'fax').'</span>';
-
-			if (empty($smarty_sms_credits))
-				$smarty_sms_credits = '<span class="red">'.sprintf($this->module->l('You have no credit %s', 'adminmarketingx'), 'sms').'</span>';
-
 			if ($smarty_email_disabled)
-				$smarty_email_credits = '<span class="red no-bold">'.sprintf($this->module->l('You have no credit %s', 'adminmarketingx'), 'email').'</span>';
+				$smarty_email_capacity = '<span class="red no-bold">'.$this->module->l('Your account is disabled', 'adminmarketingx').'</span>';
+		}
 
 			// Get all the tickets available for Prestashop
+			// And check if there is an ongoing promotion
 			// --------------------------------------------
 			$response_array = array();
 			$parameters = array(
@@ -258,13 +278,30 @@ class AdminMarketingXController extends ModuleAdminController
 			if ($this->session_api->callExternal('http://www.express-mailing.com/api/cart/ws.php',
 												'common', 'account', 'enum_credits', $parameters, $response_array))
 			{
-				if (isset($response_array['fax']))
-					$smarty_fax_tickets = $response_array['fax'];
+				$smarty_email_promotion = false;
+				if (isset($response_array['email_daily']))
+					foreach ($response_array['email_daily'] as $ticket)
+					{
+						if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
+							$smarty_email_promotion = true;
+					}
 
+				$smarty_fax_promotion = false;
+				if (isset($response_array['fax']))
+					foreach ($response_array['fax'] as $ticket)
+					{
+						if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
+							$smarty_fax_promotion = true;
+					}
+
+				$smarty_sms_promotion = false;
 				if (isset($response_array['sms']))
-					$smarty_sms_tickets = $response_array['sms'];
+					foreach ($response_array['sms'] as $ticket)
+					{
+						if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
+							$smarty_sms_promotion = true;
+					}
 			}
-		}
 
 		// Smarty variables assign
 		// -----------------------
@@ -275,11 +312,17 @@ class AdminMarketingXController extends ModuleAdminController
 				'smarty_fax_disabled' => $smarty_fax_disabled,
 				'smarty_sms_disabled' => $smarty_sms_disabled,
 				'smarty_media_checked' => $smarty_media_checked,
-				'smarty_email_credits' => $smarty_email_credits,
-				'smarty_fax_credits' => $smarty_fax_credits,
-				'smarty_sms_credits' => $smarty_sms_credits,
-				'smarty_fax_tickets' => $smarty_fax_tickets,
-				'smarty_sms_tickets' => $smarty_sms_tickets,
+				'smarty_email_capacity' => $smarty_email_capacity,
+				'smarty_remaining_email_credits' => $smarty_remaining_email_credits,
+				'smarty_remaining_fax_credits' => $smarty_remaining_fax_credits,
+				'smarty_remaining_sms_credits' => $smarty_remaining_sms_credits,
+				'smarty_count_sms_credits' => $smarty_count_sms_credits,
+				'smarty_count_fax_credits' => $smarty_count_fax_credits,
+				'smarty_fax_min_price' => $this->getMinUnitPrice('fax'),
+				'smarty_sms_min_price' => $this->getMinUnitPrice('sms'),
+				'smarty_email_promotion' => $smarty_email_promotion,
+				'smarty_fax_promotion' => $smarty_fax_promotion,
+				'smarty_sms_promotion' => $smarty_sms_promotion,
 				'credential_email' => $credential_email,
 				'credential_fax' => $credential_fax,
 				'credential_sms' => $credential_sms,
@@ -296,11 +339,11 @@ class AdminMarketingXController extends ModuleAdminController
 
 		// And the purchase part (only if the user have fax or sms account)
 		// ----------------------------------------------------------------
-		if (!empty($credential_fax) || !empty($credential_sms))
-		{
-			$buy0 = $this->getTemplatePath().'marketing_step0/buy_step0.tpl';
-			$output .= $this->context->smarty->fetch($buy0);
-		}
+		//if (!empty($credential_fax) || !empty($credential_sms))
+		//{
+			//$buy0 = $this->getTemplatePath().'marketing_step0/buy_step0.tpl';
+			//$output .= $this->context->smarty->fetch($buy0);
+		//}
 
 		// And we end with the footer
 		// --------------------------
@@ -396,4 +439,78 @@ class AdminMarketingXController extends ModuleAdminController
 		}
 	}
 
+	public function displayAjax()
+	{
+		$media = Tools::getValue('media');
+
+		switch ($media)
+		{
+			case 'email':
+				$category_code = 'email_daily';
+				break;
+			case 'fax':
+				$category_code = 'fax_tickets';
+				break;
+			case 'sms':
+				$category_code = 'sms_tickets';
+				break;
+			default:
+				die(Tools::displayError($this->module->l('Unable to get product list', 'adminmarketingestep1'),
+						$this->session_api->getError()));
+		}
+
+		$response_array = null;
+		$parameters = array(
+			'application_id' => $this->session_api->application_id,
+			'category_code' => $category_code,
+			'module_version' => $this->module->version,
+			'prestashop_version' => _PS_VERSION_,
+			'language' => $this->context->language->iso_code
+		);
+
+		if ($this->session_api->connectFromCredentials('email'))
+			$parameters['account_id'] = $this->session_api->account_id;
+
+		if ($this->session_api->callExternal('http://www.express-mailing.com/api/cart/ws.php', 'common', 'order', 'get_products_tpl',
+			$parameters, $response_array))
+		{
+			if (isset($response_array['template']) && !empty($response_array['template']))
+			{
+				$template_content = mb_convert_encoding($response_array['template'], 'UTF-8', 'BASE64');
+				die($this->context->smarty->fetch('string:'.$template_content));
+			}
+		}
+
+		die(Tools::displayError(sprintf($this->module->l('Unable to get product list : %s', 'adminmarketingestep1'),
+						$this->session_api->getError())));
+	}
+
+	private function getMinUnitPrice($media)
+	{
+			$response_array = array();
+			$parameters = array('application_id' => $this->session_api->application_id);
+
+			if ($this->session_api->callExternal('http://www.express-mailing.com/api/cart/ws.php',
+												'common', 'account', 'enum_credits', $parameters, $response_array))
+			{
+				if (isset($response_array[$media]))
+				{
+					$min_price = null;
+					foreach ($response_array[$media] as $key => $ticket)
+					{
+						if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
+						{
+							if (isset($ticket['promo_price'], $ticket['product_units']) && ($min_price == null || $ticket['promo_price'] < $min_price))
+								$min_price = $ticket['promo_price'] / $ticket['product_units'];
+						}
+						else
+							if (isset($ticket['normal_price'], $ticket['product_units']) && ($min_price == null || $ticket['normal_price'] < $min_price))
+								$min_price = $ticket['normal_price'] / $ticket['product_units'];
+					}
+					return $min_price;
+				}
+				else
+					return null;
+			}
+	}
 }

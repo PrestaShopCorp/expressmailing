@@ -52,7 +52,7 @@ class AdminMarketingSListController extends ModuleAdminController
 
 	public function setMedia()
 	{
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css', 'all');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css', 'all');
 		parent::setMedia();
 	}
 

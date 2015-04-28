@@ -60,6 +60,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		// ------------------
 		include _PS_MODULE_DIR_.$this->module->name.'/controllers/admin/session_api.php';
 		$this->session_api = new SessionApi();
+		
 	}
 
 	public function initToolbarTitle()
@@ -71,7 +72,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 	public function setMedia()
 	{
 		parent::setMedia();
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css', 'all');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css', 'all');
 		$this->addJqueryUI('ui.slider');
 		$this->addJqueryUI('ui.dialog');
 		$this->addJqueryUI('ui.draggable');
@@ -158,16 +159,17 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 				array(
 					'type' => 'free',
 					'name' => 'html_list'
+				),
+				array (
+					'type' => 'hidden',
+					'lang' => false,
+					'label' => 'Ref :',
+					'name' => 'campaign_id',
+					'col' => 1,
+					'readonly' => 'readonly'
 				)
 			),
 			'buttons' => array(
-				array(
-					'href' => 'index.php?controller=AdminMarketingEStep5&campaign_id='.$this->campaign_id.
-					'&token='.Tools::getAdminTokenLite('AdminMarketingEStep5'),
-					'title' => $this->module->l('Validate this selection', 'adminmarketingestep4'),
-					'icon' => 'process-icon-next',
-					'class' => 'pull-right'
-				),
 				array(
 					'href' => 'index.php?controller=AdminMarketingEStep3&campaign_id='.
 					$this->campaign_id.
@@ -176,15 +178,20 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 					'icon' => 'process-icon-back',
 					'class' => 'pull-left'
 				)
+			),
+			'submit' => array(
+				'title' => $this->module->l('Validate this selection', 'adminmarketingestep4'),
+				'name' => 'validateSelection',
+				'icon' => 'process-icon-next'
 			)
 		);
 
-		$html_boutons = parent::renderForm();
+		$html_boutons = (string)parent::renderForm();
 
 		// On imbrique la liste et les boutons
 		// -----------------------------------
 		if (count($array_table) > 0)
-			$output .= str_replace('<div class="form-group">', '<div class="form-group">'.$array_table[0], $html_boutons);
+			$output .= preg_replace ('/<div class="form-group">/', '<div class="form-group">'.$array_table[0], $html_boutons, 1); 
 		else
 			$output .= $html_boutons;
 
@@ -276,6 +283,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 				{
 					$this->expiration_date = $response_array['expiration_date'];
 					$template_content = mb_convert_encoding($response_array['template'], 'UTF-8', 'BASE64');
+					$this->context->smarty->assign('campaign_id', $this->campaign_id);
 					return $this->context->smarty->fetch('string:'.$template_content);
 				}
 			}
@@ -518,7 +526,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 						break;
 				}
 			}
-
+			
 			// Rebuild the recipients selection
 			// --------------------------------
 			if (empty($this->expiration_date))
@@ -546,6 +554,20 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 				'recipients_modified' => 1
 				), 'campaign_id = '.$this->campaign_id
 			);
+		}
+		if (Tools::isSubmit('validateSelection'))
+		{
+			$this->getRecipientsDB();
+			if ($this->list_total == 0)
+			{
+				$this->errors[] = $this->module->l('Your recipients selection is empty !', 'adminmarketingestep4');
+			}
+			else
+			{
+				Tools::redirectAdmin('index.php?controller=AdminMarketingEStep5&campaign_id='.
+					$this->campaign_id.
+					'&token='.Tools::getAdminTokenLite('AdminMarketingEStep5'));
+			}
 		}
 	}
 

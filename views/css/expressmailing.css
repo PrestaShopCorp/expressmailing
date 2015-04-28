@@ -108,7 +108,7 @@ div#mymodule_block_left p {
 .phoneskin {
 	width:263px;
 	height:463px;
-	background-image:url(../modules/expressmailing/img/phoneskin.png);
+	background-image:url(../modules/expressmailing/views/img/phoneskin.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 	margin-left:auto;

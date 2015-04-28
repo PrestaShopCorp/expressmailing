@@ -27,7 +27,7 @@ class ExpressMailing extends Module
 		$this->bootstrap = true;
 		$this->name = 'expressmailing';
 		$this->tab = 'emailing';
-		$this->version = '1.0.1';
+		$this->version = '1.1.0';
 		$this->author = 'Axalone France';
 		$this->need_instance = 0;
 		//$this->ps_versions_compliancy = array ('min' => '1.5', 'max' => _PS_VERSION_);
@@ -41,7 +41,7 @@ class ExpressMailing extends Module
 		$this->confirmUninstall = $this->l('Are you sure you want to uninstall ?');
 		$this->html_preview_folder = _PS_MODULE_DIR_.'expressmailing'.DIRECTORY_SEPARATOR.'campaigns'.DIRECTORY_SEPARATOR;
 
-		$this->context->controller->addCSS(_PS_MODULE_DIR_.'expressmailing/css/icon-marketing.css');
+		$this->context->controller->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/icon-marketing.css');
 	}
 
 	public function reset()
@@ -52,6 +52,9 @@ class ExpressMailing extends Module
 
 	public function install($alter_db = true)
 	{
+		if (!function_exists('curl_init'))
+			$this->context->controller->informations[] = 'This module uses CURL, you should activate the PHP CURL extension on your server.';
+
 		return parent::install()
 			&& $this->installDB($alter_db)
 			/* Add main Tab (visible into Customer) */

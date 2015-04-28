@@ -93,7 +93,7 @@
 												{l s='Email weight :' mod='expressmailing'}
 											</label>
 											<label class="control-label col-lg-2">
-												{$mail_weight|intval}
+												{$mail_weight|escape:'html':'UTF-8'}
 											</label>
 										</div>
 										<div class="form-group">
@@ -101,7 +101,11 @@
 												{l s='Email cost :' mod='expressmailing'}
 											</label>
 											<label class="control-label col-lg-2">
-												{$mail_cost|intval}
+                                                {if $mail_cost > 1}
+                                                    {$mail_cost|escape:'html':'UTF-8'} {l s='credits' mod='expressmailing'}
+                                                {else}
+                                                    {$mail_cost|intval} {l s='credit' mod='expressmailing'}
+                                                {/if}
 											</label>
 										</div>
 									</div>

@@ -12,29 +12,89 @@
 *}
 
 {if isset($smarty_fax_tickets) && is_array($smarty_fax_tickets)}
-	<table>
-		{foreach $smarty_fax_tickets as $key => $ticket}
-		<tr><td class="radio" style="padding-bottom: 2px; border-bottom: medium dotted #C5E9F3{if $key == 0}; border-top: medium dotted #C5E9F3{/if}">
-			<label>
-				<input type="radio" name="product" value="{$ticket.product_ref|escape:'html':'UTF-8'}" {if ($cart_product == '' and $key == 0) or ($cart_product == $ticket.product_ref) }checked="checked" {/if}/>
-				<span style="width:170px; display:inline-block">{$ticket.product_units|number_format:0:",":"."} {$fax_credits}<br>{$ticket.product_desc|escape:'html':'UTF-8'}</span>
-				<span style="width:170px; display:inline-block"><b>{$ticket.normal_price|number_format:2:",":"."} {$euro_symbol}</b><br>{$fax_per_unit|sprintf:($ticket.normal_price / $ticket.product_units)}</span>
-			</label>
-		</td></tr>
-		{/foreach}
-	</table>
+    <table>
+        {foreach $smarty_fax_tickets as $key => $ticket}
+            {if isset($ticket.promo_ending) && $ticket.promo_ending > time()}
+                {assign var=promotion value=true}
+            {else}
+                {assign var=promotion value=false}
+            {/if}
+            <tr>
+                <td class="radio" style="padding-bottom: 2px; border-bottom: medium dotted #C5E9F3{if $key == 0}; border-top: medium dotted #C5E9F3{/if}">
+                    {if $promotion}
+                        {if isset($ticket.promo_ending)}
+                            <span style="display: block; color: red">{l s='Promotion until' mod='expressmailing'} {$tool_date->getLocalizableDate($ticket.promo_ending)|escape:'html':'UTF-8'}</span>
+                        {/if}
+                        {if isset($ticket.promo_desc) and !empty($ticket.promo_desc)}
+                            <span style="display: block; color: red; font-weight: bold">{$ticket.promo_desc|escape:'html':'UTF-8'}</span>
+                        {/if}
+                    {/if}
+                    <label>
+                        <input type="radio" name="product" value="{$ticket.product_ref|escape:'html':'UTF-8'}" {if ($cart_product == '' and $key == 0) or ($cart_product == $ticket.product_ref) }checked="checked" {/if}/>
+                        <span style="width:170px; display:inline-block">
+                            {$ticket.product_units|number_format:0:",":"."} {$fax_credits}<br>{$ticket.product_desc|escape:'html':'UTF-8'}
+                        </span>
+                        <span style="width:170px; display:inline-block">
+                            <span style="{if $promotion}text-decoration: line-through{else}font-weight: bold{/if}">
+                                {$ticket.normal_price|number_format:2:",":"."} {$euro_symbol}
+                            </span>
+                            {if $promotion}
+                                &nbsp;&nbsp;<span style="color: red; font-weight: bold">{$ticket.promo_price|number_format:2:",":"."} {$euro_symbol}</span>
+                            {/if}
+                            <br>
+                            {if $promotion}
+                                {$fax_per_unit|sprintf:($ticket.promo_price / $ticket.product_units)}
+                            {else}
+                                {$fax_per_unit|sprintf:($ticket.normal_price / $ticket.product_units)}
+                            {/if}
+                        </span>
+                    </label>
+                </td>
+            </tr>
+        {/foreach}
+    </table>
 {/if}
 
 {if isset($smarty_sms_tickets) && is_array($smarty_sms_tickets)}
-	<table>
-		{foreach $smarty_sms_tickets as $key => $ticket}
-		<tr><td class="radio" style="padding-bottom: 2px; border-bottom: medium dotted #C5E9F3{if $key == 0}; border-top: medium dotted #C5E9F3{/if}">
-			<label>
-				<input type="radio" name="product" value="{$ticket.product_ref|escape:'html':'UTF-8'}" {if ($cart_product == '' and $key == 0) or ($cart_product == $ticket.product_ref) }checked="checked" {/if}/>
-				<span style="width:170px; display:inline-block">{$ticket.product_units|number_format:0:",":"."} {$sms_credits}<br>{$ticket.product_desc|escape:'html':'UTF-8'}</span>
-				<span style="width:170px; display:inline-block"><b>{$ticket.normal_price|number_format:2:",":"."} {$euro_symbol}</b><br>{$sms_per_unit|sprintf:($ticket.normal_price / $ticket.product_units)}</span>
-			</label>
-		</td></tr>
-		{/foreach}
-	</table>
+    <table>
+        {foreach $smarty_sms_tickets as $key => $ticket}
+            {if isset($ticket.promo_ending) && $ticket.promo_ending > time()}
+                {assign var=promotion value=true}
+            {else}
+                {assign var=promotion value=false}
+            {/if}
+            <tr>
+                <td class="radio" style="padding-bottom: 2px; border-bottom: medium dotted #C5E9F3{if $key == 0}; border-top: medium dotted #C5E9F3{/if}">
+                    {if $promotion}
+                        {if isset($ticket.promo_ending)}
+                            <span style="display: block; color: red">{l s='Promotion until' mod='expressmailing'} {$tool_date->getLocalizableDate($ticket.promo_ending)|escape:'html':'UTF-8'}</span>
+                        {/if}
+                        {if isset($ticket.promo_desc) and !empty($ticket.promo_desc)}
+                            <span style="display: block; color: red; font-weight: bold">{$ticket.promo_desc|escape:'html':'UTF-8'}</span>
+                        {/if}
+                    {/if}
+                    <label>
+                        <input type="radio" name="product" value="{$ticket.product_ref|escape:'html':'UTF-8'}" {if ($cart_product == '' and $key == 0) or ($cart_product == $ticket.product_ref) }checked="checked" {/if}/>
+                        <span style="width:170px; display:inline-block">
+                            {$ticket.product_units|number_format:0:",":"."} {$sms_credits}<br>{$ticket.product_desc|escape:'html':'UTF-8'}
+                        </span>
+                        <span style="width:170px; display:inline-block">
+                            <span style="{if $promotion}text-decoration: line-through{else}font-weight: bold{/if}">
+                                {$ticket.normal_price|number_format:2:",":"."} {$euro_symbol}
+                            </span>
+                            {if $promotion}
+                                &nbsp;&nbsp;<span style="color: red; font-weight: bold">{$ticket.promo_price|number_format:2:",":"."} {$euro_symbol}</span>
+                            {/if}
+                            <br>
+                            {if $promotion}
+                                {$fax_per_unit|sprintf:($ticket.promo_price / $ticket.product_units)}
+                            {else}
+                                {$fax_per_unit|sprintf:($ticket.normal_price / $ticket.product_units)}
+                            {/if}
+                        </span>
+                    </label>
+                </td>
+            </tr>
+        {/foreach}
+    </table>
 {/if}

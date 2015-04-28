@@ -172,7 +172,7 @@
 
 </script>
 
-<div style="margin: auto; width: 263px; height:463px; background-image: url(../modules/expressmailing/img/phoneskin.png); background-repeat: no-repeat; background-size: cover;">
+<div style="margin: auto; width: 263px; height:463px; background-image: url(../modules/expressmailing/views/img/phoneskin.png); background-repeat: no-repeat; background-size: cover;">
 	<textarea  id="text_sms" name="campaign_text" style="position: relative; top: 70px; left: 27px; height: 305px; width: 211px;">{$campaign_text|escape:'htmlall':'UTF-8'}</textarea>
 </div>
 

@@ -49,8 +49,8 @@ class AdminMarketingFStep1Controller extends ModuleAdminController
 	{
 		parent::setMedia();
 
-		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/css/expressmailing.css');
-		$this->addJS(_PS_MODULE_DIR_.'expressmailing/js/marketingf_step1.js');
+		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
+		$this->addJS(_PS_MODULE_DIR_.'expressmailing/views/js/marketingf_step1.js');
 		$this->addJqueryUI('ui.slider');
 		$this->addJqueryUI('ui.spinner');
 	}

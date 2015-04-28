@@ -10,12 +10,11 @@
 * @copyright 2014-2015 (c) Axalone France
 * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
 *}
-
 {if is_array($smarty_fax_tickets) || is_array($smarty_sms_tickets)}
-<form id="buy_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller=AdminMarketingBuy&token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate>
+<form id="buy_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller={if (!empty($credential_fax) || !empty($credential_sms))}AdminMarketingBuy&token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape:'html':'UTF-8'}{else}AdminMarketingInscription&token={Tools::getAdminTokenLite('AdminMarketingInscription')|escape:'html':'UTF-8'}{/if}" method="post" enctype="multipart/form-data" novalidate>
 	<div class="panel" id="fieldset_0">
 		<div class="panel-heading">
-			<i class="icon-shopping-cart"></i>&nbsp;{l s='Buy credit packs' mod='expressmailing'}
+			<i class="icon-shopping-cart"></i>&nbsp;{l s='Buy tickets' mod='expressmailing'}
 		</div>
 		<div class="form-wrapper">
 			<div class="form-group">

@@ -29,21 +29,21 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 		$this->context = Context::getContext();
 		$this->lang = false;
 		$this->default_form_language = $this->context->language->id;
+		$this->next_controller = '';
 
 		$this->campaign_id = (int)Tools::getValue('campaign_id');
-
-		if (empty($this->campaign_id))
-		{
-			Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
-			exit;
-		}
 
 		parent::__construct();
 
 		switch ($this->controller_name)
 		{
 			case 'AdminMarketingEStep5': /* ---------------------------------------------------- */
-
+				if (empty($this->campaign_id))
+				{
+					Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
+					exit;
+				}
+				$this->next_controller = $this->controller_name;
 				$this->step_action = '5';
 				$this->media = 'email';
 				$this->back_action = 'index.php?controller=AdminMarketingEStep4&campaign_id='.
@@ -55,7 +55,12 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 				break;
 
 			case 'AdminMarketingFStep5': /* ---------------------------------------------------- */
-
+				if (empty($this->campaign_id))
+				{
+					Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
+					exit;
+				}
+				$this->next_controller = $this->controller_name;
 				$this->step_action = '5';
 				$this->media = 'fax';
 				$this->back_action = 'index.php?controller=AdminMarketingFStep3&campaign_id='.
@@ -67,7 +72,12 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 				break;
 
 			case 'AdminMarketingSStep4': /* ---------------------------------------------------- */
-
+				if (empty($this->campaign_id))
+				{
+					Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
+					exit;
+				}
+				$this->next_controller = $this->controller_name;
 				$this->step_action = '4';
 				$this->media = 'sms';
 				$this->back_action = 'index.php?controller=AdminMarketingSStep2&campaign_id='.
@@ -78,10 +88,19 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 
 				break;
 
-			default: /* ---------------------------------------------------- */
+			case 'AdminMarketingInscription':
+				$this->next_controller = 'AdminMarketingX';
+				$this->step_action = '1';
+				$product = (string)Tools::getValue('product');
+				$this->media = Tools::substr($product, 0, Tools::strpos($product, '-'));
+				//$this->media = 'AdminMarketingX';
+				$this->back_action = 'index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX');
+				$this->next_action = 'index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX');
+				break;
 
+			default:
 				Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
-				exit;
+				break;
 		}
 
 		// API initialization
@@ -301,6 +320,8 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 				// Puis on affiche les tickets dans smarty
 				// ---------------------------------------
 				$buy = $this->getTemplatePath().'marketing_inscription/buy_package.tpl';
+				$tools = new EMTools;
+				$this->context->smarty->assign('tool_date', $tools);
 
 				if (($this->media == 'fax') && isset($response_array['fax']))
 				{
@@ -506,8 +527,8 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 					// --------------------------------------------------------
 					if ($cart_product)
 					{
-						Tools::redirectAdmin('index.php?controller=AdminMarketingBuy&campaign_id='.
-								$this->campaign_id.'&media='.$this->controller_name.'&product='.$cart_product.
+						Tools::redirectAdmin('index.php?controller=AdminMarketingBuy&submitCheckout&campaign_id='.
+								$this->campaign_id.'&media='.$this->next_controller.'&product='.$cart_product.
 								'&token='.Tools::getAdminTokenLite('AdminMarketingBuy'));
 						exit;
 					}
@@ -567,8 +588,8 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 					// --------------------------------------------------------
 					if ($cart_product)
 					{
-						Tools::redirectAdmin('index.php?controller=AdminMarketingBuy&campaign_id='.
-								$this->campaign_id.'&media='.$this->controller_name.'&product='.$cart_product.
+						Tools::redirectAdmin('index.php?controller=AdminMarketingBuy&submitCheckout&campaign_id='.
+								$this->campaign_id.'&media='.$this->next_controller.'&product='.$cart_product.
 								'&token='.Tools::getAdminTokenLite('AdminMarketingBuy'));
 						exit;
 					}
@@ -679,7 +700,7 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 
 		return true;
 	}
-
+	
 	private function removeAccents($string)
 	{
 		if (!preg_match('/[\x80-\xff]/', (string)$string))

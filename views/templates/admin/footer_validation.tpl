@@ -33,13 +33,13 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td align="right"><img border="0" src="../modules/expressmailing/img/left_arrow_history.gif" width="28" height="33"></td>
+				<td align="right"><img border="0" src="../modules/expressmailing/views/img/left_arrow_history.gif" width="28" height="33"></td>
 				<td align="center" style="padding: .5em">
 					<button type="submit" value="1" id="configuration_form_submit_btn" name="sendCampaign" class="btn btn-default" style="padding-left: 2em; padding-right: 2em;">
 						<i class="process-icon-import"></i> {l s='Send campaign' mod='expressmailing'}
 					</button>
 				</td>
-				<td align="left"><img border="0" src="../modules/expressmailing/img/right_arrow_history.gif" width="28" height="33"></td>
+				<td align="left"><img border="0" src="../modules/expressmailing/views/img/right_arrow_history.gif" width="28" height="33"></td>
 			</tr>
 			</tbody>
 			</table>

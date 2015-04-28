@@ -19,7 +19,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Marketing Module for Prestashop</title>
 	<style type="text/css">
-		.inline-list>li {
+		.inline-list li {
 			display: inline-block;
 		}
 		.inline-list a {
