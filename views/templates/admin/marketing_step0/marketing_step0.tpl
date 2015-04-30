@@ -15,51 +15,51 @@
         <img src="../modules/expressmailing/views/img/{l s='config_en.png' mod='expressmailing'}" border="0"><br>&nbsp;
     </div>
     <div class="panel" style="text-align: center">
-        <div style="display: inline-block; width:24%; min-width: 180px;">
-            <img src="../modules/expressmailing/views/img/email.png" border="0" style="display: inline-block">
-            <div style="display: inline-block; vertical-align: middle; padding-left: 1em; text-align: left">
+        <div style="display: inline-block; width:24%; min-width: 180px; text-align: left; vertical-align: top; margin-bottom: 1.5em">
+            <img src="../modules/expressmailing/views/img/email.png" border="0" style="display: inline-block; margin-bottom: .5em">
+            <div style="display: inline-block; vertical-align: top; padding-left: 1em; text-align: left; width: 18em">
                 <span style="display: block; font-size: 10pt; font-weight: bold">Vos crédits email</span>
                 <span style="display: block; font-size: 9pt">{$smarty_remaining_email_credits|unescape}</span>
                 <div style="display: block; padding-top: 4px">
                     <a href="index.php?controller=AdminMarketingEList&token={Tools::getAdminTokenLite('AdminMarketingEList')|escape:'html':'UTF-8'}" class="btn btn-default" style="text-align: left; box-shadow: none; border: none;"><i class="icon-dashboard"></i> &nbsp;{l s='My email stats' mod='expressmailing'}</a><br/>
                     <a class="btn btn-default" id="em_bying_link_email" style="text-align: left; box-shadow: none; border: none;"><i class="icon-shopping-cart"></i> &nbsp;{l s='Increase capacity ?' mod='expressmailing'}</a>
                     {if $smarty_email_promotion}
-                        <span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
+                        <br/><span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
                     {/if}
                 </div>
             </div>
         </div>
-        <div style="display: inline-block; width:24%; min-width: 180px;">
-            <img src="../modules/expressmailing/views/img/fax.png" border="0" style="display: inline-block">
-            <div style="display: inline-block; vertical-align: middle; padding-left: 1em; text-align: left">
+        <div style="display: inline-block; width:24%; min-width: 180px; text-align: left; vertical-align: top; margin-bottom: 1.5em">
+            <img src="../modules/expressmailing/views/img/fax.png" border="0" style="display: inline-block; margin-bottom: .5em">
+            <div style="display: inline-block; vertical-align: top; padding-left: 1em; text-align: left; width: 18em">
                 <span style="display: block; font-size: 10pt; font-weight: bold">Vos crédits fax</span>
                 <span style="display: block; font-size: 9pt">{$smarty_remaining_fax_credits|unescape}</span>
                 <div style="display: block; padding-top: 4px">
                     <a href="index.php?controller=AdminMarketingFList&token={Tools::getAdminTokenLite('AdminMarketingFList')|escape:'html':'UTF-8'}" class="btn btn-default" style="text-align: left; box-shadow: none; border: none;"><i class="icon-dashboard"></i> &nbsp;{l s='My fax stats' mod='expressmailing'}</a><br/>
                     <a class="btn btn-default" id="em_bying_link_fax" style="text-align: left; box-shadow: none; border: none;"><i class="icon-shopping-cart"></i> &nbsp;{l s='Buy tickets' mod='expressmailing'}</a>
                     {if $smarty_fax_promotion}
-                        <span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
+                        <br/><span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
                     {/if}
                 </div>
             </div>
         </div>
-        <div style="display: inline-block; width:24%; min-width: 180px;">
-            <img src="../modules/expressmailing/views/img/sms.png" border="0" style="display: inline-block">
-            <div style="display: inline-block; vertical-align: middle; padding-left: 1em; text-align: left">
+        <div style="display: inline-block; width:24%; min-width: 180px; text-align: left; vertical-align: top; margin-bottom: 1.5em">
+            <img src="../modules/expressmailing/views/img/sms.png" border="0" style="display: inline-block; margin-bottom: .5em">
+            <div style="display: inline-block; vertical-align: top; padding-left: 1em; text-align: left; width: 18em">
                 <span style="display: block; font-size: 10pt; font-weight: bold">Vos crédits sms</span>
                 <span style="display: block; font-size: 9pt">{$smarty_remaining_sms_credits|unescape}</span>
                 <div style="display: block; padding-top: 4px">
                     <a href="index.php?controller=AdminMarketingSList&token={Tools::getAdminTokenLite('AdminMarketingSList')|escape:'html':'UTF-8'}" class="btn btn-default" style="text-align: left; box-shadow: none; border: none;"><i class="icon-dashboard"></i> &nbsp;{l s='My sms stats' mod='expressmailing'}</a><br/>
                     <a class="btn btn-default" id="em_bying_link_sms" style="text-align: left; box-shadow: none; border: none;"><i class="icon-shopping-cart"></i> &nbsp;{l s='Buy tickets' mod='expressmailing'}</a>
                     {if $smarty_sms_promotion}
-                        <span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
+                        <br/><span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
                     {/if}
                 </div>
             </div>
         </div>
-        <div style="display: inline-block; width:24%; min-width: 180px;">
-            <img src="../modules/expressmailing/views/img/audio.png" border="0" style="display: inline-block">
-            <div style="display: inline-block; vertical-align: middle; padding-left: 1em; text-align: left">
+        <div style="display: inline-block; width:24%; min-width: 180px; text-align: left; vertical-align: top; margin-bottom: 1.5em">
+            <img src="../modules/expressmailing/views/img/audio.png" border="0" style="display: inline-block; margin-bottom: .5em">
+            <div style="display: inline-block; vertical-align: top; padding-left: 1em; text-align: left; width: 18em">
                 <span style="display: block; font-size: 10pt; font-weight: bold">{l s='Coming soon' mod='expressmailing'}</span>
                 <div style="display: block; padding-top: 4px">
                     <a href="https://www.express-mailing.com" target="_blank" class="btn btn-default" style="text-align: left; box-shadow: none; border: none;"><i class="icon-hand-right"></i> &nbsp;{l s='More informations' mod='expressmailing'}</a>
@@ -87,69 +87,38 @@
         {/if}
         <div class="form-wrapper">
             <div class="form-group" style="font-size: 10pt;">
-                <label class="control-label col-lg-3"><span>{l s='I want sending' mod='expressmailing'}</span></label>
+                <label class="control-label col-lg-3" style="margin-top: 3px"><span>{l s='I want sending' mod='expressmailing'}</span></label>
                 <div class="col-lg-9 ">
                     <table style="margin: 3px">
                         <tr>
-                            <td style="vertical-align: middle; width: 40px; text-align: center"><div style="border-radius: 2px; width: 25px; height: 11px; background-color: rgb(148, 190, 42)"></div></td>
-                            <td style="width:25px; vertical-align: middle"><input type="radio" name="campaign_type" id="marketing_e" value="marketing_e" {if $smarty_email_disabled}disabled="disabled"{/if} {if ($smarty_media_checked === 'email')}checked="checked"{/if} /></td>
-                            <td style="width:170px; vertical-align: middle; padding-top: 1px"><label for="marketing_e">{l s='An emailing' mod='expressmailing'}</label></td>
-                            <td style="width:400px; vertical-align: middle; padding-top: 1px"><label for="marketing_e">{$smarty_email_capacity|unescape}</label></td>
+                            <td style="vertical-align: middle; width: 30px; text-align: center"><div style="border-radius: 2px; width: 25px; height: 11px; background-color: rgb(148, 190, 42); margin-top: 3px"></div></td>
+                            <td style="width:170px; vertical-align: middle; padding-top: 1px">
+								<a href="index.php?campaign_type=marketing_e&controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" class="btn btn-default{if $smarty_email_disabled} disabled{/if}" style="text-align: left; box-shadow: none; border: none; font-weight: bold; font-size:10pt">{l s='An emailing' mod='expressmailing'}</a>
+							</td>
+                            <td style="width:400px; vertical-align: middle; padding-top: 3px">{$smarty_email_capacity|unescape}</td>
                         </tr>
                     </table>
 
                     <table style="margin: 3px">
                         <tr>
-                            <td style="vertical-align: middle; width: 40px; text-align: center"><div style="border-radius: 2px; width: 25px; height: 11px; background-color: rgb(199, 111, 143)"></div></td>
-                            <td style="width:25px; vertical-align: middle"><input type="radio" name="campaign_type" id="marketing_f" value="marketing_f" {if $smarty_fax_disabled}disabled="disabled"{/if} {if ($smarty_media_checked === 'fax')}checked="checked"{/if} /></td>
-                            <td style="width:170px; vertical-align: middle; padding-top: 1px"><label for="marketing_f">{l s='A fax-mailing' mod='expressmailing'}</label></td>
-                            <td style="width:430px; vertical-align: middle; padding-top: 1px">
-								{if $smarty_count_fax_credits == 0}
-                                <label for="marketing_f">
-									{if isset($smarty_fax_min_price)}
-										<span class="no-bold">{l s='From %.3f € per page' mod='expressmailing' sprintf=$smarty_fax_min_price}<sup>*</sup></span>
-										<span class='no-bold'>&nbsp;{l s='or' mod='expressmailing'}</span>
-									{/if}
-                                    <a class="btn btn-default" id="em_bying_link_fax2" style="text-align: left; box-shadow: none; border: none;"><i class="icon-shopping-cart"></i> &nbsp;{l s='Buy tickets' mod='expressmailing'}</a>
-                                    {if $smarty_fax_promotion}
-                                        <span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
-                                    {/if}
-                                </label>
-								{/if}
-                            </td>
+                            <td style="vertical-align: middle; width: 30px; text-align: center"><div style="border-radius: 2px; width: 25px; height: 11px; background-color: rgb(199, 111, 143); margin-top: 3px"></div></td>
+                            <td style="width:170px; vertical-align: middle; padding-top: 1px">
+								<a href="index.php?campaign_type=marketing_f&controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" class="btn btn-default {if $smarty_email_disabled}disabled{/if}" style="text-align: left; box-shadow: none; border: none; font-weight: bold; font-size:10pt">{l s='A fax-mailing' mod='expressmailing'}</a>
+							</td>
                         </tr>
                     </table>
 
                     <table style="margin: 3px">
                         <tr>
-                            <td style="vertical-align: middle; width: 40px; text-align: center"><div style="border-radius: 2px; width: 25px; height: 11px; background-color: rgb(117, 141, 188)"></div></td>
-                            <td style="width:25px; vertical-align: middle"><input type="radio" name="campaign_type" id="marketing_s" value="marketing_s" {if $smarty_sms_disabled}disabled="disabled"{/if} {if ($smarty_media_checked === 'sms')}checked="checked"{/if} /></td>
-                            <td style="width:170px; vertical-align: middle; padding-top: 1px"><label for="marketing_s">{l s='A sms-mailing' mod='expressmailing'}</label></td>
-                            <td style="width:430px; vertical-align: middle; padding-top: 1px">
-								{if $smarty_count_sms_credits == 0}
-                                <label for="marketing_s">
-									{if isset($smarty_sms_min_price)}
-										<span class="no-bold">{l s='From %.3f € per sms' mod='expressmailing' sprintf=$smarty_sms_min_price}<sup>*</sup></span>
-										<span class='no-bold'>&nbsp;{l s='or' mod='expressmailing'}</span>
-									{/if}
-                                    <a class="btn btn-default" id="em_bying_link_sms2" style="text-align: left; box-shadow: none; border: none;"><i class="icon-shopping-cart"></i> &nbsp;{l s='Buy tickets' mod='expressmailing'}</a>
-                                    {if $smarty_sms_promotion}
-                                        <span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
-                                    {/if}
-                                </label>
-								{/if}
-                            </td>
+                            <td style="vertical-align: middle; width: 30px; text-align: center"><div style="border-radius: 2px; width: 25px; height: 11px; background-color: rgb(117, 141, 188); margin-top: 3px"></div></td>
+                            <td style="width:170px; vertical-align: middle; padding-top: 1px">
+								<a href="index.php?campaign_type=marketing_s&controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" class="btn btn-default {if $smarty_email_disabled}disabled{/if}" style="text-align: left; box-shadow: none; border: none; font-weight: bold; font-size:10pt">{l s='A sms-mailing' mod='expressmailing'}</a>
+							</td>
                         </tr>
                     </table>
 
                 </div>
-            </div>
-            <div class="form-group">
-                <sup>* </sup>{l s='Fax and sms prices to France Metropolitan' mod='expressmailing'}
-            </div>     
-        </div>
-        <div class="panel-footer">
-            <button type="submit" value="1" id="configuration_form_submit_btn" name="submitMarketingAll" class="btn btn-default pull-right"><i class="process-icon-next"></i>{l s='Next' mod='expressmailing'}</button>
+            </div>   
         </div>
     </div>
 </form>

@@ -29,10 +29,11 @@
 				</div>
 			</div>
 		</div><!-- /.form-wrapper -->
-		<div class="panel-footer">
+		<div class="panel-footer" style="text-align: center">
 			<button type="submit" value="1"	id="configuration_form_submit_btn_1" name="submitEmailingValidate" class="btn btn-default pull-right">
 				<i class="process-icon-next"></i> {l s='Next' mod='expressmailing'}
 			</button>
+			<a href="index.php?controller=AdminMarketingEStep4&campaign_id={$campaign_id|intval}&token={Tools::getAdminTokenLite('AdminMarketingEStep4')|escape:'html':'UTF-8'}"  class="btn btn-default pull-left" ><i class="process-icon-back" ></i> {l s='Back' mod='expressmailing'}</a>
 			<a href="index.php?controller=AdminMarketingEStep3&campaign_id={$campaign_id|intval}&token={Tools::getAdminTokenLite('AdminMarketingEStep3')|escape:'html':'UTF-8'}"  class="btn btn-default" ><i class="process-icon-edit" ></i> {l s='Update' mod='expressmailing'}</a>
 		</div>
 	</div>

@@ -11,7 +11,7 @@
 * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
 *}
 
-<div class="panel-footer" align="center" style="height: auto">
+<div style="width: 100%" align="center">
 	<table border="0" cellspacing="0" bgcolor="#000000">
 	<tbody>
 	<tr>
@@ -47,4 +47,8 @@
 	</tr>
 	</tbody>
 	</table>
+</div>
+
+<div class="panel-footer" style="height: auto">
+	<a href="index.php?controller=AdminMarketingEStep7&campaign_id={$campaign_id|intval}&token={Tools::getAdminTokenLite('AdminMarketingEStep7')|escape:'html':'UTF-8'}"  class="btn btn-default" ><i class="process-icon-back" ></i> {l s='Back' mod='expressmailing'}</a>
 </div>

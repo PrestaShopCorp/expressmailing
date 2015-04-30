@@ -355,7 +355,7 @@ class AdminMarketingXController extends ModuleAdminController
 
 	public function postProcess()
 	{
-		if (Tools::isSubmit('submitMarketingAll'))
+		if (Tools::isSubmit('campaign_type'))
 		{
 			if (Tools::getValue('campaign_type') == 'marketing_f')
 			{
@@ -487,30 +487,33 @@ class AdminMarketingXController extends ModuleAdminController
 
 	private function getMinUnitPrice($media)
 	{
-			$response_array = array();
-			$parameters = array('application_id' => $this->session_api->application_id);
+		$response_array = array();
+		$parameters = array('application_id' => $this->session_api->application_id);
 
-			if ($this->session_api->callExternal('http://www.express-mailing.com/api/cart/ws.php',
-												'common', 'account', 'enum_credits', $parameters, $response_array))
+		if (isset($this->session_api->account_id))
+			$parameters['account_id'] = $this->session_api->account_id;
+
+		if (isset($this->enum_credits) || $this->session_api->callExternal('http://www.express-mailing.com/api/cart/ws.php',
+											'common', 'account', 'enum_credits', $parameters, $this->enum_credits))
+		{
+			if (isset($this->enum_credits[$media]))
 			{
-				if (isset($response_array[$media]))
+				$min_price = null;
+				foreach ($this->enum_credits[$media] as $key => $ticket)
 				{
-					$min_price = null;
-					foreach ($response_array[$media] as $key => $ticket)
+					if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
 					{
-						if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
-						{
-							if (isset($ticket['promo_price'], $ticket['product_units']) && ($min_price == null || $ticket['promo_price'] < $min_price))
-								$min_price = $ticket['promo_price'] / $ticket['product_units'];
-						}
-						else
-							if (isset($ticket['normal_price'], $ticket['product_units']) && ($min_price == null || $ticket['normal_price'] < $min_price))
-								$min_price = $ticket['normal_price'] / $ticket['product_units'];
+						if (isset($ticket['promo_price'], $ticket['product_units']) && ($min_price == null || $ticket['promo_price'] < $min_price))
+							$min_price = $ticket['promo_price'] / $ticket['product_units'];
 					}
-					return $min_price;
+					else
+						if (isset($ticket['normal_price'], $ticket['product_units']) && ($min_price == null || $ticket['normal_price'] < $min_price))
+							$min_price = $ticket['normal_price'] / $ticket['product_units'];
 				}
-				else
-					return null;
+				return $min_price;
 			}
+			else
+				return null;
+		}
 	}
 }

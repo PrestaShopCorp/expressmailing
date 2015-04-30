@@ -146,6 +146,19 @@ class AdminMarketingEStep6Controller extends ModuleAdminController
 			Db::getInstance()->execute('UPDATE '._DB_PREFIX_.'expressmailing_email_recipients SET uploaded = 0 WHERE campaign_id = '.
 										$this->campaign_id, false);
 
+			// Then empty the list
+			// -------------------
+			$parameters = array(
+				'account_id' => $this->session_api->account_id,
+				'list_id' => $this->campaign_infos['campaign_api_list_id']
+			);
+			if (!$this->session_api->call('email', 'list', 'clear', $parameters, $response_array))
+			{
+				$this->errors[] = sprintf($this->module->l('Error during communication with Express-Mailing API : %s', 'adminmarketingestep5'),
+									$this->session_api->getError());
+				return false;
+			}
+
 			// Then display the upload ajax page
 			// ---------------------------------
 			$this->context->smarty->assign('campaign_id', $this->campaign_id);
