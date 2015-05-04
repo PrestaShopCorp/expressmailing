@@ -127,7 +127,7 @@
 						</div>
 
 						<div id="prestashop-customers">
-							{$customers_filters|unescape:'html'}
+							{$customers_filters|unescape}
 						</div>
 						<!--
 						<div id="xls-file">

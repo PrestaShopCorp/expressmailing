@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
 	$(function () {
-		var slider{$field_name|escape:javascript}Config = {
+		var slider{$field_name|escape:'javascript':'UTF-8'}Config = {
 			range: true,
 			min: {$min_value|intval},
 			max: {$max_value|intval},
@@ -23,14 +23,14 @@
 				updateValue(ui.values[0], ui.values[1]);
 			}
 		};
-		$( "#slider-{$field_name|escape:javascript}" ).css('background', 'rgb(255,0,0)');
-		$("#slider-{$field_name|escape:javascript} .ui-slider-range").css('background', 'rgb(0, 128, 0)');
-		$("#slider-{$field_name|escape:javascript}").slider(slider{$field_name|escape:javascript}Config);
-		var change_{$field_name|escape:javascript} = function (evt) {
-			var {$field_name|escape:javascript} = $("#{$field_name|escape:javascript}");
-				$("#slider-{$field_name|escape:javascript}").slider("value", {$field_name|escape:javascript}.val());
+		$( "#slider-{$field_name|escape:'javascript':'UTF-8'}" ).css('background', 'rgb(255,0,0)');
+		$("#slider-{$field_name|escape:'javascript':'UTF-8'} .ui-slider-range").css('background', 'rgb(0, 128, 0)');
+		$("#slider-{$field_name|escape:'javascript':'UTF-8'}").slider(slider{$field_name|escape:'javascript':'UTF-8'}Config);
+		var change_{$field_name|escape:'javascript':'UTF-8'} = function (evt) {
+			var {$field_name|escape:'javascript':'UTF-8'} = $("#{$field_name|escape:'javascript':'UTF-8'}");
+				$("#slider-{$field_name|escape:'javascript':'UTF-8'}").slider("value", {$field_name|escape:'javascript':'UTF-8'}.val());
 			};
-			$("#{$field_name|escape:javascript}").change(change_{$field_name|escape:javascript});
+			$("#{$field_name|escape:'javascript':'UTF-8'}").change(change_{$field_name|escape:'javascript':'UTF-8'});
 
 		updateValue({$start_value|intval},{$end_value|intval});
 		function updateValue(val1, val2) {

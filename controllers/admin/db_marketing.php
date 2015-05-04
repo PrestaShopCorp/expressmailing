@@ -255,10 +255,14 @@ class DBMarketing
 							AND DATE_SUB(CURDATE(), INTERVAL '.pSQL($filter['birthday_start']).' YEAR)';
 				break;
 			case 'day':
-				$day_start = explode('-', $filter['birthday_start'])[0];
-				$month_start = explode('-', $filter['birthday_start'])[1];
-				$day_end = explode('-', $filter['birthday_end'])[0];
-				$month_end = explode('-', $filter['birthday_end'])[1];
+				$day_start = explode('-', $filter['birthday_start']);
+				$day_start = $day_start[0];
+				$month_start = explode('-', $filter['birthday_start']);
+				$month_start = $month_start[1];
+				$day_end = explode('-', $filter['birthday_end']);
+				$day_end = $day_end[0];
+				$month_end = explode('-', $filter['birthday_end']);
+				$month_end = $month_end[1];
 				$return = '(MONTH(customer.birthday) BETWEEN '.pSQL($month_start).' AND '.pSQL($month_end).')
 							AND (DAY(customer.birthday) BETWEEN '.pSQL($day_start).' AND '.pSQL($day_end).')';
 				break;

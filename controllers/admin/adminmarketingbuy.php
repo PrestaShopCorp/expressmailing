@@ -364,19 +364,19 @@ class AdminMarketingBuyController extends ModuleAdminController
 		else
 			$company_country = Country::getNameById($this->context->language->id, $country_id);
 
-		if (!ValidateCore::isGenericName($company_name))
+		if (!Validate::isGenericName($company_name))
 			$this->errors[] = sprintf(Tools::displayError('The %s field is required.'), '« '.
 				Translate::getAdminTranslation('Shop name', 'AdminStores').' »');
 
-		if (!ValidateCore::isEmail($company_email))
+		if (!Validate::isEmail($company_email))
 			$this->errors[] = sprintf(Tools::displayError('The %s field is required.'), '« '.
 				Translate::getAdminTranslation('Shop email', 'AdminStores').' »');
 
-		if (!ValidateCore::isPhoneNumber($company_phone))
+		if (!Validate::isPhoneNumber($company_phone))
 			$this->errors[] = sprintf(Tools::displayError('The %s field is required.'), '« '.
 				Translate::getAdminTranslation('Phone', 'AdminStores').' »');
 
-		if (!ValidateCore::isAddress($company_address1))
+		if (!Validate::isAddress($company_address1))
 			$this->errors[] = sprintf(Tools::displayError('The %s field is required.'), '« '.
 				Translate::getAdminTranslation('Shop address line 1', 'AdminStores').' »');
 
@@ -389,7 +389,7 @@ class AdminMarketingBuyController extends ModuleAdminController
 		elseif ($company_zipcode && !Validate::isPostCode($company_zipcode))
 			$this->errors[] = Tools::displayError('The Zip/postal code is invalid.');
 
-		if (!ValidateCore::isGenericName($company_city))
+		if (!Validate::isGenericName($company_city))
 			$this->errors[] = sprintf(Tools::displayError('The %s field is required.'), '« '.
 				Translate::getAdminTranslation('City', 'AdminStores').' »');
 

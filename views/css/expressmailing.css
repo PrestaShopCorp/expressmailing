@@ -171,10 +171,86 @@ span.stat_value {
 	color: green;
 }
 
+.bold {
+	font-weight: bold;
+}
+
 .no-bold {
 	font-weight: normal;
 }
 
+.block {
+	display: block;
+}
+
+.no-float {
+	float: none;
+}
+
 .fax_preview {
    cursor: url(magnify.cur) 14 14, pointer;
+}
+
+.media_list a {
+	text-align: left !important;
+	box-shadow: none !important;
+	border: none !important;
+}
+.media_list > div {
+	display: inline-block;
+	width:20%;
+	min-width: 235px;
+	text-align: left;
+	vertical-align: top;
+	margin-bottom: 2em
+}
+.media_list > div > img {
+	display: block;
+	margin-bottom: .5em
+}
+.media_list > div > div {
+	display: inline-block;
+	vertical-align: top;
+	padding-left: 1em;
+	text-align: left;
+	width: 18em
+}
+
+.media_choice > tr {
+	height: 25px;
+}
+.media_choice .colorcell{
+	vertical-align: middle !important;
+	width: 45px;
+	text-align: center;
+	padding-top: 3px !important;
+}
+.media_choice .colorcell > div {
+	border-radius: 2px;
+	width: 25px;
+	height: 11px;
+	margin-top: 3px;
+	margin-left: 10px;
+}
+.media_choice .colorcell .greencell {
+	background-color: rgb(148, 190, 42);
+}
+.media_choice .colorcell .redcell {
+	background-color: rgb(199, 111, 143);
+}
+.media_choice .colorcell .bluecell {
+	background-color: rgb(117, 141, 188);
+}
+.media_choice .linkcell {
+	width:70px;
+	vertical-align: middle;
+	padding-top: 1px
+}
+.media_choice .commentcell a {
+	cursor: pointer;
+}
+.pricingblock {
+	min-width: 630px;
+	width: 50%;
+	padding-bottom: 3px;
 }

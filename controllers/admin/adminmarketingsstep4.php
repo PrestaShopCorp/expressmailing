@@ -57,5 +57,4 @@ class AdminMarketingSStep4Controller extends AdminMarketingInscriptionController
 		parent::initToolbarTitle();
 		$this->toolbar_title = Translate::getModuleTranslation('expressmailing', 'Send a sms-mailing', 'adminmarketingsstep1');
 	}
-
 }

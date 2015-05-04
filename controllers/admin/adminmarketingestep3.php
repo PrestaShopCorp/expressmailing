@@ -40,16 +40,6 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		}
 
 		parent::__construct();
-
-		if (!function_exists('curl_version'))
-		{
-			$warning = $this->module->l('In order to fetch images over http, you need to activate the PHP CURL extension on your server.',
-				'adminmarketingestep3');
-			$warning .= '<br/>';
-			$warning .= $this->module->l('Otherwise this functionnality may not work properly and you will have to upload your images.',
-				'adminmarketingestep3');
-			$this->warnings[] = $warning;
-		}
 	}
 
 	public function initToolbarTitle()
@@ -61,6 +51,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	public function setMedia()
 	{
 		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
+		$this->addJS(_PS_JS_DIR_.'tiny_mce/tiny_mce.js');
 		$this->addJS(_PS_MODULE_DIR_.'expressmailing/views/js/tinymce.js');
 		parent::setMedia();
 	}
@@ -76,11 +67,10 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 		if (Tools::isSubmit('ignoreImagesEmailingStep3') || (count($images_to_upload) == 0))
 		{
-			$output = $this->generateImportForm();
-			$output .= $this->generateEditorForm();
+			$output = $this->generateEditorForm();
+			$output .= $this->generateImportForm();
 		}
-
-		if (count($images_to_upload) > 0)
+		elseif (count($images_to_upload) > 0)
 			$output .= $this->generateImagesUploadForm($images_to_upload);
 
 		$footer = $this->getTemplatePath().'footer.tpl';
@@ -125,6 +115,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			if (!empty($this->html_content))
 			{
 				$this->html_content = $this->copyImagesAndUpdateHTML($this->html_content);
+
 				if ($this->saveHTML())
 				{
 					if ($found = $this->checkLocalUrls($this->html_content))
@@ -135,6 +126,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 						$this->errors[] = $b;
 						return false;
 					}
+
 					$images_to_upload = $this->parseImagesToUpload($this->html_content);
 
 					if (Tools::isSubmit('nextEmailingStep3') && (count($images_to_upload) == 0))
@@ -146,9 +138,11 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 					}
 				}
 			}
-
-			$this->errors[] = $this->module->l('Please verify the required fields', 'adminmarketingestep3');
-			return false;
+			else
+			{
+				$this->errors[] = $this->module->l('Please verify the required fields', 'adminmarketingestep3');
+				return false;
+			}
 		}
 	}
 
@@ -171,7 +165,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			return $matches[0][0];
 		if (preg_match_all('#://192\.168.[0-9]{1,3}.[0-9]{1,3}#', $text, $matches))
 			return $matches[0][0];
-		if (preg_match_all('#://::1#',$text, $matches))
+		if (preg_match_all('#://::1#', $text, $matches))
 			return $matches[0][0];
 
 		return false;
@@ -184,9 +178,10 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	{
 		$this->fields_form = array(
 			'legend' => array(
-				'title' => $this->module->l('Import HTML from file or URL (step 3)', 'adminmarketingestep3'),
+				'title' => $this->module->l('Import HTML from file or URL', 'adminmarketingestep3'),
 				'icon' => 'icon-beaker'
 			),
+			'description' => $this->module->l('To be able to use these functions, please activate cURL (PHP extension)', 'adminmarketingestep3'),
 			'input' => array(
 				array (
 					'type' => _PS_MODE_DEV_ ? 'text' : 'hidden',
@@ -217,6 +212,10 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				'icon' => 'process-icon-cogs'
 			)
 		);
+
+		if (function_exists('curl_version'))
+			unset($this->fields_form['description']);
+
 		return parent::renderForm();
 	}
 
@@ -283,56 +282,11 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	 */
 	private function generateEditorForm()
 	{
-		$this->fields_form = array(
-			'legend' => array(
-				'title' => $this->module->l('HTML editor', 'adminmarketingestep3'),
-				'icon' => 'icon-edit'
-			),
-			'input' => array(
-				array (
-					'type' => _PS_MODE_DEV_ ? 'text' : 'hidden',
-					'lang' => false,
-					'label' => 'Ref :',
-					'name' => 'campaign_id',
-					'col' => 1,
-					'readonly' => 'readonly'
-				),
-				array (
-					'type' => 'textarea',
-					'label' => $this->module->l('HTML body of your emailing :', 'adminmarketingestep3'),
-					'name' => 'campaign_html',
-					'lang' => false,
-					'autoload_rte' => true,
-					'required' => true
-				)
-			),
-			'submit' => array(
-				'title' => $this->module->l('Validate', 'adminmarketingestep3'),
-				'name' => 'nextEmailingStep3',
-				'icon' => 'process-icon-next'
-			),
-			'buttons' => array(
-				array (
-					'type' => 'submit',
-					'title' => $this->module->l('Save only', 'adminmarketingestep3'),
-					'name' => 'saveEmailingStep3',
-					'class' => 'pull-right',
-					'icon' => 'process-icon-save'
-				),
-				array (
-					'href' => 'index.php?controller=AdminMarketingEStep2&campaign_id='.
-					$this->campaign_id.'&token='.
-					Tools::getAdminTokenLite('AdminMarketingEStep2'),
-					'title' => $this->module->l('Back', 'adminmarketingestep3'),
-					'icon' => 'process-icon-back'
-				)
-			)
-		);
+		$this->context->smarty->assign('campaign_id', $this->campaign_id);
+		$this->context->smarty->assign('campaign_html', $this->html_content);
 
-		$this->fields_value['campaign_id'] = $this->campaign_id;
-		$this->fields_value['campaign_html'] = $this->html_content;
-
-		return parent::renderForm();
+		$template_path = $this->getTemplatePath().'marketinge_step3/editor_template.tpl';
+		return $this->context->smarty->fetch($template_path);
 	}
 
 	/**
@@ -372,8 +326,13 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			$url = 'http://'.$url;
 
 		$html_content = Tools::file_get_contents($url);
-		$html_content = mb_convert_encoding($html_content, 'UTF-8', 'ASCII');
-		$html_content = htmlspecialchars_decode(htmlentities($html_content, ENT_SUBSTITUTE, 'UTF-8', false));
+
+		$enc = mb_detect_encoding($html_content, 'UTF-8, ISO-8859-1, ASCII');
+
+		if ($enc != 'UTF-8')
+			$html_content = mb_convert_encoding($html_content, 'UTF-8', $enc);
+
+		$html_content = htmlspecialchars_decode(htmlentities($html_content, ENT_IGNORE, 'UTF-8', false));
 
 		if (!empty($html_content))
 		{
@@ -401,13 +360,13 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 		if (empty($result['campaign_html']))
 		{
+			$base_url = Configuration::get('PS_SSL_ENABLED') == 0 ? Tools::getShopDomain(true, true) : Tools::getShopDomainSsl(true, true);
 			$domain_name = Tools::getShopDomain(false, true);
-			if (empty($domain_name))
-				$domain_name = Tools::getHttpHost(false, true, true);
+
 			if ($pos = strpos($domain_name, ':'))
 				$domain_name = Tools::substr($domain_name, 0, $pos);
 
-			$this->context->smarty->assign('base_url', Tools::getShopDomainSsl(true, true));
+			$this->context->smarty->assign('base_url', $base_url);
 			$this->context->smarty->assign('domain_name', $domain_name);
 			$this->context->smarty->assign('logo_name', Configuration::get('PS_LOGO'));
 			$this->context->smarty->assign('logo_width', Configuration::get('SHOP_LOGO_WIDTH'));
@@ -546,9 +505,14 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				}
 			}
 
-			if (!empty($image_url) && $this->copyFileToStorage($image_url, $filename))
+			if (!empty($image_url) && ($image_url = $this->copyFileToStorage($image_url, $filename)))
 			{
-				$final_img_url = _PS_BASE_URL_.__PS_BASE_URI__.'modules/expressmailing/campaigns/'.$this->campaign_id.'/';
+				if (Configuration::get('PS_SSL_ENABLED') == 0)
+					$final_img_url = 'http://'.Configuration::get('PS_SHOP_DOMAIN');
+				else
+					$final_img_url = 'https://'.Configuration::get('PS_SHOP_DOMAIN_SSL');
+
+				$final_img_url .= '/modules/expressmailing/campaigns/'.$this->campaign_id.'/';
 				if ($filename)
 					$final_img_url .= $filename;
 				else
@@ -622,12 +586,21 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		else
 			$dest .= basename((string)$url);
 
+		$dest = urldecode($dest);
+		$dest = str_replace(' ', '_', $dest);
+
 		if (function_exists('curl_version'))
 		{
+			$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Mozilla/5.0';
+
 			$ch = curl_init((string)$url);
 			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_CRLF, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			$raw = curl_exec($ch);
 			curl_close ($ch);
 			if (file_exists($dest))
