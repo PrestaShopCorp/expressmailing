@@ -14,55 +14,55 @@
     <div class="center small">
         <img src="../modules/expressmailing/views/img/{l s='config_en.png' mod='expressmailing'}" border="0"><br>&nbsp;
     </div>
-    <div class="panel" style="text-align: center">
-        <div style="display: inline-block; width:24%; min-width: 180px; text-align: left; vertical-align: top; margin-bottom: 1.5em">
-            <img src="../modules/expressmailing/views/img/email.png" border="0" style="display: inline-block; margin-bottom: .5em">
-            <div style="display: inline-block; vertical-align: top; padding-left: 1em; text-align: left; width: 18em">
-                <span style="display: block; font-size: 10pt; font-weight: bold">Vos crédits email</span>
-                <span style="display: block; font-size: 9pt">{$smarty_remaining_email_credits|unescape}</span>
-                <div style="display: block; padding-top: 4px">
-                    <a href="index.php?controller=AdminMarketingEList&token={Tools::getAdminTokenLite('AdminMarketingEList')|escape:'html':'UTF-8'}" class="btn btn-default" style="text-align: left; box-shadow: none; border: none;"><i class="icon-dashboard"></i> &nbsp;{l s='My email stats' mod='expressmailing'}</a><br/>
-                    <a class="btn btn-default" id="em_bying_link_email" style="text-align: left; box-shadow: none; border: none;"><i class="icon-shopping-cart"></i> &nbsp;{l s='Increase capacity ?' mod='expressmailing'}</a>
+    <div class="panel media_list" style="text-align: center">
+        <div>
+            <img src="../modules/expressmailing/views/img/email.png" border="0">
+            <div>
+                <span class="block bold" style="font-size: 10pt;">Vos crédits email</span>
+                <span class="block" style="font-size: 9pt">{$smarty_remaining_email_credits|unescape}</span>
+                <div class="block" style="padding-top: 4px">
+                    <a href="index.php?controller=AdminMarketingEList&token={Tools::getAdminTokenLite('AdminMarketingEList')|escape:'html':'UTF-8'}" class="btn btn-default"><i class="icon-dashboard"></i> &nbsp;{l s='My email stats' mod='expressmailing'}</a><br/>
+                    <a class="btn btn-default" id="em_bying_link_email"><i class="icon-shopping-cart"></i> &nbsp;{l s='Increase capacity ?' mod='expressmailing'}</a>
                     {if $smarty_email_promotion}
                         <br/><span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
                     {/if}
                 </div>
             </div>
         </div>
-        <div style="display: inline-block; width:24%; min-width: 180px; text-align: left; vertical-align: top; margin-bottom: 1.5em">
-            <img src="../modules/expressmailing/views/img/fax.png" border="0" style="display: inline-block; margin-bottom: .5em">
-            <div style="display: inline-block; vertical-align: top; padding-left: 1em; text-align: left; width: 18em">
-                <span style="display: block; font-size: 10pt; font-weight: bold">Vos crédits fax</span>
-                <span style="display: block; font-size: 9pt">{$smarty_remaining_fax_credits|unescape}</span>
-                <div style="display: block; padding-top: 4px">
-                    <a href="index.php?controller=AdminMarketingFList&token={Tools::getAdminTokenLite('AdminMarketingFList')|escape:'html':'UTF-8'}" class="btn btn-default" style="text-align: left; box-shadow: none; border: none;"><i class="icon-dashboard"></i> &nbsp;{l s='My fax stats' mod='expressmailing'}</a><br/>
-                    <a class="btn btn-default" id="em_bying_link_fax" style="text-align: left; box-shadow: none; border: none;"><i class="icon-shopping-cart"></i> &nbsp;{l s='Buy tickets' mod='expressmailing'}</a>
+        <div>
+            <img src="../modules/expressmailing/views/img/fax.png" border="0">
+            <div>
+                <span class="block bold" style="font-size: 10pt;">Vos crédits fax</span>
+                <span class="block" style="font-size: 9pt">{$smarty_remaining_fax_credits|unescape}</span>
+                <div class="block" style="padding-top: 4px">
+                    <a href="index.php?controller=AdminMarketingFList&token={Tools::getAdminTokenLite('AdminMarketingFList')|escape:'html':'UTF-8'}" class="btn btn-default"><i class="icon-dashboard"></i> &nbsp;{l s='My fax stats' mod='expressmailing'}</a><br/>
+                    <a class="btn btn-default" id="em_bying_link_fax"><i class="icon-shopping-cart"></i> &nbsp;{l s='Buy tickets' mod='expressmailing'}</a>
                     {if $smarty_fax_promotion}
                         <br/><span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
                     {/if}
                 </div>
             </div>
         </div>
-        <div style="display: inline-block; width:24%; min-width: 180px; text-align: left; vertical-align: top; margin-bottom: 1.5em">
-            <img src="../modules/expressmailing/views/img/sms.png" border="0" style="display: inline-block; margin-bottom: .5em">
-            <div style="display: inline-block; vertical-align: top; padding-left: 1em; text-align: left; width: 18em">
-                <span style="display: block; font-size: 10pt; font-weight: bold">Vos crédits sms</span>
-                <span style="display: block; font-size: 9pt">{$smarty_remaining_sms_credits|unescape}</span>
-                <div style="display: block; padding-top: 4px">
-                    <a href="index.php?controller=AdminMarketingSList&token={Tools::getAdminTokenLite('AdminMarketingSList')|escape:'html':'UTF-8'}" class="btn btn-default" style="text-align: left; box-shadow: none; border: none;"><i class="icon-dashboard"></i> &nbsp;{l s='My sms stats' mod='expressmailing'}</a><br/>
-                    <a class="btn btn-default" id="em_bying_link_sms" style="text-align: left; box-shadow: none; border: none;"><i class="icon-shopping-cart"></i> &nbsp;{l s='Buy tickets' mod='expressmailing'}</a>
+        <div>
+            <img src="../modules/expressmailing/views/img/sms.png" border="0">
+            <div>
+                <span class="block bold" style="font-size: 10pt;">Vos crédits sms</span>
+                <span class="block" style="font-size: 9pt">{$smarty_remaining_sms_credits|unescape}</span>
+                <div class="block" style="padding-top: 4px">
+                    <a href="index.php?controller=AdminMarketingSList&token={Tools::getAdminTokenLite('AdminMarketingSList')|escape:'html':'UTF-8'}" class="btn btn-default"><i class="icon-dashboard"></i> &nbsp;{l s='My sms stats' mod='expressmailing'}</a><br/>
+                    <a class="btn btn-default" id="em_bying_link_sms"><i class="icon-shopping-cart"></i> &nbsp;{l s='Buy tickets' mod='expressmailing'}</a>
                     {if $smarty_sms_promotion}
                         <br/><span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
                     {/if}
                 </div>
             </div>
         </div>
-        <div style="display: inline-block; width:24%; min-width: 180px; text-align: left; vertical-align: top; margin-bottom: 1.5em">
-            <img src="../modules/expressmailing/views/img/audio.png" border="0" style="display: inline-block; margin-bottom: .5em">
-            <div style="display: inline-block; vertical-align: top; padding-left: 1em; text-align: left; width: 18em">
-                <span style="display: block; font-size: 10pt; font-weight: bold">{l s='Coming soon' mod='expressmailing'}</span>
-                <div style="display: block; padding-top: 4px">
-                    <a href="https://www.express-mailing.com" target="_blank" class="btn btn-default" style="text-align: left; box-shadow: none; border: none;"><i class="icon-hand-right"></i> &nbsp;{l s='More informations' mod='expressmailing'}</a>
+        <div>
+            <img src="../modules/expressmailing/views/img/audio.png" border="0">
+            <div>
+                <span class="block bold" style="font-size: 10pt;">{l s='Coming soon' mod='expressmailing'}</span>
+                <div class="block" style="padding-top: 4px">
+                    <a href="https://www.express-mailing.com" target="_blank" class="btn btn-default"><i class="icon-hand-right"></i> &nbsp;{l s='More informations' mod='expressmailing'}</a>
                 </div>
             </div>
         </div>
@@ -89,30 +89,30 @@
             <div class="form-group" style="font-size: 10pt;">
                 <label class="control-label col-lg-3" style="margin-top: 3px"><span>{l s='I want sending' mod='expressmailing'}</span></label>
                 <div class="col-lg-9 ">
-                    <table style="margin: 3px">
+                    <table style="margin: 3px" class="media_choice">
                         <tr>
-                            <td style="vertical-align: middle; width: 30px; text-align: center"><div style="border-radius: 2px; width: 25px; height: 11px; background-color: rgb(148, 190, 42); margin-top: 3px"></div></td>
-                            <td style="width:170px; vertical-align: middle; padding-top: 1px">
-								<a href="index.php?campaign_type=marketing_e&controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" class="btn btn-default{if $smarty_email_disabled} disabled{/if}" style="text-align: left; box-shadow: none; border: none; font-weight: bold; font-size:10pt">{l s='An emailing' mod='expressmailing'}</a>
+                            <td class="colorcell"><div style="background-color: rgb(148, 190, 42);"></div></td>
+                            <td class="linkcell">
+								<a href="index.php?campaign_type=marketing_e&controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" class="btn btn-default{if $smarty_email_disabled} disabled{/if}">{l s='An emailing' mod='expressmailing'}</a>
 							</td>
-                            <td style="width:400px; vertical-align: middle; padding-top: 3px">{$smarty_email_capacity|unescape}</td>
+                            <td class="commentcell" style="width:400px; vertical-align: middle; padding-top: 3px">{$smarty_email_capacity|unescape}</td>
                         </tr>
                     </table>
 
-                    <table style="margin: 3px">
+                    <table style="margin: 3px" class="media_choice">
                         <tr>
-                            <td style="vertical-align: middle; width: 30px; text-align: center"><div style="border-radius: 2px; width: 25px; height: 11px; background-color: rgb(199, 111, 143); margin-top: 3px"></div></td>
-                            <td style="width:170px; vertical-align: middle; padding-top: 1px">
-								<a href="index.php?campaign_type=marketing_f&controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" class="btn btn-default {if $smarty_email_disabled}disabled{/if}" style="text-align: left; box-shadow: none; border: none; font-weight: bold; font-size:10pt">{l s='A fax-mailing' mod='expressmailing'}</a>
+                            <td class="colorcell"><div style="background-color: rgb(199, 111, 143);"></div></td>
+                            <td class="linkcell">
+								<a href="index.php?campaign_type=marketing_f&controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" class="btn btn-default {if $smarty_email_disabled}disabled{/if}">{l s='A fax-mailing' mod='expressmailing'}</a>
 							</td>
                         </tr>
                     </table>
 
-                    <table style="margin: 3px">
+                    <table style="margin: 3px" class="media_choice">
                         <tr>
-                            <td style="vertical-align: middle; width: 30px; text-align: center"><div style="border-radius: 2px; width: 25px; height: 11px; background-color: rgb(117, 141, 188); margin-top: 3px"></div></td>
-                            <td style="width:170px; vertical-align: middle; padding-top: 1px">
-								<a href="index.php?campaign_type=marketing_s&controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" class="btn btn-default {if $smarty_email_disabled}disabled{/if}" style="text-align: left; box-shadow: none; border: none; font-weight: bold; font-size:10pt">{l s='A sms-mailing' mod='expressmailing'}</a>
+                            <td class="colorcell"><div style="background-color: rgb(117, 141, 188);"></div></td>
+                            <td class="linkcell">
+								<a href="index.php?campaign_type=marketing_s&controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" class="btn btn-default {if $smarty_email_disabled}disabled{/if}">{l s='A sms-mailing' mod='expressmailing'}</a>
 							</td>
                         </tr>
                     </table>
