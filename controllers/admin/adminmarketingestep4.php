@@ -213,7 +213,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		// On retrouve tous les groupes + ceux sélectionnnés
 		// -------------------------------------------------
 		$sql = new DbQuery();
-		$sql->select('CG.id_group, GL.name, XPM.group_id as checked, count(CG.id_customer) AS total');
+		$sql->select('CG.id_group, GL.name, XPM.group_id as checked, count(DISTINCT CG.id_customer) AS total');
 		$sql->from('customer_group', 'CG');
 		$sql->leftJoin('group_lang', 'GL', 'GL.id_group = CG.id_group');
 		$sql->leftJoin('expressmailing_email_groups', 'XPM', 'XPM.campaign_id = '.$this->campaign_id.' AND XPM.group_id = CG.id_group');
@@ -529,10 +529,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 			
 			// Rebuild the recipients selection
 			// --------------------------------
-			if (empty($this->expiration_date))
-				$this->renderPayingFilters();
-
-			$extended = $this->expiration_date > time() ? true : false;
+			$extended = true;
 			$paying_filters = DBMarketing::getPayingFiltersEmailDB($this->campaign_id);
 
 			$req = 'INSERT IGNORE INTO '._DB_PREFIX_.'expressmailing_email_recipients

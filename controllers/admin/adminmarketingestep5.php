@@ -118,15 +118,6 @@ The editorial board', 'adminmarketingestep5')
 									$this->session_api->getError());
 				return false;
 			}
-
-			// Then empty the list
-			// -------------------
-			if (!$this->session_api->call('email', 'list', 'clear', $parameters, $response_array))
-			{
-				$this->errors[] = sprintf($this->module->l('Error during communication with Express-Mailing API : %s', 'adminmarketingestep5'),
-									$this->session_api->getError());
-				return false;
-			}
 		}
 
 		// Create or Update the campaign parameters (on-line) associate with the current mailing (off-line)

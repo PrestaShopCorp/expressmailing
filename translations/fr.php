@@ -281,6 +281,7 @@ $_MODULE['<{expressmailing}prestashop>footer_validation_fda0a576779412afae582e0a
 $_MODULE['<{expressmailing}prestashop>footer_validation_7469a286259799e5b37e5db9296f00b3'] = 'OUI';
 $_MODULE['<{expressmailing}prestashop>footer_validation_4a7c1e59bd71f71524d5a2ed1968e7a2'] = 'puis validez :';
 $_MODULE['<{expressmailing}prestashop>footer_validation_e3babf76bf78383d601d6911b53c0ccd'] = 'Valider l\'envoi';
+$_MODULE['<{expressmailing}prestashop>footer_validation_0557fa923dcee4d0f86b1409f5c2167f'] = 'Précédent';
 $_MODULE['<{expressmailing}prestashop>tree_node_folder_cat_prod_checkbox_24fc6fbf93a9d551ea7da4cd69f3da3e'] = '(%s sélectionné(s))';
 $_MODULE['<{expressmailing}prestashop>buy_order_d87d18e7c85dbee0fd1bbc3ef5fbdd24'] = 'Bon de commande';
 $_MODULE['<{expressmailing}prestashop>buy_order_a85eba4c6c699122b2bb1387ea4813ad'] = 'Panier d\'achat';
@@ -326,12 +327,7 @@ $_MODULE['<{expressmailing}prestashop>marketing_step0_eb360333328a36cfedee877e57
 $_MODULE['<{expressmailing}prestashop>marketing_step0_c2d779f685ba921c0e1bbbe09c1d6be9'] = 'Je souhaite';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_8be57c351b7cf2cb1a790f733d1c8a8d'] = 'Envoyer un e-mailing';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_a12baad9d5b2584d5cf98ed72307cd4b'] = 'Envoyer un fax-mailing';
-$_MODULE['<{expressmailing}prestashop>marketing_step0_e15412d14f027d5a7a453e43641cbf77'] = 'A partir de  %.3f € par page';
-$_MODULE['<{expressmailing}prestashop>marketing_step0_e81c4e4f2b7b93b481e13a8553c2ae1b'] = 'ou';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_f5eac90aeff7e341177d66e435d6c6c3'] = 'Envoyer un sms-mailing';
-$_MODULE['<{expressmailing}prestashop>marketing_step0_8045ad4b2f9a41363726128d6ef25d43'] = 'A partir de %.3f € par sms';
-$_MODULE['<{expressmailing}prestashop>marketing_step0_cfa898b6858fc4a8ea19221689d3133a'] = 'Prix des fax et sms pour la France métropolitaine';
-$_MODULE['<{expressmailing}prestashop>marketing_step0_10ac3d04253ef7e1ddc73e6091c0cd55'] = 'Débuter l\'assistant';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_efc7d8bbdea857bf89afd4a4fdea6bd1'] = 'Achat de tickets fax';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_475009ed61b4dc8fa1d3de26f1bea927'] = 'Achat de tickets sms';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_d3d2e617335f08df83599665eef8a418'] = 'Fermer';
@@ -368,7 +364,6 @@ $_MODULE['<{expressmailing}prestashop>filters_buy_0b055ca060eba01c00fd7f1cdfa56b
 $_MODULE['<{expressmailing}prestashop>filters_buy_f4adc9f62da55ed970bede239aedd721'] = 'Nécessite le Module Loyalty';
 $_MODULE['<{expressmailing}prestashop>filters_buy_58d582b2b4002ba9f9c7b409918fe917'] = '49,00 € / an';
 $_MODULE['<{expressmailing}prestashop>filters_free_94029d8e5998920a484d18d0b417cecc'] = 'Informations sur les abonnés';
-$_MODULE['<{expressmailing}prestashop>filters_free_67a805ba58a986ded84cb7eb7390778f'] = 'Pour limiter le spam, les filtres gratuits n\'extraient que les abonnés ayant réellement visité votre site (présence d\'un panier d\'achat + adresse ip valide). Les filtres payants permettent d\'extraire tous vos abonnés même les plus anciens sans panier.';
 $_MODULE['<{expressmailing}prestashop>filters_free_fc4c4425c8c67873ee7e81c64324c298'] = 'Groupes :';
 $_MODULE['<{expressmailing}prestashop>filters_free_4260da33218c570d887cb490b2838d5e'] = 'Langue d\'achat :';
 $_MODULE['<{expressmailing}prestashop>filters_free_60a24cc9d4d3b3d28e9d221d51ae0432'] = 'Filtres de la newsletter :';
@@ -383,6 +378,7 @@ $_MODULE['<{expressmailing}prestashop>ajax_upload_bc6e49bd472e2f3eeafa431db6e9d9
 $_MODULE['<{expressmailing}prestashop>ajax_upload_c2df2c2dd0cbd176d1c4fbe6d0b9c2f8'] = 'Copie des contacts (Etape 6)';
 $_MODULE['<{expressmailing}prestashop>email_preview_89e0968ac9bb5f6b2079896abd4c4d24'] = 'Aperçu final de votre campagne';
 $_MODULE['<{expressmailing}prestashop>email_preview_10ac3d04253ef7e1ddc73e6091c0cd55'] = 'Suivant';
+$_MODULE['<{expressmailing}prestashop>email_preview_0557fa923dcee4d0f86b1409f5c2167f'] = 'Précédent';
 $_MODULE['<{expressmailing}prestashop>email_preview_06933067aafd48425d67bcb01bba5cb6'] = 'Modifier';
 $_MODULE['<{expressmailing}prestashop>marketinge_step8_e11014d2ec33ff01665fe65630495f28'] = 'sur Liste Rouge';
 $_MODULE['<{expressmailing}prestashop>marketinge_step8_735fda5d72b5c650f3f0435195a211bd'] = 'suspendus';

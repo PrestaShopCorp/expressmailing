@@ -27,7 +27,7 @@ class ExpressMailing extends Module
 		$this->bootstrap = true;
 		$this->name = 'expressmailing';
 		$this->tab = 'emailing';
-		$this->version = '1.1.0';
+		$this->version = '1.1.1';
 		$this->author = 'Axalone France';
 		$this->need_instance = 0;
 		//$this->ps_versions_compliancy = array ('min' => '1.5', 'max' => _PS_VERSION_);
