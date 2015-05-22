@@ -942,7 +942,7 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 		// Count total recipients
 		// ----------------------
 		$req = new DbQuery();
-		$req->select('SQL_NO_CACHE COUNT(DISTINCT(target)');
+		$req->select('SQL_NO_CACHE COUNT(DISTINCT(target))');
 		$req->from('expressmailing_fax_recipients');
 		$req->where('campaign_id = '.$this->campaign_id);
 
