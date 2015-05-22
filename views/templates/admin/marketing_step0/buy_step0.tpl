@@ -10,84 +10,71 @@
 * @copyright 2014-2015 (c) Axalone France
 * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
 *}
-{if is_array($smarty_fax_tickets) || is_array($smarty_sms_tickets)}
+
 <form id="buy_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller={if (!empty($credential_fax) || !empty($credential_sms))}AdminMarketingBuy&token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape:'html':'UTF-8'}{else}AdminMarketingInscription&token={Tools::getAdminTokenLite('AdminMarketingInscription')|escape:'html':'UTF-8'}{/if}" method="post" enctype="multipart/form-data" novalidate>
-	<div class="panel" id="fieldset_0">
+	<div class="panel" id="fieldset_0" style="min-width: 630px; width: 50%; padding-bottom: 3px">
 		<div class="panel-heading">
-			<i class="icon-shopping-cart"></i>&nbsp;{l s='Buy tickets' mod='expressmailing'}
-		</div>
-		<div class="form-wrapper">
-			<div class="form-group">
-				{if is_array($smarty_fax_tickets)}
-					<div class="col-lg-6 ">
-						{foreach $smarty_fax_tickets as $ticket}
-							{if isset($ticket.promo_ending)}<font color="red" style="display: block">{l s='Promotion until' mod='expressmailing'} {$tool_date->getLocalizableDate($ticket.promo_ending)}</font>{/if}
-							{if isset($ticket.promo_desc) and !empty($ticket.promo_desc)}<font color="red" style="display: block"><b>{$ticket.promo_desc|escape:'html':'UTF-8'}</b></font>{/if}
-							<div class="radio" {if isset($ticket.promo_ending)}style="margin-bottom: 8px"{/if}>
-								<label>
-									<input type="radio" name="product" value="{$ticket.product_ref|escape:'html':'UTF-8'}" />
-									<span style="width:170px; display:inline-block">
-										{if isset($ticket.promo_units) and ($ticket.promo_units > 0)}
-											<strike>{$ticket.product_units|number_format:0:",":"."} {l s='fax credits' mod='expressmailing'}</strike>
-											<br><font color="red"><b>{$ticket.promo_units|number_format:0:",":"."} {l s='fax credits' mod='expressmailing'}</b></font><br>{$ticket.product_desc|escape:'html':'UTF-8'}
-											{$ticket.product_units = $ticket.promo_units}
-										{else}
-											{$ticket.product_units|number_format:0:",":"."} {l s='fax credits' mod='expressmailing'}<br>{$ticket.product_desc|escape:'html':'UTF-8'}
-										{/if}
-									</span>
-									<span style="width:170px; display:inline-block">
-										{if isset($ticket.promo_price) and ($ticket.promo_price > 0)}
-											<strike>{$ticket.normal_price|number_format:2:",":"."} {l s='€' mod='expressmailing'}</strike>
-											&nbsp;
-											<font color="red"><b>{$ticket.promo_price|number_format:2:",":"."} {l s='€' mod='expressmailing'}</b></font>
-											<br>{l s='(Let %.3f € / page)' mod='expressmailing' sprintf=($ticket.promo_price / $ticket.product_units)}
-										{else}
-											<b>{$ticket.normal_price|number_format:2:",":"."} {l s='€' mod='expressmailing'}</b><br>{l s='(Let %.3f € / page)' mod='expressmailing' sprintf=($ticket.normal_price / $ticket.product_units)}
-										{/if}
-									</span>
-								</label>
-							</div>
-						{/foreach}
-					</div>
-				{/if}
-				{if is_array($smarty_sms_tickets)}
-					<div class="col-lg-6 ">
-						{foreach $smarty_sms_tickets as $ticket}
-							{if isset($ticket.promo_ending)}<font color="red" style="display: block">{l s='Promotion until' mod='expressmailing'} {$tool_date->getLocalizableDate($ticket.promo_ending)}</font>{/if}
-							{if isset($ticket.promo_desc) and !empty($ticket.promo_desc)}<font color="red" style="display: block"><b>{$ticket.promo_desc|escape:'html':'UTF-8'}</b></font>{/if}
-							<div class="radio" {if isset($ticket.promo_ending)}style="margin-bottom: 8px"{/if}>
-								<label>
-									<input type="radio" name="product" value="{$ticket.product_ref|escape:'html':'UTF-8'}" />
-									<span style="width:170px; display:inline-block">
-										{if isset($ticket.promo_units) and ($ticket.promo_units > 0)}
-											<strike>{$ticket.product_units|number_format:0:",":"."} {l s='sms credits' mod='expressmailing'}</strike>
-											<br><font color="red"><b>{$ticket.promo_units|number_format:0:",":"."} {l s='sms credits' mod='expressmailing'}</b></font><br>{$ticket.product_desc|escape:'html':'UTF-8'}
-											{$ticket.product_units = $ticket.promo_units}
-										{else}
-											{$ticket.product_units|number_format:0:",":"."} {l s='sms credits' mod='expressmailing'}<br>{$ticket.product_desc|escape:'html':'UTF-8'}</span>
-										{/if}
-									</span>
-									<span style="width:170px; display:inline-block">
-										{if isset($ticket.promo_price) and ($ticket.promo_price > 0)}
-											<strike>{$ticket.normal_price|number_format:2:",":"."} {l s='€' mod='expressmailing'}</strike>
-											&nbsp;
-											<font color="red"><b>{$ticket.promo_price|number_format:2:",":"."} {l s='€' mod='expressmailing'}</b></font>
-											<br>{l s='(Let %.3f € / sms)' mod='expressmailing' sprintf=($ticket.promo_price / $ticket.product_units)}
-										{else}
-											<b>{$ticket.normal_price|number_format:2:",":"."} {l s='€' mod='expressmailing'}</b><br>{l s='(Let %.3f € / sms)' mod='expressmailing' sprintf=($ticket.normal_price / $ticket.product_units)}
-										{/if}
-									</span>
-								</label>
-							</div>
-						{/foreach}
-					</div>
-				{/if}
-			</div>
-		</div>
-		<!-- /.form-wrapper -->
-		<div class="panel-footer">
-			<button type="submit" value="1" name="submitBuyStep0" class="btn btn-default pull-right"><i class="process-icon-cart"></i>{l s='Add to Cart' mod='expressmailing'}</button>
-		</div>
-	</div>
+            <i class="icon-cogs"></i>&nbsp;{l s='Loss leader pricing' mod='expressmailing'}
+            {if !empty($tool_tip)}
+                <span class="panel-heading-action">
+                    <a class="list-toolbar-btn" href="#">
+                        <span class="label-tooltip" data-placement="left" data-html="true" data-original-title="{$tool_tip|escape:'html':'UTF-8'}" data-toggle="tooltip" title="">
+                            <i class="process-icon-help"></i>
+                        </span>
+                    </a>
+                </span>
+            {/if}
+        </div>
+        <div class="form-wrapper">
+            <div class="form-group">
+                <div>
+                    <table class="media_choice">
+					<tr style="height: 25px">
+						<td class="colorcell"><div style="background-color: rgb(148, 190, 42);"></div></td>
+						<td class="linkcell">{l s='Emailing' mod='expressmailing'}</td>
+						<td class="commentcell" style="vertical-align: middle; padding-top: 3px">
+							{l s='Up to %d free email per day' mod='expressmailing' sprintf=$broadcast_max_daily}
+							<b>&nbsp;-&nbsp;{l s='ou' mod='expressmailing'}&nbsp;-&nbsp;</b>
+							<a id="em_bying_link_email2"{if $smarty_email_disabled} disabled="disabled"{/if}>{l s='Sign Up for a Premium Plan' mod='expressmailing' sprintf=$smarty_email_lowest_price}</a>
+							{if !empty($smarty_email_promotion)}
+								<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
+							{/if}
+						</td>
+					</tr>
+					<tr style="height: 25px">
+						<td class="colorcell"><div style="background-color: rgb(199, 111, 143);"></div></td>
+						<td class="linkcell">{l s='Fax' mod='expressmailing'}</td>
+						<td class="commentcell" style="vertical-align: middle; padding-top: 3px">
+							{l s='Lowest price to Metropolitan France' mod='expressmailing'}
+							<b>&nbsp;-&nbsp;</b>
+							{capture assign="smarty_fax_lowest_price"}{$smarty_fax_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
+							{capture assign="fprice"}{l s='From %s € per page' mod='expressmailing' sprintf=$smarty_fax_lowest_price}{/capture}
+							<a id="em_bying_link_fax2"{if $smarty_fax_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
+							{if !empty($smarty_fax_promotion)}
+								<b>&nbsp;-&nbsp;</b>
+								<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
+							{/if}
+						</td>
+					</tr>
+					<tr style="height: 25px">
+						<td class="colorcell"><div style="background-color: rgb(117, 141, 188);"></div></td>
+						<td class="linkcell">{l s='Sms' mod='expressmailing'}</td>
+						<td class="commentcell" style="vertical-align: middle; padding-top: 3px">
+							{l s='Lowest price to Metropolitan France' mod='expressmailing'}
+							<b>&nbsp;-&nbsp;</b>
+							{capture assign="smarty_sms_lowest_price"}{$smarty_sms_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
+							{capture assign="fprice"}{l s='From %s € per sms' mod='expressmailing' sprintf=$smarty_sms_lowest_price}{/capture}
+							<a id="em_bying_link_sms2"{if $smarty_sms_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
+							{if !empty($smarty_sms_promotion)}
+								<b>&nbsp;-&nbsp;</b>
+								<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
+							{/if}
+						</td>
+					</tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </form>
-{/if}

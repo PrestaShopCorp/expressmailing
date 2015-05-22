@@ -20,6 +20,9 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 	private $back_action = null;
 	private $next_action = null;
 	private $step_action = null;
+	private $buy_package = false;
+	private $count_fax_recipients = 0;
+	private $count_sms_recipients = 0;
 
 	public function __construct()
 	{
@@ -38,6 +41,7 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 		switch ($this->controller_name)
 		{
 			case 'AdminMarketingEStep5': /* ---------------------------------------------------- */
+
 				if (empty($this->campaign_id))
 				{
 					Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
@@ -46,6 +50,7 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 				$this->next_controller = $this->controller_name;
 				$this->step_action = '5';
 				$this->media = 'email';
+				$this->buy_package = false;
 				$this->back_action = 'index.php?controller=AdminMarketingEStep4&campaign_id='.
 				$this->campaign_id.'&token='.Tools::getAdminTokenLite('AdminMarketingEStep4');
 
@@ -55,6 +60,7 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 				break;
 
 			case 'AdminMarketingFStep5': /* ---------------------------------------------------- */
+
 				if (empty($this->campaign_id))
 				{
 					Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
@@ -69,9 +75,14 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 				$this->next_action = 'index.php?controller='.$this->controller_name.'&campaign_id='.
 				$this->campaign_id.'&token='.Tools::getAdminTokenLite($this->controller_name);
 
+				$this->count_fax_recipients = $this->countFaxRecipientsDB();
+				if ($this->count_fax_recipients > $this->module->default_remaining_fax)
+					$this->buy_package = true;
+
 				break;
 
 			case 'AdminMarketingSStep4': /* ---------------------------------------------------- */
+
 				if (empty($this->campaign_id))
 				{
 					Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
@@ -86,9 +97,14 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 				$this->next_action = 'index.php?controller='.$this->controller_name.'&campaign_id='.
 				$this->campaign_id.'&token='.Tools::getAdminTokenLite($this->controller_name);
 
+				$this->count_sms_recipients = $this->countSmsRecipientsDB();
+				if ($this->count_sms_recipients > $this->module->default_remaining_sms)
+					$this->buy_package = true;
+
 				break;
 
 			case 'AdminMarketingInscription':
+
 				$this->next_controller = 'AdminMarketingX';
 				$this->step_action = '1';
 				$product = (string)Tools::getValue('product');
@@ -99,6 +115,7 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 				break;
 
 			default:
+
 				Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
 				break;
 		}
@@ -212,7 +229,7 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 					'label' => Translate::getAdminTranslation('Country', 'AdminStores').' :',
 					'name' => 'country_id',
 					'required' => true,
-					'default_value' => (int)$this->context->country->id,
+					'default_value' => (int)Configuration::get('PS_COUNTRY_DEFAULT'),
 					'options' => array(
 						'query' => Country::getCountries($this->context->language->id),
 						'id' => 'id_country',
@@ -262,31 +279,34 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 			)
 		);
 
+		// Remove or keep the block "Choose your package" !
+		// ------------------------------------------------
+		if (!$this->buy_package)
+		{
+			foreach ($this->fields_form['input'] as $key => $field)
+			{
+				if ($field['name'] == 'buy_package')
+				{
+					unset($this->fields_form['input'][$key]);
+					break;
+				}
+			}
+		}
+
 		// Get the Terms of Use (CGU)
 		// --------------------------
 		switch ($this->media)
 		{
 			case 'email':
-
-				// Need to remove the block "Choose your package" !
-				foreach ($this->fields_form['input'] as $key => $field)
-				{
-					if ($field['name'] == 'buy_package')
-					{
-						unset($this->fields_form['input'][$key]);
-						break;
-					}
-				}
-
-				$cgv_iframe = $this->module->l('http://www.express-mailing.com/actualites/cgv-email.php', 'adminmarketinginscription');
+				$cgv_iframe = $this->module->l('https://www.express-mailing.com/actualites/cgv-email.php', 'adminmarketinginscription');
 				break;
 
 			case 'fax':
-				$cgv_iframe = $this->module->l('http://www.express-mailing.com/actualites/cgv-fax.php', 'adminmarketinginscription');
+				$cgv_iframe = $this->module->l('https://www.express-mailing.com/actualites/cgv-fax.php', 'adminmarketinginscription');
 				break;
 
 			case 'sms':
-				$cgv_iframe = $this->module->l('http://www.express-mailing.com/actualites/cgv-sms.php', 'adminmarketinginscription');
+				$cgv_iframe = $this->module->l('https://www.express-mailing.com/actualites/cgv-sms.php', 'adminmarketinginscription');
 				break;
 		}
 
@@ -297,7 +317,7 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 
 		// Enfin, on récupère tous les tickets disponibles pour Prestashop
 		// ---------------------------------------------------------------
-		if ($this->media == 'fax' || $this->media == 'sms')
+		if ($this->buy_package && ($this->media == 'fax' || $this->media == 'sms'))
 		{
 			$response_array = array();
 			$parameters = array('application_id' => $this->session_api->application_id);
@@ -309,11 +329,15 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 				// --------------------------
 				$this->context->smarty->assign(
 					array(
-						'fax_credits' => Translate::getModuleTranslation('expressmailing', 'fax credits', 'buy_step0'),
-						'euro_symbol' => Translate::getModuleTranslation('expressmailing', '€', 'buy_step0'),
-						'sms_credits' => Translate::getModuleTranslation('expressmailing', 'sms credits', 'buy_step0'),
-						'fax_per_unit' => Translate::getModuleTranslation('expressmailing', '(Let %.3f € / page)', 'buy_step0'),
-						'sms_per_unit' => Translate::getModuleTranslation('expressmailing', '(Let %.3f € / sms)', 'buy_step0')
+						'remaining_fax' => $this->module->default_remaining_fax,
+						'remaining_sms' => $this->module->default_remaining_sms,
+						'count_fax' => $this->count_fax_recipients,
+						'count_sms' => $this->count_sms_recipients,
+						'fax_credits' => $this->module->l('fax credits'),
+						'euro_symbol' => $this->module->l('€'),
+						'sms_credits' => $this->module->l('sms credits'),
+						'fax_per_unit' => $this->module->l('(Let %.3f € / page)'),
+						'sms_per_unit' => $this->module->l('(Let %.3f € / sms)')
 					)
 				);
 
@@ -517,7 +541,8 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 					'info_phone' => $company_phone,
 					'info_contact_firstname' => $this->context->employee->firstname,
 					'info_contact_lastname' => $this->context->employee->lastname,
-					'email_report' => $this->context->employee->email
+					'email_report' => $this->context->employee->email,
+					'gift_code' => 'prestashop_'.Translate::getModuleTranslation('expressmailing', '3320', 'session_api')
 				);
 
 				if ($this->session_api->createAccount($parameters, $response_array))
@@ -700,7 +725,7 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 
 		return true;
 	}
-	
+
 	private function removeAccents($string)
 	{
 		if (!preg_match('/[\x80-\xff]/', (string)$string))
@@ -912,4 +937,27 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 		return strtr($string, $chars);
 	}
 
+	private function countFaxRecipientsDB()
+	{
+		// Count total recipients
+		// ----------------------
+		$req = new DbQuery();
+		$req->select('SQL_NO_CACHE COUNT(DISTINCT(target)');
+		$req->from('expressmailing_fax_recipients');
+		$req->where('campaign_id = '.$this->campaign_id);
+
+		return Db::getInstance()->getValue($req, false);
+	}
+
+	public function countSmsRecipientsDB()
+	{
+		// Count total recipients
+		// ----------------------
+		$req = new DbQuery();
+		$req->select('SQL_NO_CACHE COUNT(DISTINCT(target))');
+		$req->from('expressmailing_sms_recipients');
+		$req->where('campaign_id = '.$this->campaign_id);
+
+		return Db::getInstance()->getValue($req, false);
+	}
 }

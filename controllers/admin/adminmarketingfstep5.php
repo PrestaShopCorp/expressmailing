@@ -188,5 +188,4 @@ class AdminMarketingFStep5Controller extends AdminMarketingInscriptionController
 
 		return $document;
 	}
-
 }

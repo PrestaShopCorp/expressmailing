@@ -20,8 +20,8 @@
 		var i = 1;
 		var url_base = "index.php?controller=AdminMarketingEStep6";
 		var url_ajax = "&ajax=true";
-		var url_cpid = "&campaign_id={$campaign_id|escape:javascript}";
-		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingEStep6')|escape:javascript}";
+		var url_cpid = "&campaign_id={$campaign_id|escape:'javascript':'UTF-8'}";
+		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingEStep6')|escape:'javascript':'UTF-8'}";
 
 		upload();
 
@@ -32,7 +32,7 @@
 						url: url_base + url_ajax + url_token,
 						type: "POST",
 						data: {
-							campaign_id: "{$campaign_id|escape:javascript}",
+							campaign_id: "{$campaign_id|escape:'javascript':'UTF-8'}",
 							i: i++
 						},
 						success: function (output)
@@ -41,7 +41,7 @@
 							if (output == 'continue')
 								upload();
 							else if (output == 'ended')
-								window.location = 'index.php?controller=AdminMarketingEStep7' + url_cpid + "&token={Tools::getAdminTokenLite('AdminMarketingEStep7')|escape:javascript}";
+								window.location = 'index.php?controller=AdminMarketingEStep7' + url_cpid + "&token={Tools::getAdminTokenLite('AdminMarketingEStep7')|escape:'javascript':'UTF-8'}";
 							else
 							{
 								$("#progress").append("{l s='An error occurred for this block :' mod='expressmailing'}" + output + "<br>" + "{l s='We will try to resend it ...' mod='expressmailing'}" + "<br>");

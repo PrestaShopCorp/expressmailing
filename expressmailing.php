@@ -22,22 +22,25 @@ class ExpressMailing extends Module
 	private $html_preview_folder = null;
 	private $ids_tabs = array ();
 
+	public $default_remaining_email = 400;
+	public $default_remaining_fax = 30;
+	public $default_remaining_sms = 5;
+
 	public function __construct()
 	{
 		$this->bootstrap = true;
 		$this->name = 'expressmailing';
 		$this->tab = 'emailing';
-		$this->version = '1.1.1';
+		$this->version = '1.1.2';
 		$this->author = 'Axalone France';
 		$this->need_instance = 0;
-		//$this->ps_versions_compliancy = array ('min' => '1.5', 'max' => _PS_VERSION_);
 		$this->limited_countries = array ('fr', 'pl');
 
 		parent::__construct();
 
 		$this->author = $this->l('Axalone France');
 		$this->displayName = 'Express-Mailing';
-		$this->description = $this->l('Marketing Module from Express-Mailing, including e-mailing (100% free), sending faxes and sms at low price');
+		$this->description = $this->l('First Marketing module fully integrated with the PrestaShop interface, including emailing with 10,000 free emails per month i.e. 400 per day, and the ability to send FAX and SMS at very low prices.');
 		$this->confirmUninstall = $this->l('Are you sure you want to uninstall ?');
 		$this->html_preview_folder = _PS_MODULE_DIR_.'expressmailing'.DIRECTORY_SEPARATOR.'campaigns'.DIRECTORY_SEPARATOR;
 
@@ -58,7 +61,7 @@ class ExpressMailing extends Module
 		return parent::install()
 			&& $this->installDB($alter_db)
 			/* Add main Tab (visible into Customer) */
-			&& $this->installAdminTab('AdminMarketingX', true, $this->displayName, 'AdminParentModules')
+			&& $this->installAdminTab('AdminMarketingX', true, $this->displayName, 'AdminPriceRule')
 			/* Add media controllers */
 			&& $this->installAdminTab('AdminMarketingE', false, $this->displayName, 'AdminMarketingX')
 			&& $this->installAdminTab('AdminMarketingF', false, $this->displayName, 'AdminMarketingX')
@@ -98,13 +101,16 @@ class ExpressMailing extends Module
 			&& $this->installAdminTab('AdminMarketingSList', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
 			&& $this->installAdminTab('AdminMarketingEStats', false, $this->l('E-Mailing'), 'AdminMarketingE')
 			&& $this->installAdminTab('AdminMarketingFStats', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			&& $this->installAdminTab('AdminMarketingSStats', false, $this->l('Sms-Mailing'), 'AdminMarketingS');
+			&& $this->installAdminTab('AdminMarketingSStats', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+			/* Add QuickLink */
+			&& $this->installQuickAccess();
 	}
 
 	public function uninstall($alter_db = true)
 	{
 		return parent::uninstall()
 			&& Configuration::deleteByName('adminmarketing_session_api')
+			&& $this->uninstallQuickAccess()
 			&& $this->uninstallDB($alter_db)
 			&& $this->uninstallAdminTab('AdminMarketingX')
 			&& $this->uninstallAdminTab('AdminMarketingE')
@@ -503,7 +509,7 @@ class ExpressMailing extends Module
 					`'._DB_PREFIX_.'expressmailing_email_promocodes`,
 					`'._DB_PREFIX_.'expressmailing_email_accountdates`,
 					`'._DB_PREFIX_.'expressmailing_email_buyingdates`,
-					`'._DB_PREFIX_.'expressmailing_email_postalcodes`,
+					`'._DB_PREFIX_.'expressmailing_email_postcodes`,
 					`'._DB_PREFIX_.'expressmailing_email_countries`,
 					`'._DB_PREFIX_.'expressmailing_email_civilities`,
 					`'._DB_PREFIX_.'expressmailing_email_birthdays`,
@@ -515,6 +521,7 @@ class ExpressMailing extends Module
 					`'._DB_PREFIX_.'expressmailing_email`,
 					`'._DB_PREFIX_.'expressmailing`');
 		}
+
 		return true;
 	}
 
@@ -550,6 +557,36 @@ class ExpressMailing extends Module
 
 		// Else, Tab already installed
 		// ---------------------------
+		return true;
+	}
+
+	private function installQuickAccess()
+	{
+		$quick = new QuickAccess();
+		$quick->link = 'index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX');
+		$quick->new_window = true;
+
+		foreach (Language::getLanguages(true) as $language)
+			$quick->name[(int)$language['id_lang']] = $this->displayName;
+
+		return $quick->add();
+	}
+
+	public function uninstallQuickAccess()
+	{
+		foreach (Language::getLanguages(true) as $language)
+		{
+			$quick_lang = QuickAccess::getQuickAccesses((int)$language['id_lang']);
+			foreach ($quick_lang as $quick)
+			{
+				if ($quick['name'] == $this->displayName)
+				{
+					$delete = new QuickAccessCore($quick['id_quick_access']);
+					$delete->delete();
+				}
+			}
+		}
+
 		return true;
 	}
 

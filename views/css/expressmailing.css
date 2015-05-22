@@ -198,14 +198,14 @@ span.stat_value {
 }
 .media_list > div {
 	display: inline-block;
-	width:24%;
-	min-width: 180px;
+	width:20%;
+	min-width: 235px;
 	text-align: left;
 	vertical-align: top;
-	margin-bottom: 1.5em
+	margin-bottom: 2em
 }
 .media_list > div > img {
-	display: inline-block;
+	display: block;
 	margin-bottom: .5em
 }
 .media_list > div > div {
@@ -218,7 +218,7 @@ span.stat_value {
 
 .media_choice .colorcell{
 	vertical-align: middle;
-	width: 30px;
+	width: 45px;
 	text-align: center
 }
 .media_choice .colorcell > div {
@@ -226,16 +226,14 @@ span.stat_value {
 	width: 25px;
 	height: 11px;
 	margin-top: 3px;
+	margin-left: 10px;
 }
 .media_choice .linkcell {
-	width:170px;
+	width:70px;
 	vertical-align: middle;
 	padding-top: 1px
 }
-.media_choice a {
-	text-align: left !important;
-	box-shadow: none !important;
-	border: none !important;
-	font-weight: bold !important;
-	font-size:10pt !important
+.media_choice .commentcell a {
+	cursor: pointer;
+	color: none;
 }
