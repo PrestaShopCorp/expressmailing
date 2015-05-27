@@ -12,7 +12,7 @@
 *}
 
 <form id="buy_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller={if (!empty($credential_fax) || !empty($credential_sms))}AdminMarketingBuy&token={Tools::getAdminTokenLite('AdminMarketingBuy')|escape:'html':'UTF-8'}{else}AdminMarketingInscription&token={Tools::getAdminTokenLite('AdminMarketingInscription')|escape:'html':'UTF-8'}{/if}" method="post" enctype="multipart/form-data" novalidate>
-	<div class="panel" id="fieldset_0" style="min-width: 630px; width: 50%; padding-bottom: 3px">
+	<div class="panel pricingblock" id="fieldset_0">
 		<div class="panel-heading">
             <i class="icon-cogs"></i>&nbsp;{l s='Loss leader pricing' mod='expressmailing'}
             {if !empty($tool_tip)}
@@ -29,52 +29,51 @@
             <div class="form-group">
                 <div>
                     <table class="media_choice">
-					<tr style="height: 25px">
-						<td class="colorcell"><div style="background-color: rgb(148, 190, 42);"></div></td>
-						<td class="linkcell">{l s='Emailing' mod='expressmailing'}</td>
-						<td class="commentcell" style="vertical-align: middle; padding-top: 3px">
-							{l s='Up to %d free email per day' mod='expressmailing' sprintf=$broadcast_max_daily}
-							<b>&nbsp;-&nbsp;{l s='ou' mod='expressmailing'}&nbsp;-&nbsp;</b>
-							<a id="em_bying_link_email2"{if $smarty_email_disabled} disabled="disabled"{/if}>{l s='Sign Up for a Premium Plan' mod='expressmailing' sprintf=$smarty_email_lowest_price}</a>
-							{if !empty($smarty_email_promotion)}
-								<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
-							{/if}
-						</td>
-					</tr>
-					<tr style="height: 25px">
-						<td class="colorcell"><div style="background-color: rgb(199, 111, 143);"></div></td>
-						<td class="linkcell">{l s='Fax' mod='expressmailing'}</td>
-						<td class="commentcell" style="vertical-align: middle; padding-top: 3px">
-							{l s='Lowest price to Metropolitan France' mod='expressmailing'}
-							<b>&nbsp;-&nbsp;</b>
-							{capture assign="smarty_fax_lowest_price"}{$smarty_fax_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
-							{capture assign="fprice"}{l s='From %s € per page' mod='expressmailing' sprintf=$smarty_fax_lowest_price}{/capture}
-							<a id="em_bying_link_fax2"{if $smarty_fax_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
-							{if !empty($smarty_fax_promotion)}
+						<tr>
+							<td class="colorcell"><div class="greencell"></div></td>
+							<td class="linkcell">{l s='Emailing' mod='expressmailing'}</td>
+							<td class="commentcell">
+								{l s='Up to %d free email per day' mod='expressmailing' sprintf=$broadcast_max_daily}
+								<b>&nbsp;-&nbsp;{l s='ou' mod='expressmailing'}&nbsp;-&nbsp;</b>
+								<a id="em_bying_link_email2"{if $smarty_email_disabled} disabled="disabled"{/if}>{l s='Sign Up for a Premium Plan' mod='expressmailing' sprintf=$smarty_email_lowest_price}</a>
+								{if !empty($smarty_email_promotion)}
+									<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
+								{/if}
+							</td>
+						</tr>
+						<tr>
+							<td class="colorcell"><div class="redcell"></div></td>
+							<td class="linkcell">{l s='Fax' mod='expressmailing'}</td>
+							<td class="commentcell">
+								{l s='Lowest price to Metropolitan France' mod='expressmailing'}
 								<b>&nbsp;-&nbsp;</b>
-								<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
-							{/if}
-						</td>
-					</tr>
-					<tr style="height: 25px">
-						<td class="colorcell"><div style="background-color: rgb(117, 141, 188);"></div></td>
-						<td class="linkcell">{l s='Sms' mod='expressmailing'}</td>
-						<td class="commentcell" style="vertical-align: middle; padding-top: 3px">
-							{l s='Lowest price to Metropolitan France' mod='expressmailing'}
-							<b>&nbsp;-&nbsp;</b>
-							{capture assign="smarty_sms_lowest_price"}{$smarty_sms_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
-							{capture assign="fprice"}{l s='From %s € per sms' mod='expressmailing' sprintf=$smarty_sms_lowest_price}{/capture}
-							<a id="em_bying_link_sms2"{if $smarty_sms_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
-							{if !empty($smarty_sms_promotion)}
+								{capture assign="smarty_fax_lowest_price"}{$smarty_fax_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
+								{capture assign="fprice"}{l s='From %s € per page' mod='expressmailing' sprintf=$smarty_fax_lowest_price}{/capture}
+								<a id="em_bying_link_fax2"{if $smarty_fax_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
+								{if !empty($smarty_fax_promotion)}
+									<b>&nbsp;-&nbsp;</b>
+									<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
+								{/if}
+							</td>
+						</tr>
+						<tr>
+							<td class="colorcell"><div class="bluecell"></div></td>
+							<td class="linkcell">{l s='Sms' mod='expressmailing'}</td>
+							<td class="commentcell">
+								{l s='Lowest price to Metropolitan France' mod='expressmailing'}
 								<b>&nbsp;-&nbsp;</b>
-								<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
-							{/if}
-						</td>
-					</tr>
+								{capture assign="smarty_sms_lowest_price"}{$smarty_sms_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
+								{capture assign="fprice"}{l s='From %s € per sms' mod='expressmailing' sprintf=$smarty_sms_lowest_price}{/capture}
+								<a id="em_bying_link_sms2"{if $smarty_sms_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
+								{if !empty($smarty_sms_promotion)}
+									<b>&nbsp;-&nbsp;</b>
+									<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
+								{/if}
+							</td>
+						</tr>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
 </form>

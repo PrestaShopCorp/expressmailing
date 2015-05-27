@@ -216,10 +216,14 @@ span.stat_value {
 	width: 18em
 }
 
+.media_choice > tr {
+	height: 25px;
+}
 .media_choice .colorcell{
-	vertical-align: middle;
+	vertical-align: middle !important;
 	width: 45px;
-	text-align: center
+	text-align: center;
+	padding-top: 3px !important;
 }
 .media_choice .colorcell > div {
 	border-radius: 2px;
@@ -228,6 +232,15 @@ span.stat_value {
 	margin-top: 3px;
 	margin-left: 10px;
 }
+.media_choice .colorcell .greencell {
+	background-color: rgb(148, 190, 42);
+}
+.media_choice .colorcell .redcell {
+	background-color: rgb(199, 111, 143);
+}
+.media_choice .colorcell .bluecell {
+	background-color: rgb(117, 141, 188);
+}
 .media_choice .linkcell {
 	width:70px;
 	vertical-align: middle;
@@ -235,5 +248,9 @@ span.stat_value {
 }
 .media_choice .commentcell a {
 	cursor: pointer;
-	color: none;
+}
+.pricingblock {
+	min-width: 630px;
+	width: 50%;
+	padding-bottom: 3px;
 }
