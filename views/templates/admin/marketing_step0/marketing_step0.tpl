@@ -96,8 +96,6 @@
 
     $(function ()
     {
-        var progresshtml = '<div style="width: 100%; margin-right: auto; margin-left: auto; text-align: center">\
-                    <br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" /></div>';
         var url_base = "index.php?controller=AdminMarketingX";
         var url_ajax = "&ajax=true";
         var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}";
