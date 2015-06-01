@@ -22,22 +22,25 @@ class ExpressMailing extends Module
 	private $html_preview_folder = null;
 	private $ids_tabs = array ();
 
+	public $default_remaining_email = 400;
+	public $default_remaining_fax = 30;
+	public $default_remaining_sms = 5;
+
 	public function __construct()
 	{
 		$this->bootstrap = true;
 		$this->name = 'expressmailing';
 		$this->tab = 'emailing';
-		$this->version = '1.1.1';
+		$this->version = '1.1.2';
 		$this->author = 'Axalone France';
 		$this->need_instance = 0;
-		//$this->ps_versions_compliancy = array ('min' => '1.5', 'max' => _PS_VERSION_);
 		$this->limited_countries = array ('fr', 'pl');
 
 		parent::__construct();
 
 		$this->author = $this->l('Axalone France');
 		$this->displayName = 'Express-Mailing';
-		$this->description = $this->l('Marketing Module from Express-Mailing, including e-mailing (100% free), sending faxes and sms at low price');
+		$this->description = $this->l('First Marketing module fully integrated with the PrestaShop interface, including emailing with 10,000 free emails per month i.e. 400 per day, and the ability to send FAX and SMS at very low prices.');
 		$this->confirmUninstall = $this->l('Are you sure you want to uninstall ?');
 		$this->html_preview_folder = _PS_MODULE_DIR_.'expressmailing'.DIRECTORY_SEPARATOR.'campaigns'.DIRECTORY_SEPARATOR;
 
@@ -57,48 +60,7 @@ class ExpressMailing extends Module
 
 		return parent::install()
 			&& $this->installDB($alter_db)
-			/* Add main Tab (visible into Customer) */
-			&& $this->installAdminTab('AdminMarketingX', true, $this->displayName, 'AdminParentModules')
-			/* Add media controllers */
-			&& $this->installAdminTab('AdminMarketingE', false, $this->displayName, 'AdminMarketingX')
-			&& $this->installAdminTab('AdminMarketingF', false, $this->displayName, 'AdminMarketingX')
-			&& $this->installAdminTab('AdminMarketingS', false, $this->displayName, 'AdminMarketingX')
-			/* Add order/subscription controllers */
-			&& $this->installAdminTab('AdminMarketingInscription', false, $this->l('Inscription'), 'AdminMarketingX')
-			&& $this->installAdminTab('AdminMarketingBuy', false, $this->l('Cart'), 'AdminMarketingX')
-			/* Add emailing controllers */
-			&& $this->installAdminTab('AdminMarketingEStep1', false, $this->l('E-Mailing'), 'AdminMarketingE')
-			&& $this->installAdminTab('AdminMarketingEStep2', false, $this->l('E-Mailing'), 'AdminMarketingE')
-			&& $this->installAdminTab('AdminMarketingEStep3', false, $this->l('E-Mailing'), 'AdminMarketingE')
-			&& $this->installAdminTab('AdminMarketingEStep4', false, $this->l('E-Mailing'), 'AdminMarketingE')
-			&& $this->installAdminTab('AdminMarketingEStep5', false, $this->l('E-Mailing'), 'AdminMarketingE')
-			&& $this->installAdminTab('AdminMarketingEStep6', false, $this->l('E-Mailing'), 'AdminMarketingE')
-			&& $this->installAdminTab('AdminMarketingEStep7', false, $this->l('E-Mailing'), 'AdminMarketingE')
-			&& $this->installAdminTab('AdminMarketingEStep8', false, $this->l('E-Mailing'), 'AdminMarketingE')
-			/* Add fax controllers */
-			&& $this->installAdminTab('AdminMarketingFStep1', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			&& $this->installAdminTab('AdminMarketingFStep2', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			&& $this->installAdminTab('AdminMarketingFStep3', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			&& $this->installAdminTab('AdminMarketingFStep4', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			&& $this->installAdminTab('AdminMarketingFStep5', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			&& $this->installAdminTab('AdminMarketingFStep6', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			&& $this->installAdminTab('AdminMarketingFStep7', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			&& $this->installAdminTab('AdminMarketingFStep8', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			/* Add sms controllers */
-			&& $this->installAdminTab('AdminMarketingSStep1', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
-			&& $this->installAdminTab('AdminMarketingSStep2', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
-			&& $this->installAdminTab('AdminMarketingSStep3', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
-			&& $this->installAdminTab('AdminMarketingSStep4', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
-			&& $this->installAdminTab('AdminMarketingSStep5', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
-			&& $this->installAdminTab('AdminMarketingSStep6', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
-			&& $this->installAdminTab('AdminMarketingSStep7', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
-			/* Add statistics controllers */
-			&& $this->installAdminTab('AdminMarketingEList', false, $this->l('E-Mailing'), 'AdminMarketingE')
-			&& $this->installAdminTab('AdminMarketingFList', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			&& $this->installAdminTab('AdminMarketingSList', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
-			&& $this->installAdminTab('AdminMarketingEStats', false, $this->l('E-Mailing'), 'AdminMarketingE')
-			&& $this->installAdminTab('AdminMarketingFStats', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-			&& $this->installAdminTab('AdminMarketingSStats', false, $this->l('Sms-Mailing'), 'AdminMarketingS');
+			&& $this->installAdminTabs();
 	}
 
 	public function uninstall($alter_db = true)
@@ -106,41 +68,7 @@ class ExpressMailing extends Module
 		return parent::uninstall()
 			&& Configuration::deleteByName('adminmarketing_session_api')
 			&& $this->uninstallDB($alter_db)
-			&& $this->uninstallAdminTab('AdminMarketingX')
-			&& $this->uninstallAdminTab('AdminMarketingE')
-			&& $this->uninstallAdminTab('AdminMarketingF')
-			&& $this->uninstallAdminTab('AdminMarketingS')
-			&& $this->uninstallAdminTab('AdminMarketingInscription')
-			&& $this->uninstallAdminTab('AdminMarketingBuy')
-			&& $this->uninstallAdminTab('AdminMarketingEList')
-			&& $this->uninstallAdminTab('AdminMarketingFList')
-			&& $this->uninstallAdminTab('AdminMarketingSList')
-			&& $this->uninstallAdminTab('AdminMarketingEStats')
-			&& $this->uninstallAdminTab('AdminMarketingFStats')
-			&& $this->uninstallAdminTab('AdminMarketingSStats')
-			&& $this->uninstallAdminTab('AdminMarketingEStep1')
-			&& $this->uninstallAdminTab('AdminMarketingEStep2')
-			&& $this->uninstallAdminTab('AdminMarketingEStep3')
-			&& $this->uninstallAdminTab('AdminMarketingEStep4')
-			&& $this->uninstallAdminTab('AdminMarketingEStep5')
-			&& $this->uninstallAdminTab('AdminMarketingEStep6')
-			&& $this->uninstallAdminTab('AdminMarketingEStep7')
-			&& $this->uninstallAdminTab('AdminMarketingEStep8')
-			&& $this->uninstallAdminTab('AdminMarketingFStep1')
-			&& $this->uninstallAdminTab('AdminMarketingFStep2')
-			&& $this->uninstallAdminTab('AdminMarketingFStep3')
-			&& $this->uninstallAdminTab('AdminMarketingFStep4')
-			&& $this->uninstallAdminTab('AdminMarketingFStep5')
-			&& $this->uninstallAdminTab('AdminMarketingFStep6')
-			&& $this->uninstallAdminTab('AdminMarketingFStep7')
-			&& $this->uninstallAdminTab('AdminMarketingFStep8')
-			&& $this->uninstallAdminTab('AdminMarketingSStep1')
-			&& $this->uninstallAdminTab('AdminMarketingSStep2')
-			&& $this->uninstallAdminTab('AdminMarketingSStep3')
-			&& $this->uninstallAdminTab('AdminMarketingSStep4')
-			&& $this->uninstallAdminTab('AdminMarketingSStep5')
-			&& $this->uninstallAdminTab('AdminMarketingSStep6')
-			&& $this->uninstallAdminTab('AdminMarketingSStep7');
+			&& $this->uninstallAdminTabs();
 	}
 
 	public function installDB($alter_db = true)
@@ -503,7 +431,7 @@ class ExpressMailing extends Module
 					`'._DB_PREFIX_.'expressmailing_email_promocodes`,
 					`'._DB_PREFIX_.'expressmailing_email_accountdates`,
 					`'._DB_PREFIX_.'expressmailing_email_buyingdates`,
-					`'._DB_PREFIX_.'expressmailing_email_postalcodes`,
+					`'._DB_PREFIX_.'expressmailing_email_postcodes`,
 					`'._DB_PREFIX_.'expressmailing_email_countries`,
 					`'._DB_PREFIX_.'expressmailing_email_civilities`,
 					`'._DB_PREFIX_.'expressmailing_email_birthdays`,
@@ -515,10 +443,96 @@ class ExpressMailing extends Module
 					`'._DB_PREFIX_.'expressmailing_email`,
 					`'._DB_PREFIX_.'expressmailing`');
 		}
+
 		return true;
 	}
 
-	private function installAdminTab($tab_class, $tab_active, $tab_name, $tab_class_parent)
+	public function installAdminTabs()
+	{
+		/* Add main Tab (visible into Customer) */
+		return $this->installAdminTab('AdminMarketingX', true, $this->displayName, 'AdminPriceRule')
+		/* Add media controllers */
+		&& $this->installAdminTab('AdminMarketingE', false, $this->displayName, 'AdminMarketingX')
+		&& $this->installAdminTab('AdminMarketingF', false, $this->displayName, 'AdminMarketingX')
+		&& $this->installAdminTab('AdminMarketingS', false, $this->displayName, 'AdminMarketingX')
+		/* Add order/subscription controllers */
+		&& $this->installAdminTab('AdminMarketingInscription', false, $this->l('Inscription'), 'AdminMarketingX')
+		&& $this->installAdminTab('AdminMarketingBuy', false, $this->l('Cart'), 'AdminMarketingX')
+		/* Add emailing controllers */
+		&& $this->installAdminTab('AdminMarketingEStep1', false, $this->l('E-Mailing'), 'AdminMarketingE')
+		&& $this->installAdminTab('AdminMarketingEStep2', false, $this->l('E-Mailing'), 'AdminMarketingE')
+		&& $this->installAdminTab('AdminMarketingEStep3', false, $this->l('E-Mailing'), 'AdminMarketingE')
+		&& $this->installAdminTab('AdminMarketingEStep4', false, $this->l('E-Mailing'), 'AdminMarketingE')
+		&& $this->installAdminTab('AdminMarketingEStep5', false, $this->l('E-Mailing'), 'AdminMarketingE')
+		&& $this->installAdminTab('AdminMarketingEStep6', false, $this->l('E-Mailing'), 'AdminMarketingE')
+		&& $this->installAdminTab('AdminMarketingEStep7', false, $this->l('E-Mailing'), 'AdminMarketingE')
+		&& $this->installAdminTab('AdminMarketingEStep8', false, $this->l('E-Mailing'), 'AdminMarketingE')
+		/* Add fax controllers */
+		&& $this->installAdminTab('AdminMarketingFStep1', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+		&& $this->installAdminTab('AdminMarketingFStep2', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+		&& $this->installAdminTab('AdminMarketingFStep3', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+		&& $this->installAdminTab('AdminMarketingFStep4', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+		&& $this->installAdminTab('AdminMarketingFStep5', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+		&& $this->installAdminTab('AdminMarketingFStep6', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+		&& $this->installAdminTab('AdminMarketingFStep7', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+		&& $this->installAdminTab('AdminMarketingFStep8', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+		/* Add sms controllers */
+		&& $this->installAdminTab('AdminMarketingSStep1', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+		&& $this->installAdminTab('AdminMarketingSStep2', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+		&& $this->installAdminTab('AdminMarketingSStep3', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+		&& $this->installAdminTab('AdminMarketingSStep4', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+		&& $this->installAdminTab('AdminMarketingSStep5', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+		&& $this->installAdminTab('AdminMarketingSStep6', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+		&& $this->installAdminTab('AdminMarketingSStep7', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+		/* Add statistics controllers */
+		&& $this->installAdminTab('AdminMarketingEList', false, $this->l('E-Mailing'), 'AdminMarketingE')
+		&& $this->installAdminTab('AdminMarketingFList', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+		&& $this->installAdminTab('AdminMarketingSList', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+		&& $this->installAdminTab('AdminMarketingEStats', false, $this->l('E-Mailing'), 'AdminMarketingE')
+		&& $this->installAdminTab('AdminMarketingFStats', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
+		&& $this->installAdminTab('AdminMarketingSStats', false, $this->l('Sms-Mailing'), 'AdminMarketingS');
+	}
+
+	public function uninstallAdminTabs()
+	{
+		return $this->uninstallAdminTab('AdminMarketingX')
+			&& $this->uninstallAdminTab('AdminMarketingE')
+			&& $this->uninstallAdminTab('AdminMarketingF')
+			&& $this->uninstallAdminTab('AdminMarketingS')
+			&& $this->uninstallAdminTab('AdminMarketingInscription')
+			&& $this->uninstallAdminTab('AdminMarketingBuy')
+			&& $this->uninstallAdminTab('AdminMarketingEList')
+			&& $this->uninstallAdminTab('AdminMarketingFList')
+			&& $this->uninstallAdminTab('AdminMarketingSList')
+			&& $this->uninstallAdminTab('AdminMarketingEStats')
+			&& $this->uninstallAdminTab('AdminMarketingFStats')
+			&& $this->uninstallAdminTab('AdminMarketingSStats')
+			&& $this->uninstallAdminTab('AdminMarketingEStep1')
+			&& $this->uninstallAdminTab('AdminMarketingEStep2')
+			&& $this->uninstallAdminTab('AdminMarketingEStep3')
+			&& $this->uninstallAdminTab('AdminMarketingEStep4')
+			&& $this->uninstallAdminTab('AdminMarketingEStep5')
+			&& $this->uninstallAdminTab('AdminMarketingEStep6')
+			&& $this->uninstallAdminTab('AdminMarketingEStep7')
+			&& $this->uninstallAdminTab('AdminMarketingEStep8')
+			&& $this->uninstallAdminTab('AdminMarketingFStep1')
+			&& $this->uninstallAdminTab('AdminMarketingFStep2')
+			&& $this->uninstallAdminTab('AdminMarketingFStep3')
+			&& $this->uninstallAdminTab('AdminMarketingFStep4')
+			&& $this->uninstallAdminTab('AdminMarketingFStep5')
+			&& $this->uninstallAdminTab('AdminMarketingFStep6')
+			&& $this->uninstallAdminTab('AdminMarketingFStep7')
+			&& $this->uninstallAdminTab('AdminMarketingFStep8')
+			&& $this->uninstallAdminTab('AdminMarketingSStep1')
+			&& $this->uninstallAdminTab('AdminMarketingSStep2')
+			&& $this->uninstallAdminTab('AdminMarketingSStep3')
+			&& $this->uninstallAdminTab('AdminMarketingSStep4')
+			&& $this->uninstallAdminTab('AdminMarketingSStep5')
+			&& $this->uninstallAdminTab('AdminMarketingSStep6')
+			&& $this->uninstallAdminTab('AdminMarketingSStep7');
+	}
+
+	public function installAdminTab($tab_class, $tab_active, $tab_name, $tab_class_parent)
 	{
 		if (!Tab::getIdFromClassName((string)$tab_class))
 		{
@@ -553,7 +567,7 @@ class ExpressMailing extends Module
 		return true;
 	}
 
-	private function uninstallAdminTab($tab_class)
+	public function uninstallAdminTab($tab_class)
 	{
 		$id_tab = Tab::getIdFromClassName((string)$tab_class);
 

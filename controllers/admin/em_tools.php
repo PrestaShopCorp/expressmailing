@@ -350,7 +350,7 @@ class EMTools
 			$file_copy = _PS_MODULE_DIR_.(string)$module_name.DIRECTORY_SEPARATOR.'import'.DIRECTORY_SEPARATOR.basename($file_path).'_copy.csv';
 
 			if (file_exists($file_path))
-				copy($file_path, $file_copy);
+				Tools::copy($file_path, $file_copy);
 			else
 				return false;
 

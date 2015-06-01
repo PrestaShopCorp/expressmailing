@@ -22,7 +22,7 @@
 					<div class="form-group">
 						<div class="col-lg-12" style="text-align: center">
 							{foreach $settled_pages as $page}
-								<img class="fax_preview" style="background-size: 210px 297px; display: inline-block; width: 210px; height: 297px; border: 1px solid black; margin-left: .5em; margin-right: .5em" src="data:image/png;base64, {$page['image_base64']|unescape}" />
+								<img class="fax_preview" style="background-size: 210px 297px; display: inline-block; width: 210px; height: 297px; border: 1px solid black; margin-left: .5em; margin-right: .5em" src="data:image/png;base64, {$page['image_base64']|escape:'html':'UTF-8'}" />
 							{/foreach}
 						</div>
 					</div>
@@ -65,7 +65,7 @@
 			$("#dialog-message").dialog("open");
 			$("#dialog-preview").attr("src", $(this).attr("src"));
 			$("#dialog-preview").height("auto");
-			$("#dialog-preview").width("auto");
+			$("#dialog-preview").width("100%");
 			$("#dialog-preview").height(2 * $("#dialog-preview").height());
 		});
 	});
