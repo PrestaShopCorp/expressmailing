@@ -40,16 +40,6 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		}
 
 		parent::__construct();
-
-		if (!function_exists('curl_version'))
-		{
-			$warning = $this->module->l('In order to fetch images over http, you need to activate the PHP CURL extension on your server.',
-				'adminmarketingestep3');
-			$warning .= '<br/>';
-			$warning .= $this->module->l('Otherwise this functionnality may not work properly and you will have to upload your images.',
-				'adminmarketingestep3');
-			$this->warnings[] = $warning;
-		}
 	}
 
 	public function initToolbarTitle()
@@ -125,6 +115,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			if (!empty($this->html_content))
 			{
 				$this->html_content = $this->copyImagesAndUpdateHTML($this->html_content);
+
 				if ($this->saveHTML())
 				{
 					if ($found = $this->checkLocalUrls($this->html_content))
@@ -135,6 +126,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 						$this->errors[] = $b;
 						return false;
 					}
+
 					$images_to_upload = $this->parseImagesToUpload($this->html_content);
 
 					if (Tools::isSubmit('nextEmailingStep3') && (count($images_to_upload) == 0))
@@ -146,9 +138,11 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 					}
 				}
 			}
-
-			$this->errors[] = $this->module->l('Please verify the required fields', 'adminmarketingestep3');
-			return false;
+			else
+			{
+				$this->errors[] = $this->module->l('Please verify the required fields', 'adminmarketingestep3');
+				return false;
+			}
 		}
 	}
 
@@ -171,7 +165,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			return $matches[0][0];
 		if (preg_match_all('#://192\.168.[0-9]{1,3}.[0-9]{1,3}#', $text, $matches))
 			return $matches[0][0];
-		if (preg_match_all('#://::1#',$text, $matches))
+		if (preg_match_all('#://::1#', $text, $matches))
 			return $matches[0][0];
 
 		return false;
@@ -187,6 +181,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				'title' => $this->module->l('Import HTML from file or URL (step 3)', 'adminmarketingestep3'),
 				'icon' => 'icon-beaker'
 			),
+			'description' => $this->module->l('To be able to use these functions, please activate cURL (PHP extension)', 'adminmarketingestep3'),
 			'input' => array(
 				array (
 					'type' => _PS_MODE_DEV_ ? 'text' : 'hidden',
@@ -217,6 +212,10 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 				'icon' => 'process-icon-cogs'
 			)
 		);
+
+		if (function_exists('curl_version'))
+			unset($this->fields_form['description']);
+
 		return parent::renderForm();
 	}
 
@@ -401,13 +400,13 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 		if (empty($result['campaign_html']))
 		{
+			$base_url = Configuration::get('PS_SSL_ENABLED') == 0 ? Tools::getShopDomain(true, true) : Tools::getShopDomainSsl(true, true);
 			$domain_name = Tools::getShopDomain(false, true);
-			if (empty($domain_name))
-				$domain_name = Tools::getHttpHost(false, true, true);
+
 			if ($pos = strpos($domain_name, ':'))
 				$domain_name = Tools::substr($domain_name, 0, $pos);
 
-			$this->context->smarty->assign('base_url', Tools::getShopDomainSsl(true, true));
+			$this->context->smarty->assign('base_url', $base_url);
 			$this->context->smarty->assign('domain_name', $domain_name);
 			$this->context->smarty->assign('logo_name', Configuration::get('PS_LOGO'));
 			$this->context->smarty->assign('logo_width', Configuration::get('SHOP_LOGO_WIDTH'));
@@ -548,7 +547,12 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 			if (!empty($image_url) && $this->copyFileToStorage($image_url, $filename))
 			{
-				$final_img_url = _PS_BASE_URL_.__PS_BASE_URI__.'modules/expressmailing/campaigns/'.$this->campaign_id.'/';
+				if (Configuration::get('PS_SSL_ENABLED') == 0)
+					$final_img_url = 'http://'.Configuration::get('PS_SHOP_DOMAIN');
+				else
+					$final_img_url = 'https://'.Configuration::get('PS_SHOP_DOMAIN_SSL');
+
+				$final_img_url .= '/modules/expressmailing/campaigns/'.$this->campaign_id.'/';
 				if ($filename)
 					$final_img_url .= $filename;
 				else

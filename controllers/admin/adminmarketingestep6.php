@@ -148,6 +148,7 @@ class AdminMarketingEStep6Controller extends ModuleAdminController
 
 			// Then empty the list
 			// -------------------
+			$response_array = array ();
 			$parameters = array(
 				'account_id' => $this->session_api->account_id,
 				'list_id' => $this->campaign_infos['campaign_api_list_id']

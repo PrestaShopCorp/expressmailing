@@ -224,7 +224,8 @@ class AdminMarketingFStep2Controller extends ModuleAdminController
 
 		$response_array = null;
 		$parameters = array (
-			'file_suffix' => $suffix,
+			'application_id' => Translate::getModuleTranslation('expressmailing', '3320', 'session_api'),
+			'file_suffix' => 'prestashop.'.$suffix,
 			'document' => $encoded_file_data,
 			'return_format' => 'Png'
 		);

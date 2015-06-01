@@ -12,6 +12,12 @@
 *}
 
 {if isset($smarty_fax_tickets) && is_array($smarty_fax_tickets)}
+
+	<div class="alert alert-danger">
+		{l s='Your mailing contains %d contacts, but you have only %d credits on your account.' mod='expressmailing' sprintf=[$count_fax,$remaining_fax]}<br>
+		{l s='You must buy additional credits (number of tickets can be changed at the next step).' mod='expressmailing'}
+	</div>
+
     <table>
         {foreach $smarty_fax_tickets as $key => $ticket}
             {if isset($ticket.promo_ending) && $ticket.promo_ending > time()}
@@ -56,6 +62,12 @@
 {/if}
 
 {if isset($smarty_sms_tickets) && is_array($smarty_sms_tickets)}
+
+	<div class="alert alert-danger">
+		{l s='Your mailing contains %d contacts, but you have only %d credits on your account.' mod='expressmailing' sprintf=[$count_sms,$remaining_sms]}<br>
+		{l s='You must buy additional credits (number of tickets can be changed at the next step).' mod='expressmailing'}
+	</div>
+
     <table>
         {foreach $smarty_sms_tickets as $key => $ticket}
             {if isset($ticket.promo_ending) && $ticket.promo_ending > time()}
@@ -87,9 +99,9 @@
                             {/if}
                             <br>
                             {if $promotion}
-                                {$fax_per_unit|sprintf:($ticket.promo_price / $ticket.product_units)}
+                                {$sms_per_unit|sprintf:($ticket.promo_price / $ticket.product_units)}
                             {else}
-                                {$fax_per_unit|sprintf:($ticket.normal_price / $ticket.product_units)}
+                                {$sms_per_unit|sprintf:($ticket.normal_price / $ticket.product_units)}
                             {/if}
                         </span>
                     </label>
