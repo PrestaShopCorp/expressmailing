@@ -61,7 +61,6 @@ class ExpressMailing extends Module
 		return parent::install()
 			&& $this->installDB($alter_db)
 			&& $this->installAdminTabs();
-			
 	}
 
 	public function uninstall($alter_db = true)
