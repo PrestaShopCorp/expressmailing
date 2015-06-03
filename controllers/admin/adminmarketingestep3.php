@@ -17,7 +17,7 @@ include_once 'html_cleaner.php';
 /**
  * Step 3 : Provide HTML content & Images upload
  */
-class AdminMarketingEStep3Controller extends ModuleAdminControllerCore
+class AdminMarketingEStep3Controller extends ModuleAdminController
 {
 	private $campaign_id = null;
 	private $html_content = null;
