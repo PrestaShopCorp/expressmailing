@@ -31,7 +31,7 @@ class HtmlCleaner
 		// if ($this->session_api->connectFromCredentials('email'))
 		// 	$this->regexps_filters = $this->getRegexpFiltersFromAPI();
 		// else
-		   $this->regexps_filters = $this->getRegexpFiltersFromLocal();
+		$this->regexps_filters = $this->getRegexpFiltersFromLocal();
 	}
 
 	private function getRegexpFiltersFromAPI()

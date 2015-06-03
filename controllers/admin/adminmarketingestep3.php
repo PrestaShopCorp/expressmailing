@@ -284,7 +284,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	{
 		$this->context->smarty->assign('campaign_id', $this->campaign_id);
 		$this->context->smarty->assign('campaign_html', $this->html_content);
-		
+
 		$template_path = $this->getTemplatePath().'marketinge_step3/editor_template.tpl';
 		return $this->context->smarty->fetch($template_path);
 	}
@@ -326,12 +326,12 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			$url = 'http://'.$url;
 
 		$html_content = Tools::file_get_contents($url);
-		
+
 		$enc = mb_detect_encoding($html_content, 'UTF-8, ISO-8859-1, ASCII');
 
 		if ($enc != 'UTF-8')
 			$html_content = mb_convert_encoding($html_content, 'UTF-8', $enc);
-		
+
 		$html_content = htmlspecialchars_decode(htmlentities($html_content, ENT_IGNORE, 'UTF-8', false));
 
 		if (!empty($html_content))
@@ -585,14 +585,14 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			$dest .= (string)$filename;
 		else
 			$dest .= basename((string)$url);
-		
+
 		$dest = urldecode($dest);
 		$dest = str_replace(' ', '_', $dest);
 
 		if (function_exists('curl_version'))
 		{
 			$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Mozilla/5.0';
-			
+
 			$ch = curl_init((string)$url);
 			curl_setopt($ch, CURLOPT_HEADER, 0);
 			curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);

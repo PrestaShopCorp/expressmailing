@@ -75,7 +75,7 @@ class AdminMarketingEStep5Controller extends AdminMarketingInscriptionController
 		$sql->from('expressmailing_email');
 		$sql->where('campaign_id = '.$this->campaign_id);
 		$result = Db::getInstance()->getRow($sql);
-			
+
 		// Create or Update the mailing-list parameters (on-line) associate with the current mailing (off-line)
 		// ----------------------------------------------------------------------------------------------------
 		$response_array = array();
@@ -181,9 +181,7 @@ The editorial board', 'adminmarketingestep5')
 			// ------------
 			$parameters['campaign_id'] = $result['campaign_api_message_id'];
 			if ($this->session_api->call('email', 'campaign', 'set_infos', $parameters, $response_array))
-			{	
 				return true;
-			}
 		}
 
 		$this->errors[] = sprintf($this->module->l('Error during communication with Express-Mailing API : %s', 'adminmarketingestep5'),
