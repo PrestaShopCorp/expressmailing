@@ -457,8 +457,9 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 				$inserts = array();
 				foreach ($post_codes as $value)
 				{
-					$country_id = explode('|', $value)[0];
-					$post_code = explode('|', $value)[1];
+					$values = explode('|', $value);
+					$country_id = $values[0];
+					$post_code = $values[1];
 					$inserts[] = array(
 						'campaign_id' => $this->campaign_id,
 						'country_id' => pSQL($country_id),

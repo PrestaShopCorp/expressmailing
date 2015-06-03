@@ -59,7 +59,7 @@ $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_4d0db83d9772046e4b7aa
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_67e417311ee0d1aec0409437ef8631fa'] = 'Merci de remplir tous les champs obligatoires !';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_a77ec87b83ae0698dcb681578636ac6c'] = 'Vous utilisez actuellement un serveur Prestashop LOCAL (IP privée) :';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_2ac5a101b7469d392b844fd3071f1c6e'] = 'Pour que les IMAGES et le TRACKING de vos newsletters fonctionnent, il faut utiliser un serveur Prestashop ONLINE (IP publique) !';
-$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_235c48433470c96de47d956ef0229aa9'] = 'Importer le HTML depuis un fichier local ou une page web (Etape 3)';
+$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_f595fd9745462118b075603f3f43726b'] = 'Importer le HTML depuis un fichier local ou une page web';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_0224797a8a4ada13d6811b8c1219474f'] = 'Pour pouvoir utiliser ces fonctions, veuillez activer cURL (extension PHP)';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_4617938f686798eed339719bd9a2284e'] = 'Importer depuis une page HTML sur mon disque dur :';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_8a997ca115d93048c37988cb8f6b8c67'] = 'Importer depuis une page web :';
@@ -69,11 +69,6 @@ $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_434141bb658564b4ca1ea
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_28388a95f91696aec7b5716d8b8720b2'] = 'Envoyer les images sur le serveur';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_71d385d7596901b1a3d50f7120e614cb'] = 'Envoyer ces %d image%s sur le serveur';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep3_fd038fc7f319e48f3115d92bf5bdbef9'] = 'Ignorer';
-$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_134d8beec41df28ec545d3a75bb8a249'] = 'Modifier le HTML depuis l\'éditeur HTML';
-$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_8d1db1fe8fb5eef0aacc8060320dc3db'] = 'Corps HTML de votre emailing :';
-$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_ad3d06d03d94223fa652babc913de686'] = 'Valider ce HTML';
-$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_9349759a11d0057a79f582dc81cc75d8'] = 'Sauvegarder';
-$_MODULE['<{expressmailing}prestashop>adminmarketingestep3_0557fa923dcee4d0f86b1409f5c2167f'] = 'Précédent';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep4_263ab2eac2168d940fe76675ef8b3081'] = 'Langue';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep4_20db0bfeecd8fe60533206a2b5e9891a'] = 'Prénom';
 $_MODULE['<{expressmailing}prestashop>adminmarketingestep4_8d3f5eff9c40ee315d452392bed5309b'] = 'Nom';
@@ -355,6 +350,10 @@ $_MODULE['<{expressmailing}prestashop>marketinge_stats_cd3569ceeba83ebf7db1d4c7d
 $_MODULE['<{expressmailing}prestashop>marketinge_stats_7329a3c3247b10ec107736b0bdb592dd'] = 'Statistiques pour la campagne';
 $_MODULE['<{expressmailing}prestashop>bying_link_a40e54d3bb95c30d5f9e66421a76bde6'] = 'Besoin de plus de capacité ?';
 $_MODULE['<{expressmailing}prestashop>bying_link_d3d2e617335f08df83599665eef8a418'] = 'Fermer';
+$_MODULE['<{expressmailing}prestashop>editor_template_52f2a431971994325ac9cd5d09132c40'] = 'Modifier le HTML depuis l\'éditeur HTML (Etape 3)';
+$_MODULE['<{expressmailing}prestashop>editor_template_10ac3d04253ef7e1ddc73e6091c0cd55'] = 'Suivant';
+$_MODULE['<{expressmailing}prestashop>editor_template_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
+$_MODULE['<{expressmailing}prestashop>editor_template_0557fa923dcee4d0f86b1409f5c2167f'] = 'Précédent';
 $_MODULE['<{expressmailing}prestashop>marketinge_template_89fa243ab99cec6fc9ea79f29d5de8a4'] = 'Newsletter %s';
 $_MODULE['<{expressmailing}prestashop>marketinge_template_7bed138c238d51551c9b2c8a8d9a1a2e'] = 'Vous recevez cet email car vous avez visité ou commandé[br]sur le site [www]';
 $_MODULE['<{expressmailing}prestashop>marketinge_template_4182c8f19d40c7ca236a5f4f83faeb6b'] = 'Se désabonner';
@@ -377,7 +376,7 @@ $_MODULE['<{expressmailing}prestashop>filters_free_fc4c4425c8c67873ee7e81c64324c
 $_MODULE['<{expressmailing}prestashop>filters_free_4260da33218c570d887cb490b2838d5e'] = 'Langue d\'achat :';
 $_MODULE['<{expressmailing}prestashop>filters_free_60a24cc9d4d3b3d28e9d221d51ae0432'] = 'Filtres de la newsletter :';
 $_MODULE['<{expressmailing}prestashop>filters_free_24c6261081d1eefbb7c175e96a3cf316'] = 'Abonnés OPTIN';
-$_MODULE['<{expressmailing}prestashop>filters_free_34a8465e6e79c1ca7f7ea4f078587b14'] = 'Abonnés inscripits à la NEWSLETTER';
+$_MODULE['<{expressmailing}prestashop>filters_free_34a8465e6e79c1ca7f7ea4f078587b14'] = 'Abonnés inscrits à la NEWSLETTER';
 $_MODULE['<{expressmailing}prestashop>filters_free_674bc8dccb64c3ae45858cfddf39ed1f'] = 'Abonnés ACTIFS';
 $_MODULE['<{expressmailing}prestashop>marketinge_step4_4b5aa4b36f2934d635433a017295bca8'] = 'Sélection des destinataires (Etape 4)';
 $_MODULE['<{expressmailing}prestashop>marketinge_step4_e75f8202762ae5b01444e0705da5a75b'] = 'Lancer le calcul';

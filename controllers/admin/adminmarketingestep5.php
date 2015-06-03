@@ -75,7 +75,7 @@ class AdminMarketingEStep5Controller extends AdminMarketingInscriptionController
 		$sql->from('expressmailing_email');
 		$sql->where('campaign_id = '.$this->campaign_id);
 		$result = Db::getInstance()->getRow($sql);
-
+			
 		// Create or Update the mailing-list parameters (on-line) associate with the current mailing (off-line)
 		// ----------------------------------------------------------------------------------------------------
 		$response_array = array();
@@ -131,6 +131,14 @@ The editorial board', 'adminmarketingestep5')
 		$tz_paris = new DateTimeZone('Europe/Paris');
 		$date_paris = $date_london->setTimezone($tz_paris);
 
+		$planning_allow_monday = Tools::strpos($result['campaign_week_limit'], 'L') !== false ? 'True' : 'False';
+		$planning_allow_tuesday = Tools::strpos($result['campaign_week_limit'], 'M') !== false ? 'True' : 'False';
+		$planning_allow_wednesday = Tools::strpos($result['campaign_week_limit'], 'C') !== false ? 'True' : 'False';
+		$planning_allow_thursday = Tools::strpos($result['campaign_week_limit'], 'J') !== false ? 'True' : 'False';
+		$planning_allow_friday = Tools::strpos($result['campaign_week_limit'], 'V') !== false ? 'True' : 'False';
+		$planning_allow_saturday = Tools::strpos($result['campaign_week_limit'], 'S') !== false ? 'True' : 'False';
+		$planning_allow_sunday = Tools::strpos($result['campaign_week_limit'], 'D') !== false ? 'True' : 'False';
+
 		$response_array = array();
 		$parameters = array(
 			'account_id' => $this->session_api->account_id,
@@ -141,7 +149,15 @@ The editorial board', 'adminmarketingestep5')
 			'campaign_html' => $result['campaign_html'],
 			'campaign_tracking' => $result['campaign_tracking'] ? 'True' : 'False',
 			'campaign_linking' => $result['campaign_linking'] ? 'True' : 'False',
-			'campaign_redlist' => $result['campaign_redlist'] ? 'True' : 'False'
+			'campaign_redlist' => $result['campaign_redlist'] ? 'True' : 'False',
+			'campaign_limit_daily' => $result['campaign_day_limit'],
+			'planning_allow_monday' => $planning_allow_monday,
+			'planning_allow_tuesday' => $planning_allow_tuesday,
+			'planning_allow_wednesday' => $planning_allow_wednesday,
+			'planning_allow_thursday' => $planning_allow_thursday,
+			'planning_allow_friday' => $planning_allow_friday,
+			'planning_allow_saturday' => $planning_allow_saturday,
+			'planning_allow_sunday' => $planning_allow_sunday
 		);
 
 		if (empty($result['campaign_api_message_id']))
@@ -165,7 +181,9 @@ The editorial board', 'adminmarketingestep5')
 			// ------------
 			$parameters['campaign_id'] = $result['campaign_api_message_id'];
 			if ($this->session_api->call('email', 'campaign', 'set_infos', $parameters, $response_array))
+			{	
 				return true;
+			}
 		}
 
 		$this->errors[] = sprintf($this->module->l('Error during communication with Express-Mailing API : %s', 'adminmarketingestep5'),

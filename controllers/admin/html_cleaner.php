@@ -31,7 +31,7 @@ class HtmlCleaner
 		// if ($this->session_api->connectFromCredentials('email'))
 		// 	$this->regexps_filters = $this->getRegexpFiltersFromAPI();
 		// else
-			$this->regexps_filters = $this->getRegexpFiltersFromLocal();
+		   $this->regexps_filters = $this->getRegexpFiltersFromLocal();
 	}
 
 	private function getRegexpFiltersFromAPI()
@@ -53,7 +53,6 @@ class HtmlCleaner
 	{
 		$regexp_filters = array();
 
-		$regexp_filters[] = array('type' => 'regexp', 'pattern' => '#<!doctype.*?>#is', 'replacement' => '');
 		$regexp_filters[] = array('type' => 'regexp', 'pattern' => '#<script.*?</script>#is', 'replacement' => '');
 
 		$regexp_filters[] = array('type' => 'str', 'pattern' => 'Saisissez ici le <b>corps de votre emailing</b> HTML', 'replacement' => '&nbsp;');
@@ -81,7 +80,7 @@ class HtmlCleaner
 			'type' => 'str',
 			'condition' => array(
 				'require' => false,
-				'pattern' => '#<body#i'
+				'pattern' => '#<body#is'
 			),
 			'pattern' => '</head>',
 			'replacement' => '</head><body>'
@@ -142,18 +141,10 @@ class HtmlCleaner
 		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,131,194,160', 'replacement' => '&agrave;');
 		$regexp_filters[] = array('type' => 'chr', 'pattern' => '195,131,194,169', 'replacement' => '&eacute;');
 
-		$regexp_filters[] = array('type' => 'regexp', 'pattern' => '#<title>.*?</title>#i', 'replacement' => '');
-		$regexp_filters[] = array('type' => 'regexp', 'pattern' => '#<head>\S*?</head>#i', 'replacement' => '');
-
 		$regexp_filters[] = array('type' => 'str', 'pattern' => '</o:p>', 'replacement' => '');
 		$regexp_filters[] = array('type' => 'str', 'pattern' => '<o:p>', 'replacement' => '');
 		$regexp_filters[] = array('type' => 'regexp', 'pattern' => '#mso-bidi-font-weight: normal,?#i', 'replacement' => '');
 		$regexp_filters[] = array('type' => 'regexp', 'pattern' => '#BORDER-COLLAPSE: collapse,?#i', 'replacement' => '');
-
-		$regexp_filters[] = array('type' => 'str', 'pattern' => '<tbody>', 'replacement' => '');
-		$regexp_filters[] = array('type' => 'str', 'pattern' => '</tbody>', 'replacement' => '');
-		$regexp_filters[] = array('type' => 'str', 'pattern' => '<thead>', 'replacement' => '');
-		$regexp_filters[] = array('type' => 'str', 'pattern' => '</thead>', 'replacement' => '');
 
 		$regexp_filters[] = array('type' => 'regexp', 'pattern' => '#<span lang=".."#i', 'replacement' => '<span');
 		$regexp_filters[] = array('type' => 'regexp', 'pattern' => '# id="AutoNumber[0-9]*"#i', 'replacement' => '');
@@ -187,7 +178,7 @@ class HtmlCleaner
 	{
 		foreach ($this->regexps_filters as $filter)
 		{
-			if (isset($filter['condition']) && is_array($filter['condition']))
+			if (isset($filter['condition']) && is_array($filter['condition']) && !empty($filter['condition']))
 			{
 				$condition = $filter['condition'];
 
