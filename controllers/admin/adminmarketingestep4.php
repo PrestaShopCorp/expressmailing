@@ -60,7 +60,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		// ------------------
 		include _PS_MODULE_DIR_.$this->module->name.'/controllers/admin/session_api.php';
 		$this->session_api = new SessionApi();
-		
+
 	}
 
 	public function initToolbarTitle()
@@ -191,7 +191,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		// On imbrique la liste et les boutons
 		// -----------------------------------
 		if (count($array_table) > 0)
-			$output .= preg_replace ('/<div class="form-group">/', '<div class="form-group">'.$array_table[0], $html_boutons, 1); 
+			$output .= preg_replace ('/<div class="form-group">/', '<div class="form-group">'.$array_table[0], $html_boutons, 1);
 		else
 			$output .= $html_boutons;
 
@@ -457,8 +457,9 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 				$inserts = array();
 				foreach ($post_codes as $value)
 				{
-					$country_id = explode('|', $value)[0];
-					$post_code = explode('|', $value)[1];
+					$values = explode('|', $value);
+					$country_id = $values[0];
+					$post_code = $values[1];
 					$inserts[] = array(
 						'campaign_id' => $this->campaign_id,
 						'country_id' => pSQL($country_id),
@@ -526,7 +527,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 						break;
 				}
 			}
-			
+
 			// Rebuild the recipients selection
 			// --------------------------------
 			$extended = true;
@@ -556,9 +557,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		{
 			$this->getRecipientsDB();
 			if ($this->list_total == 0)
-			{
 				$this->errors[] = $this->module->l('Your recipients selection is empty !', 'adminmarketingestep4');
-			}
 			else
 			{
 				Tools::redirectAdmin('index.php?controller=AdminMarketingEStep5&campaign_id='.
@@ -678,7 +677,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 
 	public function getCartRulesDB()
 	{
-		$req = new DbQueryCore();
+		$req = new DbQuery();
 		$req->select('cart_rule.id_cart_rule, cart_rule.code, cart_rule.description, cart_cart_rule.id_cart as used_on_id_cart');
 		$req->from('cart_rule', 'cart_rule');
 		$req->leftJoin('cart_cart_rule', 'cart_cart_rule', 'cart_cart_rule.id_cart_rule = cart_rule.id_cart_rule');
@@ -706,5 +705,4 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 
 		return $user_list;
 	}
-
 }

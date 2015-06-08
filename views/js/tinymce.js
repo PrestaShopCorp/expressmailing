@@ -33,7 +33,7 @@ jQuery(document).ready(function()
 		toolbar2 : "bold,italic,underline,strikethrough,|,superscript,subscript,blockquote,|,alignleft,aligncenter,alignright,alignjustify,rtl,|,link,unlink,anchor,image,emoticons,|,visualchars,visualblocks,|,preview,fullscreen,code",
         toolbar3 : "styleselect,|,formatselect,|,fontselect,|,fontsizeselect,|,colorpicker,forecolor",
 
-		plugins : "visualblocks preview tabfocus fullscreen visualchars directionality style searchreplace insertdatetime charmap hr colorpicker anchor code link autolink image paste table lists advlist contextmenu filemanager textcolor emoticons",
+		plugins : "fullpage visualblocks preview tabfocus fullscreen visualchars directionality style searchreplace insertdatetime charmap hr colorpicker anchor code link autolink image paste table lists advlist contextmenu filemanager textcolor emoticons",
 
 		menubar : false,
 		statusbar : true,
@@ -44,7 +44,6 @@ jQuery(document).ready(function()
 		cleanup: false,
 
 		force_p_newlines : false,
-		forced_root_block : "div",
 		force_br_newlines : true,
 		object_resizing : true,
 		visual : true,

@@ -21,7 +21,7 @@
 		var url_base = "index.php?controller=AdminMarketingFStep6";
 		var url_ajax = "&ajax=true";
 		var url_cpid = "&campaign_id={$campaign_id|intval}";
-		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingFStep6')|escape:javascript}";
+		var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingFStep6')|escape:'javascript':'UTF-8'}";
 
 		upload();
 

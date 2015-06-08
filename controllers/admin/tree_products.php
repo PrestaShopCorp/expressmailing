@@ -12,7 +12,7 @@
  * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
  */
 
-class HelperTreeCategoriesProducts extends TreeCore
+class HelperTreeCategoriesProducts extends Tree
 {
 	const DEFAULT_TEMPLATE = 'tree_categories.tpl';
 	const DEFAULT_NODE_FOLDER_TEMPLATE = 'tree_node_folder_radio.tpl';

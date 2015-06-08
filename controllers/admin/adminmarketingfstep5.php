@@ -15,7 +15,7 @@
 include 'adminmarketinginscription.php';
 
 /**
- * Step 5 : Inscription (no connected) and send campaign settings to the API (if connected)
+ * Step 5 : Subscription (no connected) and send campaign settings to the API (if connected)
  */
 class AdminMarketingFStep5Controller extends AdminMarketingInscriptionController
 {
@@ -188,5 +188,4 @@ class AdminMarketingFStep5Controller extends AdminMarketingInscriptionController
 
 		return $document;
 	}
-
 }

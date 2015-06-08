@@ -22,6 +22,31 @@ class ExpressApi
 			$this->base_url = $url;
 	}
 
+	private function reportError($parameters, $response)
+	{
+		$parameters = array(
+			'parameters' => $parameters,
+			'response' => $response,
+			'server_infos' => $_SERVER
+		);
+		$response_array = array();
+
+		$this->callExternal('http://www.express-mailing.com/api/cart/ws.php', 'common', 'debug', 'send_report', $parameters, $response_array);
+	}
+
+	public function callExternal($tmp_base_url, $module, $section, $method, $parameters, &$response_array, $debug_post = null, $debug_response = null)
+	{
+		$this->error = null;
+		$init_base_url = $this->base_url;
+		$this->base_url = $tmp_base_url;
+
+		$return = $this->call($module, $section, $method, $parameters, $response_array, 'post',
+										null, $this->error, $debug_post, $debug_response);
+
+		$this->base_url = $init_base_url;
+		return $return;
+	}
+
 	public function call($module, $section, $method,
 						$parameters, &$response_array,
 						$xml_or_post_mode = 'xml',
@@ -114,6 +139,7 @@ class ExpressApi
 		}
 		else
 		{
+			$this->reportError($parameters, $response);
 			$error = -2;
 			return false;
 		}
