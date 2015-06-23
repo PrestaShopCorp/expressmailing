@@ -51,7 +51,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 	public function setMedia()
 	{
 		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
-		$this->addJS('/js/tiny_mce/tiny_mce.js');
+		$this->addJS(_PS_JS_DIR_.'tiny_mce/tiny_mce.js');
 		$this->addJS(_PS_MODULE_DIR_.'expressmailing/views/js/tinymce.js');
 		parent::setMedia();
 	}
