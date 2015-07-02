@@ -108,14 +108,14 @@ class AdminMarketingInscriptionController extends ModuleAdminController
 				$this->next_controller = 'AdminMarketingX';
 				$this->step_action = '1';
 				$product = (string)Tools::getValue('product');
-				
+
 				if (Tools::strpos($product, 'fax-') !== false)
 					$this->media = 'fax';
 				elseif (Tools::strpos($product, 'sms-') !== false)
 					$this->media = 'sms';
 				else
 					$this->media = 'email';
-				
+
 				$this->back_action = 'index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX');
 				$this->next_action = 'index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX');
 				break;
