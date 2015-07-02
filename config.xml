@@ -2,7 +2,7 @@
 <module>
 	<name>expressmailing</name>
 	<displayName><![CDATA[Express-Mailing]]></displayName>
-	<version><![CDATA[1.1.4]]></version>
+	<version><![CDATA[1.1.5]]></version>
 	<description><![CDATA[Marketing Module from Express-Mailing, including e-mailing (100% free), sending faxes and sms at low price]]></description>
 	<author><![CDATA[Axalone France]]></author>
 	<tab><![CDATA[emailing]]></tab>
