@@ -252,17 +252,17 @@ class AdminMarketingBuyController extends ModuleAdminController
 		// -------------------------------------------------
 		$product = (string)Tools::getValue('product');
 
-		if (Tools::substr($product, 0, 4) === 'fax-')
+		if (Tools::strpos($product, 'fax-') !== false)
 		{
 			if ($this->session_api->connectFromCredentials('fax'))
 				$parameters['account_id'] = $this->session_api->account_id;
 		}
-		elseif (Tools::substr($product, 0, 4) === 'sms-')
+		elseif (Tools::strpos($product, 'sms-') !== false)
 		{
 			if ($this->session_api->connectFromCredentials('sms'))
 				$parameters['account_id'] = $this->session_api->account_id;
 		}
-		elseif (Tools::substr($product, 0, 6) === 'email-')
+		else
 		{
 			if ($this->session_api->connectFromCredentials('email'))
 				$parameters['account_id'] = $this->session_api->account_id;
