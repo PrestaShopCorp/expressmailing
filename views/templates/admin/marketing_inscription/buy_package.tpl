@@ -36,22 +36,22 @@
                         {/if}
                     {/if}
                     <label>
-                        <input type="radio" name="product" value="{$ticket.product_ref|escape:'html':'UTF-8'}" {if ($cart_product == '' and $key == 0) or ($cart_product == $ticket.product_ref) }checked="checked" {/if}/>
+                        <input type="radio" name="product" value="{$ticket.product_ref|escape:'htmlall':'UTF-8'}" {if ($cart_product == '' and $key == 0) or ($cart_product == $ticket.product_ref) }checked="checked" {/if}/>
                         <span style="width:170px; display:inline-block">
-                            {$ticket.product_units|number_format:0:",":"."} {$fax_credits}<br>{$ticket.product_desc|escape:'html':'UTF-8'}
+                            {$ticket.product_units|number_format:0:",":"."} {$fax_credits|escape:'htmlall':'UTF-8'}<br>{$ticket.product_desc|escape:'html':'UTF-8'}
                         </span>
                         <span style="width:170px; display:inline-block">
                             <span style="{if $promotion}text-decoration: line-through{else}font-weight: bold{/if}">
-                                {$ticket.normal_price|number_format:2:",":"."} {$euro_symbol}
+                                {$ticket.normal_price|number_format:2:",":"."} {$euro_symbol|escape:'htmlall':'UTF-8'}
                             </span>
                             {if $promotion}
-                                &nbsp;&nbsp;<span style="color: red; font-weight: bold">{$ticket.promo_price|number_format:2:",":"."} {$euro_symbol}</span>
+                                &nbsp;&nbsp;<span style="color: red; font-weight: bold">{$ticket.promo_price|number_format:2:",":"."} {$euro_symbol|escape:'htmlall':'UTF-8'}</span>
                             {/if}
                             <br>
                             {if $promotion}
-                                {$fax_per_unit|sprintf:($ticket.promo_price / $ticket.product_units)}
+                                {$fax_per_unit|sprintf:($ticket.promo_price / $ticket.product_units)|escape:'htmlall':'UTF-8'}
                             {else}
-                                {$fax_per_unit|sprintf:($ticket.normal_price / $ticket.product_units)}
+                                {$fax_per_unit|sprintf:($ticket.normal_price / $ticket.product_units)|escape:'htmlall':'UTF-8'}
                             {/if}
                         </span>
                     </label>
@@ -88,20 +88,20 @@
                     <label>
                         <input type="radio" name="product" value="{$ticket.product_ref|escape:'html':'UTF-8'}" {if ($cart_product == '' and $key == 0) or ($cart_product == $ticket.product_ref) }checked="checked" {/if}/>
                         <span style="width:170px; display:inline-block">
-                            {$ticket.product_units|number_format:0:",":"."} {$sms_credits}<br>{$ticket.product_desc|escape:'html':'UTF-8'}
+                            {$ticket.product_units|number_format:0:",":"."} {$sms_credits|escape:'htmlall':'UTF-8'}<br>{$ticket.product_desc|escape:'html':'UTF-8'}
                         </span>
                         <span style="width:170px; display:inline-block">
                             <span style="{if $promotion}text-decoration: line-through{else}font-weight: bold{/if}">
-                                {$ticket.normal_price|number_format:2:",":"."} {$euro_symbol}
+                                {$ticket.normal_price|number_format:2:",":"."|escape:'htmlall':'UTF-8'} {$euro_symbol|escape:'htmlall':'UTF-8'}
                             </span>
                             {if $promotion}
-                                &nbsp;&nbsp;<span style="color: red; font-weight: bold">{$ticket.promo_price|number_format:2:",":"."} {$euro_symbol}</span>
+                                &nbsp;&nbsp;<span style="color: red; font-weight: bold">{$ticket.promo_price|number_format:2:",":"."|escape:'htmlall':'UTF-8'} {$euro_symbol|escape:'htmlall':'UTF-8'}</span>
                             {/if}
                             <br>
                             {if $promotion}
-                                {$sms_per_unit|sprintf:($ticket.promo_price / $ticket.product_units)}
+                                {$sms_per_unit|sprintf:($ticket.promo_price / $ticket.product_units)|escape:'htmlall':'UTF-8'}
                             {else}
-                                {$sms_per_unit|sprintf:($ticket.normal_price / $ticket.product_units)}
+                                {$sms_per_unit|sprintf:($ticket.normal_price / $ticket.product_units)|escape:'htmlall':'UTF-8'}
                             {/if}
                         </span>
                     </label>

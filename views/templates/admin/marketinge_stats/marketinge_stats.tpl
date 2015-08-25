@@ -55,7 +55,7 @@
 			<tr>
 				<td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">{$l_sent|replace:'[br]':'<br/>'}</span>
+						<span class="stat_label">{$l_sent|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$sent|intval}</span>
 						</span>
@@ -63,7 +63,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">{$l_not_sent|replace:'[br]':'<br/>'}</span>
+						<span class="stat_label">{$l_not_sent|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$not_sent|intval}</span>
 						</span>
@@ -71,7 +71,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">{$l_delivrered|replace:'[br]':'<br/>'}</span>
+						<span class="stat_label">{$l_delivrered|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$delivered|intval}</span>
 						</span>
@@ -82,7 +82,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">{$l_not_delivrered|replace:'[br]':'<br/>'}</span>
+						<span class="stat_label">{$l_not_delivrered|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$not_delivered|intval}</span>
 						</span>
@@ -93,7 +93,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">{$l_opened|replace:'[br]':'<br/>'}</span>
+						<span class="stat_label">{$l_opened|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$opened|intval}</span>
 						</span>
@@ -104,7 +104,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">{$l_not_opened|replace:'[br]':'<br/>'}</span>
+						<span class="stat_label">{$l_not_opened|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$not_opened|intval}</span>
 						</span>
@@ -115,7 +115,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">{$l_clickers|replace:'[br]':'<br/>'}</span>
+						<span class="stat_label">{$l_clickers|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$unique_clickers|intval}</span>
 						</span>
@@ -126,7 +126,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">{$l_clicks|replace:'[br]':'<br/>'}</span>
+						<span class="stat_label">{$l_clicks|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$all_clicks|intval}</span>
 						</span>
@@ -134,7 +134,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">{$l_abuses|replace:'[br]':'<br/>'}</span>
+						<span class="stat_label">{$l_abuses|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$abuses|intval}</span>
 						</span>
@@ -145,7 +145,7 @@
 				</td>
 				 <td class="stat_td">
 					<div class="stat_list_block">
-						<span class="stat_label">{$l_unsubscribes|replace:'[br]':'<br/>'}</span>
+						<span class="stat_label">{$l_unsubscribes|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}</span>
 						<span class="stat_value">
 							<span>{$unsubscribes|intval}</span>
 						</span>
@@ -169,7 +169,7 @@
 	{
 		return [
 			{
-				key: "{$l_delivrered|replace:'[br]':'<br/>'}",
+				key: "{$l_delivrered|escape:'htmlall':'UTF-8'|replace:'[br]':'<br/>'}",
 				values: series1,
 				color: "green"
 			}

@@ -91,13 +91,28 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 			'tree_filter_inputs' => $this->renderTreeProducts()
 		));
 
-		// 1er panel : Critères de sélection (2 blocs)
-		// -------------------------------------------
+		// 1st panel : Search Criteria (2 blocs)
+		// -------------------------------------
 		$display = $this->getTemplatePath().'marketinge_step4/marketinge_step4.tpl';
 		$output = $this->context->smarty->fetch($display);
 
-		// 2ème panel : Aperçu des destinataires
-		// -------------------------------------
+		// If no or empty search available, we display the default search (optin=1 or news=1 or active=1)
+		// ----------------------------------------------------------------------------------------------
+		if (($this->list_total == 0) && !Tools::getIsset($_POST))
+		{
+			$_POST['refreshEmailingStep4'] = 1;
+			$_POST['subscriptions_campaign_optin'] = 1;
+			$_POST['subscriptions_campaign_newsletter'] = 1;
+			$_POST['subscriptions_campaign_active'] = 1;
+			$this->storeSearchBD();
+		}
+
+		// Retrive the selected recipients
+		// -------------------------------
+		$recipients = $this->getRecipientsDB();
+
+		// 2nd panel : Recipients preview
+		// ------------------------------
 		$fields_list = array(
 			'id' => array(
 				'title' => '#',
@@ -132,11 +147,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 			)
 		);
 
-		// Retrive the selected recipients
-		// -------------------------------
 		$helper_list = new HelperList();
-		$recipients = $this->getRecipientsDB();
-
 		$helper_list->no_link = true;
 		$helper_list->shopLinkType = '';
 		$helper_list->simple_header = true;
@@ -148,8 +159,8 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		if (!preg_match('/<table.*<\/table>/iUs', $html_list, $array_table))
 			$output .= $html_list;
 
-		// 3ème panel : Boutons Prev/Next
-		// ------------------------------
+		// 3rd panel : Butons Prev/Next
+		// ----------------------------
 		$this->fields_form = array(
 			'legend' => array(
 				'title' => $this->module->l('Recipients preview', 'adminmarketingestep4').'<span class="badge">'.$this->list_total.'</span>',
@@ -188,20 +199,20 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 
 		$html_boutons = (string)parent::renderForm();
 
-		// On imbrique la liste et les boutons
-		// -----------------------------------
+		// Join list & buttons templates
+		// -----------------------------
 		if (count($array_table) > 0)
 			$output .= preg_replace ('/<div class="form-group">/', '<div class="form-group">'.$array_table[0], $html_boutons, 1);
 		else
 			$output .= $html_boutons;
 
-		// Puis on affiche la fusion des 3 blocs + le footer
-		// -------------------------------------------------
+		// Finally we display the fusion of the 3 blocks + Footer
+		// ------------------------------------------------------
 		$footer = $this->getTemplatePath().'footer.tpl';
 		$output .= $this->context->smarty->fetch($footer);
 
-		// On pré-ouvre le tree
-		// --------------------
+		// Pre-opens the treeview
+		// ----------------------
 		$open_tree = $this->getTemplatePath().'marketinge_step4/filters_tree.tpl';
 		$output .= $this->context->smarty->fetch($open_tree);
 
@@ -210,8 +221,8 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 
 	private function renderFreeFilters()
 	{
-		// On retrouve tous les groupes + ceux sélectionnnés
-		// -------------------------------------------------
+		// Include all groups and selected ones
+		// ------------------------------------
 		$sql = new DbQuery();
 		$sql->select('CG.id_group, GL.name, XPM.group_id as checked, count(DISTINCT CG.id_customer) AS total');
 		$sql->from('customer_group', 'CG');
@@ -220,8 +231,8 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$sql->groupBy('CG.id_group');
 		$customers_groups = db::getInstance()->executeS($sql, true, false);
 
-		// On retrouve toutes les langues + celles sélectionnnées
-		// ------------------------------------------------------
+		// We find all the languages and those selected
+		// --------------------------------------------
 		$sql = new DbQuery();
 		$sql->select('CS.id_lang, LG.name, XPM.lang_id as checked, count(CS.id_customer) AS total');
 		$sql->from('customer', 'CS');
@@ -230,8 +241,8 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$sql->groupBy('CS.id_lang');
 		$customers_langs = db::getInstance()->executeS($sql, true, false);
 
-		// On compte le nombre d'abonnés optin
-		// -----------------------------------
+		// Count the number of optin subscribers
+		// -------------------------------------
 		$sql = new DbQuery();
 		$sql->select('SUM(optin) as total_optin, SUM(newsletter) as total_newsletter, SUM(active) as total_active');
 		$sql->from('customer');
@@ -290,9 +301,11 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 
 			$this->errors[] = sprintf($this->module->l('Unable to get customer filters : %s', 'adminmarketingestep4'), $this->session_api->getError());
 		}
-
-		$template_path = $this->getTemplatePath().'marketinge_step4/filters_buy.tpl';
-		return $this->context->smarty->fetch($template_path);
+		else
+		{
+			$this->errors[] = $this->module->l('Unable to connect to API', 'adminmarketingestep4');
+			return '';
+		}
 	}
 
 	private function renderTreeProducts()
@@ -312,247 +325,12 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 	{
 		if (Tools::isSubmit('refreshEmailingStep4'))
 		{
-			// On efface l'ancienne sélection
-			// ------------------------------
-			DB::getInstance()->delete('expressmailing_email_recipients', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			// On mémorise la sélection des Groupes
-			// ------------------------------------
-			DB::getInstance()->delete('expressmailing_email_groups', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if ($groups = Tools::getValue('groups'))
-			{
-				$db_entries = array();
-				foreach (array_keys($groups) as $group)
-				{
-					$this->checked_groups[] = (int)$group;
-					$db_entries[] = array(
-						'campaign_id' => (int)$this->campaign_id,
-						'group_id' => (int)$group
-					);
-				}
-				DB::getInstance()->insert('expressmailing_email_groups', $db_entries);
-			}
-
-			// On mémorise la sélection des Langues
-			// ------------------------------------
-			DB::getInstance()->delete('expressmailing_email_langs', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if ($langs = Tools::getValue('langs'))
-			{
-				$db_entries = array();
-				foreach (array_keys($langs) as $lang)
-				{
-					$this->checked_langs[] = (int)$lang;
-					$db_entries[] = array(
-						'campaign_id' => (int)$this->campaign_id,
-						'lang_id' => (int)$lang
-					);
-				}
-				DB::getInstance()->insert('expressmailing_email_langs', $db_entries);
-			}
-
-			// On mémorise la sélection des Catégories de produit
-			// --------------------------------------------------
-			DB::getInstance()->delete('expressmailing_email_categories', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if ($categories = Tools::getValue('tree-categories'))
-			{
-				$db_entries = array();
-				foreach ($categories as $category)
-				{
-					$this->selected_categories[] = (int)$category;
-					$db_entries[] = array(
-						'campaign_id' => (int)$this->campaign_id,
-						'category_id' => (int)$category
-					);
-				}
-				DB::getInstance()->insert('expressmailing_email_categories', $db_entries);
-			}
-
-			// On mémorise la sélection des Produits
-			// -------------------------------------
-			DB::getInstance()->delete('expressmailing_email_products', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if ($products = Tools::getValue('tree-products'))
-			{
-				$db_entries = array();
-				foreach ($products as $product)
-				{
-					$this->selected_products[] = (int)$product;
-					$db_entries[] = array(
-						'campaign_id' => (int)$this->campaign_id,
-						'product_id' => (int)$product
-					);
-				}
-				DB::getInstance()->insert('expressmailing_email_products', $db_entries);
-			}
-
-			// On mémorise les paramètes Optin/ Newsletter/ Active
-			// ---------------------------------------------------
-			$this->checked_campaign_optin = (int)Tools::getValue('subscriptions_campaign_optin', '0');
-			$this->checked_campaign_newsletter = (int)Tools::getValue('subscriptions_campaign_newsletter', '0');
-			$this->checked_campaign_active = (int)Tools::getValue('subscriptions_campaign_active', '0');
-
-			Db::getInstance()->update('expressmailing_email',
-				array(
-				'campaign_optin' => $this->checked_campaign_optin,
-				'campaign_newsletter' => $this->checked_campaign_newsletter,
-				'campaign_active' => $this->checked_campaign_active
-				), 'campaign_id = '.$this->campaign_id
-			);
-
-			// On mémorise le filtre birthday
-			// ------------------------------
-			DB::getInstance()->delete('expressmailing_email_birthdays', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if ($birthday = (string)Tools::getValue('birthday'))
-			{
-				$values = explode('|', $birthday);
-				Db::getInstance()->insert('expressmailing_email_birthdays',
-					array(
-					'campaign_id' => $this->campaign_id,
-					'birthday_type' => pSQL($values[0]),
-					'birthday_start' => pSQL($values[1]),
-					'birthday_end' => pSQL($values[2])
-				));
-			}
-
-			// On mémorise le filtre civility
-			// ------------------------------
-			DB::getInstance()->delete('expressmailing_email_civilities', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if ($civilities = Tools::getValue('civility'))
-			{
-				$inserts = array();
-				foreach ($civilities as $civility_id)
-					$inserts[] = array(
-						'campaign_id' => $this->campaign_id,
-						'civility_id' => pSQL((int)$civility_id)
-					);
-				Db::getInstance()->insert('expressmailing_email_civilities', $inserts);
-			}
-
-			// On mémorise le filtre country
-			// -----------------------------
-			DB::getInstance()->delete('expressmailing_email_countries', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if ($countries = Tools::getValue('selected_countries'))
-			{
-				$inserts = array();
-				foreach ($countries as $country_id)
-					$inserts[] = array(
-						'campaign_id' => $this->campaign_id,
-						'country_id' => pSQL((int)$country_id)
-					);
-				Db::getInstance()->insert('expressmailing_email_countries', $inserts);
-			}
-
-			// On memorise le filtre postalcode
-			// --------------------------------
-			DB::getInstance()->delete('expressmailing_email_postcodes', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if ($post_codes = Tools::getValue('selected_postcodes'))
-			{
-				$inserts = array();
-				foreach ($post_codes as $value)
-				{
-					$values = explode('|', $value);
-					$country_id = $values[0];
-					$post_code = $values[1];
-					$inserts[] = array(
-						'campaign_id' => $this->campaign_id,
-						'country_id' => pSQL($country_id),
-						'postcode' => pSQL($post_code)
-					);
-				}
-				Db::getInstance()->insert('expressmailing_email_postcodes', $inserts);
-			}
-
-			// On memorise le filtre buyingdate
-			// --------------------------------
-			DB::getInstance()->delete('expressmailing_email_buyingdates', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if (($min_bying_date = (string)Tools::getValue('min_bying_date')) && ($max_bying_date = (string)Tools::getValue('max_bying_date')))
-				Db::getInstance()->insert('expressmailing_email_buyingdates',
-					array(
-					'campaign_id' => $this->campaign_id,
-					'min_buyingdate' => pSQL($min_bying_date),
-					'max_buyingdate' => pSQL($max_bying_date)
-				));
-
-			// On memorise le filtre Account creation
-			// --------------------------------------
-			DB::getInstance()->delete('expressmailing_email_accountdates', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if (($min_account_date = (string)Tools::getValue('min_account_creation_date'))
-				&& ($max_account_date = (string)Tools::getValue('max_account_creation_date')))
-				Db::getInstance()->insert('expressmailing_email_accountdates',
-					array(
-					'campaign_id' => $this->campaign_id,
-					'min_accountdate' => pSQL($min_account_date),
-					'max_accountdate' => pSQL($max_account_date)
-				));
-
-			// On memorise le filtre Promotion code
-			// ------------------------------------
-			DB::getInstance()->delete('expressmailing_email_promocodes', 'campaign_id = '.$this->campaign_id, 0, false);
-
-			if ($promocode_type = (string)Tools::getValue('promocode'))
-			{
-				switch ($promocode_type)
-				{
-					case 'any':
-					case 'never':
-						Db::getInstance()->insert('expressmailing_email_promocodes',
-							array(
-							'campaign_id' => $this->campaign_id,
-							'promocode_type' => pSQL($promocode_type),
-							'promocode' => null
-						));
-						break;
-					case 'specific':
-						$promocodes_values = Tools::getValue('promocode_values');
-						$inserts = array();
-						foreach ($promocodes_values as $value)
-							if (!empty($value))
-								$inserts[] = array(
-									'campaign_id' => $this->campaign_id,
-									'promocode_type' => pSQL($promocode_type),
-									'promocode' => pSQL($value)
-								);
-						Db::getInstance()->insert('expressmailing_email_promocodes', $inserts);
-						break;
-					default:
-						break;
-				}
-			}
-
-			// Rebuild the recipients selection
-			// --------------------------------
-			$extended = true;
-			$paying_filters = DBMarketing::getPayingFiltersEmailDB($this->campaign_id);
-
-			$req = 'INSERT IGNORE INTO '._DB_PREFIX_.'expressmailing_email_recipients
-			(campaign_id, lang_iso, target, last_name, first_name, ip_address, last_connexion_date)
-			SELECT campaign_id, iso_code, email, lastname, firstname, ip_address, last_connexion_date
-			FROM ('
-				.DBMarketing::getCustomersEmailRequest($this->campaign_id, $this->checked_langs, $this->checked_groups,
-					$this->checked_campaign_optin, $this->checked_campaign_newsletter, $this->checked_campaign_active,
-					$this->checked_products, $this->checked_categories, $paying_filters, $extended).'
-			) AS recipients';
-
-			if (!DB::getInstance()->execute($req))
-				$this->errors[] = DB::getInstance()->getMsgError();
-
-			// And informe the step7 that the selection has changed
-			// ----------------------------------------------------
-			Db::getInstance()->update('expressmailing_email', array (
-				'campaign_date_update' => date('Y-m-d H:i:s'),
-				'recipients_modified' => 1
-				), 'campaign_id = '.$this->campaign_id
-			);
+			// Clear the previous search and store the new recipients
+			// ------------------------------------------------------
+			$this->storeSearchBD();
+			return;
 		}
+
 		if (Tools::isSubmit('validateSelection'))
 		{
 			$this->getRecipientsDB();
@@ -563,6 +341,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 				Tools::redirectAdmin('index.php?controller=AdminMarketingEStep5&campaign_id='.
 					$this->campaign_id.
 					'&token='.Tools::getAdminTokenLite('AdminMarketingEStep5'));
+				exit;
 			}
 		}
 	}
@@ -576,11 +355,13 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		// Obtain the 3 values Optin/ Newsletter /Active
 		// ---------------------------------------------
 		$sql = new DbQuery();
-		$sql->select('*');
+		$sql->select('campaign_optin, campaign_newsletter, campaign_active');
 		$sql->from('expressmailing_email');
 		$sql->where('campaign_id = '.$this->campaign_id);
 		$result = Db::getInstance()->getRow($sql);
 
+		if (_PS_MODE_DEV_)
+			echo '<!-- OK expressmailing_email -->';
 		$this->checked_campaign_optin = $result['campaign_optin'];
 		$this->checked_campaign_newsletter = $result['campaign_newsletter'];
 		$this->checked_campaign_active = $result['campaign_active'];
@@ -624,8 +405,8 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 //				$this->fields_value['langs[]_'.$row['lang_id']] = '1';
 //			}
 
-		// On retrouve les produits sélectionnnées
-		// ---------------------------------------
+		// Retrieve selected products
+		// --------------------------
 		$sql = new DbQuery();
 		$sql->select('product_id');
 		$sql->from('expressmailing_email_products');
@@ -634,9 +415,11 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
 			foreach ($result as $row)
 				$this->checked_products[] = $row['product_id'];
+		if (_PS_MODE_DEV_)
+			echo '<!-- OK expressmailing_email_products -->';
 
-		// On retrouve les catégories sélectionnnées
-		// -----------------------------------------
+		// Retrieve selected categories
+		// ----------------------------
 		$sql = new DbQuery();
 		$sql->select('category_id');
 		$sql->from('expressmailing_email_categories');
@@ -645,6 +428,8 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
 			foreach ($result as $row)
 				$this->checked_categories[] = $row['category_id'];
+		if (_PS_MODE_DEV_)
+			echo '<!-- OK expressmailing_email_categories -->';
 	}
 
 	public function getGendersDB()
@@ -658,6 +443,8 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$req->groupby('gender.id_gender');
 
 		$gender_list = Db::getInstance()->executeS($req, true, false);
+		if (_PS_MODE_DEV_)
+			echo '<!-- OK getGendersDB -->';
 		return $gender_list;
 	}
 
@@ -672,6 +459,8 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$req->groupby('address.id_country');
 
 		$country_list = Db::getInstance()->executeS($req, true, false);
+		if (_PS_MODE_DEV_)
+			echo '<!-- OK getCountriesDB -->';
 		return $country_list;
 	}
 
@@ -686,15 +475,17 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$req->orderBy('used_on_id_cart DESC');
 
 		$cart_rules = Db::getInstance()->executeS($req, true, false);
+		if (_PS_MODE_DEV_)
+			echo '<!-- OK getCartRulesDB -->';
 		return $cart_rules;
 	}
 
 	private function getRecipientsDB()
 	{
-		// Calcul nombre destinataires total
-		// ---------------------------------
+		// Calculating the total number of recipients
+		// ------------------------------------------
 		$req = new DbQuery();
-		$req->select('SQL_NO_CACHE SQL_CALC_FOUND_ROWS id, lang_iso, target, last_name, first_name, ip_address');
+		$req->select('SQL_CALC_FOUND_ROWS id, lang_iso, target, last_name, first_name, ip_address');
 		$req->from('expressmailing_email_recipients');
 		$req->where('campaign_id = '.$this->campaign_id);
 		$req->limit(10);
@@ -702,7 +493,253 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$user_list = Db::getInstance()->executeS($req, true, false);
 
 		$this->list_total = Db::getInstance()->getValue('SELECT FOUND_ROWS()', false);
-
+		if (_PS_MODE_DEV_)
+			echo '<!-- OK getRecipientsDB ('.$this->list_total.') -->'."\r\n";
 		return $user_list;
 	}
+
+	private function storeSearchBD()
+	{
+		// Clear the previous search
+		// -------------------------
+		DB::getInstance()->delete('expressmailing_email_recipients', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		// Store selection's Groups
+		// ------------------------
+		DB::getInstance()->delete('expressmailing_email_groups', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if ($groups = Tools::getValue('groups'))
+		{
+			$db_entries = array();
+			foreach (array_keys($groups) as $group)
+			{
+				$this->checked_groups[] = (int)$group;
+				$db_entries[] = array(
+					'campaign_id' => (int)$this->campaign_id,
+					'group_id' => (int)$group
+				);
+			}
+			DB::getInstance()->insert('expressmailing_email_groups', $db_entries);
+		}
+
+		// Store selection's Languages
+		// ---------------------------
+		DB::getInstance()->delete('expressmailing_email_langs', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if ($langs = Tools::getValue('langs'))
+		{
+			$db_entries = array();
+			foreach (array_keys($langs) as $lang)
+			{
+				$this->checked_langs[] = (int)$lang;
+				$db_entries[] = array(
+					'campaign_id' => (int)$this->campaign_id,
+					'lang_id' => (int)$lang
+				);
+			}
+			DB::getInstance()->insert('expressmailing_email_langs', $db_entries);
+		}
+
+		// Store categorie's Products
+		// --------------------------
+		DB::getInstance()->delete('expressmailing_email_categories', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if ($categories = Tools::getValue('tree-categories'))
+		{
+			$db_entries = array();
+			foreach ($categories as $category)
+			{
+				$this->selected_categories[] = (int)$category;
+				$db_entries[] = array(
+					'campaign_id' => (int)$this->campaign_id,
+					'category_id' => (int)$category
+				);
+			}
+			DB::getInstance()->insert('expressmailing_email_categories', $db_entries);
+		}
+
+		// Store Products
+		// --------------
+		DB::getInstance()->delete('expressmailing_email_products', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if ($products = Tools::getValue('tree-products'))
+		{
+			$db_entries = array();
+			foreach ($products as $product)
+			{
+				$this->selected_products[] = (int)$product;
+				$db_entries[] = array(
+					'campaign_id' => (int)$this->campaign_id,
+					'product_id' => (int)$product
+				);
+			}
+			DB::getInstance()->insert('expressmailing_email_products', $db_entries);
+		}
+
+		// Store options Optin/ Newsletter/ Active
+		// ---------------------------------------
+		$this->checked_campaign_optin = (int)Tools::getValue('subscriptions_campaign_optin', '0');
+		$this->checked_campaign_newsletter = (int)Tools::getValue('subscriptions_campaign_newsletter', '0');
+		$this->checked_campaign_active = (int)Tools::getValue('subscriptions_campaign_active', '0');
+
+		Db::getInstance()->update('expressmailing_email',
+			array(
+			'campaign_optin' => $this->checked_campaign_optin,
+			'campaign_newsletter' => $this->checked_campaign_newsletter,
+			'campaign_active' => $this->checked_campaign_active
+			), 'campaign_id = '.$this->campaign_id
+		);
+
+		// Store birthday filter
+		// ---------------------
+		DB::getInstance()->delete('expressmailing_email_birthdays', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if ($birthday = (string)Tools::getValue('birthday'))
+		{
+			$values = explode('|', $birthday);
+			Db::getInstance()->insert('expressmailing_email_birthdays',
+				array(
+				'campaign_id' => $this->campaign_id,
+				'birthday_type' => pSQL($values[0]),
+				'birthday_start' => pSQL($values[1]),
+				'birthday_end' => pSQL($values[2])
+			));
+		}
+
+		// Store civility filter
+		// ---------------------
+		DB::getInstance()->delete('expressmailing_email_civilities', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if ($civilities = Tools::getValue('civility'))
+		{
+			$inserts = array();
+			foreach ($civilities as $civility_id)
+				$inserts[] = array(
+					'campaign_id' => $this->campaign_id,
+					'civility_id' => pSQL((int)$civility_id)
+				);
+			Db::getInstance()->insert('expressmailing_email_civilities', $inserts);
+		}
+
+		// Store country filter
+		// --------------------
+		DB::getInstance()->delete('expressmailing_email_countries', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if ($countries = Tools::getValue('selected_countries'))
+		{
+			$inserts = array();
+			foreach ($countries as $country_id)
+				$inserts[] = array(
+					'campaign_id' => $this->campaign_id,
+					'country_id' => pSQL((int)$country_id)
+				);
+			Db::getInstance()->insert('expressmailing_email_countries', $inserts);
+		}
+
+		// Store postalcode filter
+		// -----------------------
+		DB::getInstance()->delete('expressmailing_email_postcodes', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if ($post_codes = Tools::getValue('selected_postcodes'))
+		{
+			$inserts = array();
+			foreach ($post_codes as $value)
+			{
+				$values = explode('|', $value);
+				$country_id = $values[0];
+				$post_code = $values[1];
+				$inserts[] = array(
+					'campaign_id' => $this->campaign_id,
+					'country_id' => pSQL($country_id),
+					'postcode' => pSQL($post_code)
+				);
+			}
+			Db::getInstance()->insert('expressmailing_email_postcodes', $inserts);
+		}
+
+		// Store buyingdate filter
+		// -----------------------
+		DB::getInstance()->delete('expressmailing_email_buyingdates', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if (($min_bying_date = (string)Tools::getValue('min_bying_date')) && ($max_bying_date = (string)Tools::getValue('max_bying_date')))
+			Db::getInstance()->insert('expressmailing_email_buyingdates',
+				array(
+				'campaign_id' => $this->campaign_id,
+				'min_buyingdate' => pSQL($min_bying_date),
+				'max_buyingdate' => pSQL($max_bying_date)
+			));
+
+		// Store account creation filter
+		// -----------------------------
+		DB::getInstance()->delete('expressmailing_email_accountdates', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if (($min_account_date = (string)Tools::getValue('min_account_creation_date'))
+			&& ($max_account_date = (string)Tools::getValue('max_account_creation_date')))
+			Db::getInstance()->insert('expressmailing_email_accountdates',
+				array(
+				'campaign_id' => $this->campaign_id,
+				'min_accountdate' => pSQL($min_account_date),
+				'max_accountdate' => pSQL($max_account_date)
+			));
+
+		// Store promotion code filter
+		// ---------------------------
+		DB::getInstance()->delete('expressmailing_email_promocodes', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if ($promocode_type = (string)Tools::getValue('promocode'))
+		{
+			switch ($promocode_type)
+			{
+				case 'any':
+				case 'never':
+					Db::getInstance()->insert('expressmailing_email_promocodes',
+						array(
+						'campaign_id' => $this->campaign_id,
+						'promocode_type' => pSQL($promocode_type),
+						'promocode' => null
+					));
+					break;
+				case 'specific':
+					$promocodes_values = Tools::getValue('promocode_values');
+					$inserts = array();
+					foreach ($promocodes_values as $value)
+						if (!empty($value))
+							$inserts[] = array(
+								'campaign_id' => $this->campaign_id,
+								'promocode_type' => pSQL($promocode_type),
+								'promocode' => pSQL($value)
+							);
+					Db::getInstance()->insert('expressmailing_email_promocodes', $inserts);
+					break;
+				default:
+					break;
+			}
+		}
+
+		// Rebuild the recipients selection
+		// --------------------------------
+		$extended = true;
+		$paying_filters = DBMarketing::getPayingFiltersEmailDB($this->campaign_id);
+
+		$req = 'INSERT IGNORE INTO '._DB_PREFIX_.'expressmailing_email_recipients
+		(campaign_id, lang_iso, target, last_name, first_name, ip_address, last_connexion_date)
+		SELECT campaign_id, iso_code, email, lastname, firstname, ip_address, last_connexion_date
+		FROM ('
+			.DBMarketing::getCustomersEmailRequest($this->campaign_id, $this->checked_langs, $this->checked_groups,
+				$this->checked_campaign_optin, $this->checked_campaign_newsletter, $this->checked_campaign_active,
+				$this->checked_products, $this->checked_categories, $paying_filters, $extended).'
+		) AS recipients';
+
+		if (!DB::getInstance()->execute($req))
+			$this->errors[] = DB::getInstance()->getMsgError();
+
+		// And informe the step7 that the selection has changed
+		// ----------------------------------------------------
+		Db::getInstance()->update('expressmailing_email', array (
+			'campaign_date_update' => date('Y-m-d H:i:s'),
+			'recipients_modified' => 1
+			), 'campaign_id = '.$this->campaign_id
+		);
+	}
+
 }

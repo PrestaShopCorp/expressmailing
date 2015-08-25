@@ -12,12 +12,12 @@
  * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
  */
 
-include 'adminmarketinginscription.php';
+include 'session_api.php';
 
 /**
  * Step 4 : Inscription (no connected) and send campaign settings to the API (if connected)
  */
-class AdminMarketingSStep4Controller extends AdminMarketingInscriptionController
+class AdminMarketingSStep4Controller extends ModuleAdminController
 {
 	private $campaign_id = null;
 
@@ -40,8 +40,9 @@ class AdminMarketingSStep4Controller extends AdminMarketingInscriptionController
 
 		parent::__construct();
 
+		$this->session_api = new SessionApi();
+
 		// On regarde si le compte est toujours en activité
-		// Attention ; l'initialisation de l'API se fait dans adminmarketinginscription.php
 		// --------------------------------------------------------------------------------
 		if ($this->session_api->connectFromCredentials('sms'))
 		{

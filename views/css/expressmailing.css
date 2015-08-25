@@ -188,7 +188,7 @@ span.stat_value {
 }
 
 .fax_preview {
-   cursor: url(magnify.cur) 14 14, pointer;
+	cursor: url(magnify.cur) 14 14, pointer;
 }
 
 .media_list a {
@@ -253,4 +253,27 @@ span.stat_value {
 	min-width: 630px;
 	width: 50%;
 	padding-bottom: 3px;
+}
+
+.em-fixed-col-lg{
+	position: fixed
+}
+@media screen and (max-width: 1199px) {
+	.em-fixed-col-lg {
+		position:relative;
+	}
+}
+
+.em-config-green-icospace{
+	margin-right: .8em;
+	color: #94be2a;
+}
+.em-center-block{
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+.em-media-img{
+	max-width: 25%;
+	margin: 0.8em;
 }

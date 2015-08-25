@@ -325,6 +325,7 @@ class ExpressApi
 		20003 => 'SMS_ModificationDeCampagneImpossible',
 		20012 => 'SMS_ParametreIncorrect',
 		20015 => 'SMS_ActionImpossible',
+		20100 => 'SMS Too many tests',
 		30001 => 'AUD_ImpossibleDeCrerCampagne',
 		30002 => 'AUD_CampagneInexistante',
 		30003 => 'AUD_ModificationDeCampagneImpossible',

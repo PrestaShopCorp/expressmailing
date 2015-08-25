@@ -21,8 +21,8 @@
 		  {/if}
 		  ">
 		<input type="checkbox"
-			   name="{if isset($node['id_category'])}{$input_name|escape:'htmlall':'UTF-8'}-categories{else}{$input_name}-products{/if}[]"
-			   value="{if isset($node['id_category'])}{$node['id_category']|intval}{else}{$node['id_product']}{/if}"{if isset($node['disabled']) && $node['disabled'] == true}
+			   name="{if isset($node['id_category'])}{$input_name|escape:'htmlall':'UTF-8'}-categories{else}{$input_name|escape:'htmlall':'UTF-8'}-products{/if}[]"
+			   value="{if isset($node['id_category'])}{$node['id_category']|intval}{else}{$node['id_product']|intval}{/if}"{if isset($node['disabled']) && $node['disabled'] == true}
 			   disabled="disabled"{/if}
 			   {if isset($node['id_category']) && isset($selected_categories_em) && in_array($node['id_category'], $selected_categories_em)}
 				   checked="true"

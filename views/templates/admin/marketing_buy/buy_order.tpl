@@ -25,7 +25,7 @@
 					{else}
 						{l s='Cart' mod='expressmailing'}
 					{/if}
-					 <span class="badge">{$cart.products|@count}</span>
+					 <span class="badge">{$cart.products|@count|intval}</span>
 				</div>
 
 				<div class="table-responsive">
