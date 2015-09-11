@@ -219,7 +219,7 @@ span.stat_value {
 .media_choice > tr {
 	height: 25px;
 }
-.media_choice .colorcell{
+.media_choice .colorcell {
 	vertical-align: middle !important;
 	width: 45px;
 	text-align: center;
@@ -255,7 +255,8 @@ span.stat_value {
 	padding-bottom: 3px;
 }
 
-.em-fixed-col-lg{
+.em-fixed-col-lg {
+	z-index: 450;
 	position: fixed
 }
 @media screen and (max-width: 1199px) {
@@ -264,16 +265,30 @@ span.stat_value {
 	}
 }
 
-.em-config-green-icospace{
+.em-config-green-icospace {
 	margin-right: .8em;
 	color: #94be2a;
 }
-.em-center-block{
+.em-center-block {
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
 }
-.em-media-img{
+.em-media-img {
 	max-width: 25%;
 	margin: 0.8em;
+}
+.em-space-inline {
+	margin-right: 2em;
+	margin-left: 2em;
+}
+
+.intro-left-blocs {
+	background-color: #E3E7E9;
+	color: #343943;
+	padding: 1em;
+	border-color: grey;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 6px;
 }

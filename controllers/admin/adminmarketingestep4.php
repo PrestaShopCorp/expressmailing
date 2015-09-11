@@ -24,6 +24,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 	private $campaign_id = null;
 	private $list_total = 0;
 	private $checked_groups = array();
+	private $checked_shops = array();
 	private $checked_langs = array();
 	private $checked_categories = array();
 	private $checked_products = array();
@@ -96,13 +97,11 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$display = $this->getTemplatePath().'marketinge_step4/marketinge_step4.tpl';
 		$output = $this->context->smarty->fetch($display);
 
-		// If no or empty search available, we display the default search (optin=1 or news=1 or active=1)
-		// ----------------------------------------------------------------------------------------------
-		if (($this->list_total == 0) && !Tools::getIsset($_POST))
+		// If no or empty search available, we display the default search (active=1)
+		// -------------------------------------------------------------------------
+		if (($this->list_total == 0) && !Tools::isSubmit('refreshEmailingStep4'))
 		{
 			$_POST['refreshEmailingStep4'] = 1;
-			$_POST['subscriptions_campaign_optin'] = 1;
-			$_POST['subscriptions_campaign_newsletter'] = 1;
 			$_POST['subscriptions_campaign_active'] = 1;
 			$this->storeSearchBD();
 		}
@@ -140,8 +139,8 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 				'width' => 140,
 				'type' => 'text'
 			),
-			'ip_address' => array(
-				'title' => $this->module->l('Cart IP address', 'adminmarketingestep4'),
+			'group_name' => array(
+				'title' => $this->module->l('Group', 'adminmarketingestep4'),
 				'width' => 140,
 				'type' => 'text'
 			)
@@ -221,6 +220,46 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 
 	private function renderFreeFilters()
 	{
+		// Multishop: selection
+		// --------------------
+		$sql = new DbQuery();
+		$sql->select('shop_group.id_shop_group, shop_group.share_customer as shop_group_share_customer, shop_group.name as shop_group_name, 
+			GROUP_CONCAT(DISTINCT shop.id_shop SEPARATOR \'|\') as shop_ids, GROUP_CONCAT(DISTINCT shop.name SEPARATOR \'|\') as shop_names,
+			count(*) as shop_count');
+		$sql->from('shop', 'shop');
+		$sql->leftJoin('shop_group', 'shop_group', 'shop_group.id_shop_group = shop.id_shop_group');
+		$sql->leftJoin('customer', 'customer', 'customer.id_shop = shop.id_shop');
+		$sql->groupBy('if(shop_group.share_customer = 1, shop.id_shop_group, shop.id_shop)');
+
+		$shops_by_sharing_shop_group = db::getInstance()->executeS($sql, true, false);
+
+		foreach ($shops_by_sharing_shop_group as $key => $shop_group)
+		{
+			$shops_by_sharing_shop_group[$key]['shop_ids'] = explode('|', $shop_group['shop_ids']);
+			$shops_by_sharing_shop_group[$key]['shop_names'] = explode('|', $shop_group['shop_names']);
+		}
+
+		// Multishop: checked shops and groups
+		// -----------------------------------
+		$sql = new DbQuery();
+		$sql->select('shop_group_id, shop_id');
+		$sql->from('expressmailing_email_shops_groups');
+		$sql->where('campaign_id = '.$this->campaign_id);
+
+		$res = db::getInstance()->executeS($sql, true, false);
+
+		$checked_groups_shops = array(
+			'shop_groups' => array(),
+			'shops' => array()
+		);
+		foreach ($res as $row)
+		{
+			if (!in_array($row['shop_group_id'], $checked_groups_shops['shop_groups']))
+				$checked_groups_shops['shop_groups'][] = $row['shop_group_id'];
+			if (!in_array($row['shop_id'], $checked_groups_shops['shops']))
+				$checked_groups_shops['shops'][] = $row['shop_id'];
+		}
+
 		// Include all groups and selected ones
 		// ------------------------------------
 		$sql = new DbQuery();
@@ -248,10 +287,21 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$sql->from('customer');
 		$customers_suscriptions = db::getInstance()->getRow($sql, false);
 
+		// Count the number of guest subscribers
+		// -------------------------------------
+		$sql = new DbQuery();
+		$sql->select('count(*) as total');
+		$sql->where('active = 1');
+		$sql->from('newsletter');
+		$guest_newsletter = db::getInstance()->getRow($sql, false);
+		$customers_suscriptions['total_guest'] = $guest_newsletter['total'];
+
 		$this->context->smarty->assign(array(
+			'shops_by_sharing_shop_group' => $shops_by_sharing_shop_group,
 			'customers_groups' => $customers_groups,
 			'customers_langs' => $customers_langs,
-			'customers_suscriptions' => $customers_suscriptions
+			'customers_suscriptions' => $customers_suscriptions,
+			'checked_groups_shops' => $checked_groups_shops
 		));
 
 		$template_path = $this->getTemplatePath().'marketinge_step4/filters_free.tpl';
@@ -355,7 +405,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		// Obtain the 3 values Optin/ Newsletter /Active
 		// ---------------------------------------------
 		$sql = new DbQuery();
-		$sql->select('campaign_optin, campaign_newsletter, campaign_active');
+		$sql->select('campaign_optin, campaign_newsletter, campaign_active, campaign_guest');
 		$sql->from('expressmailing_email');
 		$sql->where('campaign_id = '.$this->campaign_id);
 		$result = Db::getInstance()->getRow($sql);
@@ -365,45 +415,20 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$this->checked_campaign_optin = $result['campaign_optin'];
 		$this->checked_campaign_newsletter = $result['campaign_newsletter'];
 		$this->checked_campaign_active = $result['campaign_active'];
+		$this->checked_campaign_guest = $result['campaign_guest'];
 
 		$this->fields_value['subscriptions_campaign_optin'] = $this->checked_campaign_optin;
 		$this->fields_value['subscriptions_campaign_newsletter'] = $this->checked_campaign_newsletter;
 		$this->fields_value['subscriptions_campaign_active'] = $this->checked_campaign_active;
+		$this->fields_value['subscriptions_campaign_guest'] = $this->checked_campaign_guest;
 
 		$this->context->smarty->assign(array(
 			'campaign_id' => $this->campaign_id,
 			'subscriptions_campaign_optin' => $this->checked_campaign_optin,
 			'subscriptions_campaign_newsletter' => $this->checked_campaign_newsletter,
-			'subscriptions_campaign_active' => $this->checked_campaign_active
+			'subscriptions_campaign_active' => $this->checked_campaign_active,
+			'subscriptions_campaign_guest' => $this->checked_campaign_guest
 		));
-
-//		// On retrouve les groupes sélectionnnés
-//		// -------------------------------------
-//		$sql = new DbQuery();
-//		$sql->select('group_id');
-//		$sql->from('expressmailing_email_groups');
-//		$sql->where('campaign_id = '.$this->campaign_id);
-//
-//		if ($result = Db::getInstance()->ExecuteS($sql))
-//			foreach ($result as $row)
-//			{
-//				$this->checked_groups[] = $row['group_id'];
-//				$this->fields_value['groups[]_'.$row['group_id']] = '1';
-//			}
-
-//		// On retrouve les langues sélectionnnées
-//		// --------------------------------------
-//		$sql = new DbQuery();
-//		$sql->select('lang_id');
-//		$sql->from('expressmailing_email_langs');
-//		$sql->where('campaign_id = '.$this->campaign_id);
-//
-//		if ($result = Db::getInstance()->ExecuteS($sql))
-//			foreach ($result as $row)
-//			{
-//				$this->checked_langs[] = $row['lang_id'];
-//				$this->fields_value['langs[]_'.$row['lang_id']] = '1';
-//			}
 
 		// Retrieve selected products
 		// --------------------------
@@ -485,7 +510,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		// Calculating the total number of recipients
 		// ------------------------------------------
 		$req = new DbQuery();
-		$req->select('SQL_CALC_FOUND_ROWS id, lang_iso, target, last_name, first_name, ip_address');
+		$req->select('SQL_CALC_FOUND_ROWS id, lang_iso, target, last_name, first_name, group_name');
 		$req->from('expressmailing_email_recipients');
 		$req->where('campaign_id = '.$this->campaign_id);
 		$req->limit(10);
@@ -503,6 +528,31 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		// Clear the previous search
 		// -------------------------
 		DB::getInstance()->delete('expressmailing_email_recipients', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		// Store shop selection
+		// --------------------
+		DB::getInstance()->delete('expressmailing_email_shops_groups', 'campaign_id = '.$this->campaign_id, 0, false);
+
+		if ($groups_shops_ids = Tools::getValue('groups_shops_ids'))
+		{
+			$db_entries = array();
+			foreach ($groups_shops_ids as $shop_group_id => $shop_ids)
+			{
+				foreach ($shop_ids as $shop_id => $checked)
+				{
+					if ($checked)
+					{
+						$this->checked_shops[] = $shop_id;
+						$db_entries[] = array(
+							'campaign_id' => (int)$this->campaign_id,
+							'shop_group_id' => (int)$shop_group_id,
+							'shop_id' => $shop_id
+						);
+					}
+				}
+			}
+			DB::getInstance()->insert('expressmailing_email_shops_groups', $db_entries);
+		}
 
 		// Store selection's Groups
 		// ------------------------
@@ -581,12 +631,14 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$this->checked_campaign_optin = (int)Tools::getValue('subscriptions_campaign_optin', '0');
 		$this->checked_campaign_newsletter = (int)Tools::getValue('subscriptions_campaign_newsletter', '0');
 		$this->checked_campaign_active = (int)Tools::getValue('subscriptions_campaign_active', '0');
+		$this->checked_campaign_guest = (int)Tools::getValue('subscriptions_campaign_guest', '0');
 
 		Db::getInstance()->update('expressmailing_email',
 			array(
 			'campaign_optin' => $this->checked_campaign_optin,
 			'campaign_newsletter' => $this->checked_campaign_newsletter,
-			'campaign_active' => $this->checked_campaign_active
+			'campaign_active' => $this->checked_campaign_active,
+			'campaign_guest' => $this->checked_campaign_guest
 			), 'campaign_id = '.$this->campaign_id
 		);
 
@@ -722,12 +774,12 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$paying_filters = DBMarketing::getPayingFiltersEmailDB($this->campaign_id);
 
 		$req = 'INSERT IGNORE INTO '._DB_PREFIX_.'expressmailing_email_recipients
-		(campaign_id, lang_iso, target, last_name, first_name, ip_address, last_connexion_date)
-		SELECT campaign_id, iso_code, email, lastname, firstname, ip_address, last_connexion_date
+		(campaign_id, lang_iso, target, last_name, first_name, ip_address, last_connexion_date, group_name)
+		SELECT campaign_id, iso_code, email, lastname, firstname, ip_address, last_connexion_date, group_name
 		FROM ('
 			.DBMarketing::getCustomersEmailRequest($this->campaign_id, $this->checked_langs, $this->checked_groups,
-				$this->checked_campaign_optin, $this->checked_campaign_newsletter, $this->checked_campaign_active,
-				$this->checked_products, $this->checked_categories, $paying_filters, $extended).'
+				$this->checked_campaign_optin, $this->checked_campaign_newsletter, $this->checked_campaign_active, $this->checked_campaign_guest,
+				$this->checked_products, $this->checked_categories, $this->checked_shops, $paying_filters, $extended).'			 
 		) AS recipients';
 
 		if (!DB::getInstance()->execute($req))

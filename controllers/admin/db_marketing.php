@@ -19,21 +19,23 @@ class DBMarketing
 {
 	public static function getCustomersEmailRequest($campaign_id,
 		$checked_langs, $checked_groups,
-		$checked_campaign_optin, $checked_campaign_newsletter, $checked_campaign_active,
-		$checked_products, $checked_categories,
+		$checked_campaign_optin, $checked_campaign_newsletter, $checked_campaign_active, $checked_campaign_guest,
+		$checked_products, $checked_categories, $checked_shops,
 		$paying_filters = array(), $extended = false,
 		$limit = 0, &$list_total = null)
 	{
 		$sql_calc_found = is_null($list_total) ? '' : 'SQL_CALC_FOUND_ROWS ';
 
-		$req = new DbQuery();
+		$req = new DbQueryCore();
 		$req->select($sql_calc_found.(int)$campaign_id.' as campaign_id, customer.id_customer, customer.id_lang,
 						customer.firstname, customer.lastname, customer.email,
 						INET_NTOA(connections.ip_address) as ip_address,
 						country.iso_code, address.postcode as zip, address.city,
-						UNIX_TIMESTAMP(MAX(connections.date_add)) as last_connexion_date, \'prestashop\' as source');
+						UNIX_TIMESTAMP(MAX(connections.date_add)) as last_connexion_date, \'prestashop\' as source,
+						group_lang.name as group_name');
 		$req->from('customer', 'customer');
 		$req->leftJoin('customer_group', 'customer_group', 'customer_group.id_customer = customer.id_customer');
+		$req->leftJoin('group_lang', 'group_lang', 'group_lang.id_group = customer_group.id_group AND customer.id_lang = group_lang.id_lang');
 		$req->leftJoin('guest', 'guest', 'guest.id_customer = customer.id_customer');
 		$req->leftJoin('connections', 'connections', 'connections.id_guest = guest.id_guest');
 		$req->leftJoin('address', 'address', 'address.id_customer = customer.id_customer');
@@ -72,6 +74,9 @@ class DBMarketing
 
 			$req->where(implode(' OR ', $where_products_categories));
 		}
+
+		if (!empty($checked_shops))
+			$req->where('customer.id_shop IN ('.implode(', ', array_map('intval', $checked_shops)).')');
 
 		if (isset($paying_filters['birthday']))
 			if ($birthday_sql = self::generateSQLWhereBirthday($paying_filters['birthday']))
@@ -135,15 +140,39 @@ class DBMarketing
 				$req->where('cart_rule.code in (\''.implode('\', \'', $codes).'\')');
 		}
 
+		if (Tools::strpos($req->build(), 'WHERE') === false)
+			$req->where('0 = 1');
+
 		if (!$extended)
 			$req->where('connections.ip_address IS NOT NULL');
 
-		$req->orderby('customer.id_customer');
 		$req->groupby('customer.id_customer');
 
 		$limit = (int)$limit;
-		if ($limit)
+
+		// Guest newsletter subscribers
+		if ($checked_campaign_guest)
+		{
+			$req_guest = new DbQuery();
+			$req_guest->select((int)$campaign_id.' as campaign_id, null, null,
+							null, null, newsletter.email, newsletter.ip_registration_newsletter as ip_address,
+							null, null as zip, null,
+							UNIX_TIMESTAMP(newsletter.newsletter_date_add) as last_connexion_date, \'prestashop newsletter\' as source,
+							\'Newsletter\' as group_name');
+			$req_guest->from('newsletter', 'newsletter');
+			$req_guest->where('newsletter.active = 1');
+
+			$req .= ' UNION ('.$req_guest;
+			$req .= ' HAVING email IS NOT NULL)';
+			if ($limit)
+				$req .= ' LIMIT '.$limit;
+		}
+		else if ($limit)
 			$req->limit($limit);
+
+		$req = 'SELECT campaign_id, id_customer, id_lang, firstname, lastname, email, ip_address, iso_code, 
+			zip, city, last_connexion_date, source, group_name
+			FROM ('.$req.') as rcpt';
 
 		return $req;
 	}
@@ -151,14 +180,14 @@ class DBMarketing
 	public static function getCustomersEmail($campaign_id,
 		$checked_langs, $checked_groups,
 		$checked_campaign_optin, $checked_campaign_newsletter, $checked_campaign_active,
-		$checked_products, $checked_categories,
+		$checked_products, $checked_categories, $checked_shops,
 		$paying_filters = array(), $extended = false,
 		$limit = 0, &$list_total = null)
 	{
-		$req = selft::getCustomersEmailRequest($campaign_id,
+		$req = self::getCustomersEmailRequest($campaign_id,
 												$checked_langs, $checked_groups,
 												$checked_campaign_optin, $checked_campaign_newsletter, $checked_campaign_active,
-												$checked_products, $checked_categories,
+												$checked_products, $checked_categories, $checked_shops,
 												$paying_filters, $extended,
 												$limit, $list_total);
 

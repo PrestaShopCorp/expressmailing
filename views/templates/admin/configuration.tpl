@@ -10,11 +10,13 @@
 * @copyright 2014-2015 (c) Axalone France
 * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
 *}
-
-<div class="col-lg-8">
+<div class="bootstrap panel">
+	<div class="row">
+		<div class="col-lg-8" style="padding-right: 10px">
 	<div class="row">
 		<div class="col-lg-12 text-center row-margin-bottom">
-			<img src="../modules/expressmailing/views/img/{l s='config_en.png' mod='expressmailing'}" alt="logo" style="max-width: 100%" />
+			<img src="../modules/expressmailing/views/img/{l s='config_en.png' mod='expressmailing'}" alt="logo" class="em-space-inline" style="max-width: 100%;" />
+			<img src="../modules/expressmailing/views/img/certified_prestashop.png" alt="certified by prestashop" class="em-space-inline"/>
 		</div>
 		<div class="em-center-block" style="max-width: 60em;">
 			<p>{l s='With more than %d years of experience in direct marketing, we provide the ideal tool to broadcast your marketing campaigns (emailing, faxing & Sms).' mod='expressmailing' sprintf=$smarty.now|date_format:"%Y" - 2002}</p>
@@ -89,18 +91,25 @@
 		</div>
 	</div>
 </div>
-<div class="col-lg-4" style="padding: 2em;">
+<div class="col-lg-4">
 	<div class="em-fixed-col-lg">
-		<div class="row row-margin-bottom" style="background-color:#EFF1F2; color: #343943; padding: 1em">
+		<div class="row row-margin-bottom intro-left-blocs">
 			<div class="col-lg-12 text-center">
 				<h2 class="text-uppercase" style="margin-top: 0px">{l s='Subscription' mod='expressmailing'}</h2>
 				<a href="index.php?controller=AdminMarketingInscription&token={Tools::getAdminTokenLite('AdminMarketingInscription')|escape:'html':'UTF-8'}" class="btn btn-primary btn-lg" >{l s='Open your account' mod='expressmailing'}</a>
 				<div style="padding: 1em">
-					<span class="text-primary">{l s='Open your account now and enjoy :' mod='expressmailing'}<br/><b>{l s='300 free emails' mod='expressmailing'}</b> <u>{l s='by day' mod='expressmailing'}</u><br/>+ <b>{l s='5 free Sms' mod='expressmailing'}</b><br/>+ <b>{l s='30 free Fax' mod='expressmailing'}</b></span>
+					<div style="font-size: 15px; margin-right: auto; margin-left: auto; display: inline; text-align: left">
+						<span style="display: inline-block; text-align: left" class="text-primary">
+							<span style="margin-bottom: 2px">{l s='And receive :' mod='expressmailing'}</span><br/>
+							+ <b>{l s='300 free Email' mod='expressmailing'}</b> <u>{l s='per day' mod='expressmailing'}</u><br/>
+							+ <b>{l s='5 free Sms' mod='expressmailing'}</b><br/>
+							+ <b>{l s='30 free Fax' mod='expressmailing'}</b>
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row" style="background-color:#EFF1F2; color: #343943; padding: 1em">
+		<div class="row  intro-left-blocs">
 			<div class="col-lg-12 text-center">
 				<h2 class="text-uppercase" style="margin-top: 0px">{l s='Our benefits' mod='expressmailing'}</h2>
 				<div class="text-left" style="display: inline-block">
@@ -116,7 +125,7 @@
 						<li><i class="icon process-icon-ok em-config-green-icospace"></i>{l s='Immediate or delayed sending' mod='expressmailing'}</li>
 						<li><i class="icon process-icon-ok em-config-green-icospace"></i>{l s='Sending segmentation over several days' mod='expressmailing'}</li>
 						<li><i class="icon process-icon-ok em-config-green-icospace"></i>{l s='Sending history and statistics' mod='expressmailing'}</li>
-						<li><i class="icon process-icon-ok em-config-green-icospace"></i>{l s='Recipient filter' mod='expressmailing'}</li>
+						<li><i class="icon process-icon-ok em-config-green-icospace"></i>{l s='Fine recipient filters' mod='expressmailing'}</li>
 						<li><i class="icon process-icon-ok em-config-green-icospace"></i>{l s='Tests before sending' mod='expressmailing'}</li>
 						<li><i class="icon process-icon-ok em-config-green-icospace"></i>{l s='Advice and phone support included' mod='expressmailing'}</li>
 					</ul>
@@ -125,6 +134,10 @@
 		</div>
 	</div>
 </div>
+	</div>
+	
+</div>
+
 <div id="bying_dialog_email" title="{l s='Increase capacity ?' mod='expressmailing'}">
     <div style="width: 100%; margin-right: auto; margin-left: auto; text-align: center">
         <br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />

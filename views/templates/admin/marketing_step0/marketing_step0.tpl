@@ -12,7 +12,9 @@
 *}
 <form id="configuration_form" class="defaultForm form-horizontal adminmarketingx" action="index.php?controller=AdminMarketingX&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}" method="post" enctype="multipart/form-data" novalidate>
     <div class="small">
-        <img src="../modules/expressmailing/views/img/{l s='config_en.png' mod='expressmailing'}" border="0"><br>&nbsp;
+        <img src="../modules/expressmailing/views/img/{l s='config_en.png' mod='expressmailing'}" alt="logo" border="0" class="em-space-inline">
+		<img src="../modules/expressmailing/views/img/certified_prestashop.png" alt="certified by prestashop" class="em-space-inline"/>
+		<br/>&nbsp;
     </div>
     <div class="panel media_list" style="padding-bottom: 0px; text-align: center">
         <div>

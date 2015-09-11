@@ -164,13 +164,20 @@ class AdminMarketingEStep7Controller extends ModuleAdminController
 
 	public function displayAjax()
 	{
-		// On retrouve l'aperçu html du mailing
-		// ------------------------------------
-		$sql = new DbQuery();
-		$sql->select('campaign_html');
-		$sql->from('expressmailing_email');
-		$sql->where('campaign_id = '.$this->campaign_id);
-		die(Db::getInstance()->getValue($sql));
+		// Fetch preview from API
+		// ----------------------
+		$preview = '';
+		$parameters = array(
+			'account_id' => $this->session_api->account_id,
+			'campaign_id' => $this->campaign_infos['campaign_api_message_id']
+		);
+
+		if ($this->session_api->call('email', 'campaign', 'get_preview', $parameters, $preview))
+			die($preview);
+		else
+			die(sprintf($this->module->l('Error during communication with Express-Mailing API : %s', 'adminmarketingestep8'),
+							$this->session_api->getError()));
+
 	}
 
 	private function getFieldsValues()
@@ -258,78 +265,4 @@ class AdminMarketingEStep7Controller extends ModuleAdminController
 
 		return $result;
 	}
-
-	private function initFilters()
-	{
-		$sql = new DbQuery();
-		$sql->select('group_id');
-		$sql->from('expressmailing_email_groups');
-		$sql->where('campaign_id = '.$this->campaign_id);
-
-		$this->checked_groups = array();
-		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
-		{
-			foreach ($result as $row)
-			{
-				$this->checked_groups[] = $row['group_id'];
-				$this->fields_value['groups[]_'.$row['group_id']] = '1';
-			}
-		}
-
-		$sql = new DbQuery();
-		$sql->select('lang_id');
-		$sql->from('expressmailing_email_langs');
-		$sql->where('campaign_id = '.$this->campaign_id);
-
-		$this->checked_langs = array();
-		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
-		{
-			foreach ($result as $row)
-			{
-				$this->checked_langs[] = $row['lang_id'];
-				$this->fields_value['langs[]_'.$row['lang_id']] = '1';
-			}
-		}
-
-		$sql = new DbQuery();
-		$sql->select('product_id');
-		$sql->from('expressmailing_email_products');
-		$sql->where('campaign_id = '.$this->campaign_id);
-
-		$this->checked_products = array();
-		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
-		{
-			foreach ($result as $row)
-			{
-				$this->checked_products[] = $row['product_id'];
-				$this->fields_value['products[]_'.$row['product_id']] = '1';
-			}
-		}
-
-		$sql = new DbQuery();
-		$sql->select('category_id');
-		$sql->from('expressmailing_email_categories');
-		$sql->where('campaign_id = '.$this->campaign_id);
-
-		$this->checked_categories = array();
-		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
-		{
-			foreach ($result as $row)
-			{
-				$this->checked_categories[] = $row['category_id'];
-				$this->fields_value['categories[]_'.$row['category_id']] = '1';
-			}
-		}
-
-		$req = new DbQuery();
-		$req->select('campaign_optin, campaign_newsletter, campaign_active');
-		$req->from('expressmailing_email');
-		$req->where('campaign_id = '.$this->campaign_id);
-
-		$result = Db::getInstance()->getRow($req->build());
-		$this->checked_campaign_optin = $result['campaign_optin'];
-		$this->checked_campaign_newsletter = $result['campaign_newsletter'];
-		$this->checked_campaign_active = $result['campaign_active'];
-	}
-
 }

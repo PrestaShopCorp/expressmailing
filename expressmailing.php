@@ -22,7 +22,7 @@ class ExpressMailing extends Module
 	private $html_preview_folder = null;
 	private $ids_tabs = array ();
 
-	public $default_remaining_email = 400;
+	public $default_remaining_email = 300;
 	public $default_remaining_fax = 30;
 	public $default_remaining_sms = 5;
 
@@ -40,7 +40,7 @@ class ExpressMailing extends Module
 
 		$this->author = $this->l('Axalone France');
 		$this->displayName = 'Express-Mailing';
-		$this->description = $this->l('First Newletter module fully integrated with the PrestaShop interface, including emailing with 9,000 free emails per month i.e. 300 per day, and the ability to send FAX and SMS at very low prices.');
+		$this->description = $this->l('First Marketing and Newletter module fully integrated with the PrestaShop interface, including emailing with 9,000 free emails per month i.e. 300 per day, and the ability to send FAX and SMS at very low prices.');
 		$this->confirmUninstall = $this->l('Are you sure you want to uninstall ?');
 		$this->html_preview_folder = _PS_MODULE_DIR_.'expressmailing'.DIRECTORY_SEPARATOR.'campaigns'.DIRECTORY_SEPARATOR;
 
@@ -113,9 +113,10 @@ class ExpressMailing extends Module
 					`campaign_api_validation` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
 					`campaign_last_tester` VARCHAR(255) NULL DEFAULT NULL,
 					`campaign_selected_recipients` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-					`campaign_optin` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
-					`campaign_newsletter` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					`campaign_optin` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
+					`campaign_newsletter` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
 					`campaign_active` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					`campaign_guest` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
 					`recipients_modified` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
 					PRIMARY KEY (`campaign_id`),
 					INDEX `index_state` (`campaign_state`)
@@ -133,6 +134,7 @@ class ExpressMailing extends Module
 					`ip_address` TEXT NULL,
 					`last_connexion_date` INT UNSIGNED NULL DEFAULT NULL,
 					`source` VARCHAR(10) NULL,
+					`group_name` VARCHAR(32) NULL,
 					PRIMARY KEY (`id`),
 					INDEX `campaign_id` (`campaign_id`)
 				) DEFAULT CHARSET=utf8');
@@ -224,6 +226,15 @@ class ExpressMailing extends Module
 					`campaign_id` INT(10) UNSIGNED NOT NULL,
 					`promocode_type` VARCHAR(50) NOT NULL,
 					`promocode` VARCHAR(50) NULL DEFAULT NULL,
+					PRIMARY KEY (`id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_shops_groups` (
+					`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT(10) UNSIGNED NOT NULL,
+					`shop_group_id` INT(10) UNSIGNED NOT NULL,
+					`shop_id` INT(10) UNSIGNED NOT NULL,
 					PRIMARY KEY (`id`)
 				) DEFAULT CHARSET=utf8');
 
@@ -591,7 +602,7 @@ class ExpressMailing extends Module
 		$this->context->controller->addJqueryUI('ui.draggable');
 		$this->context->controller->addJqueryUI('ui.resizable');
 
-		$broadcast_max_daily = 400;
+		$broadcast_max_daily = 300;
 		$smarty_email_disabled = false;
 		$smarty_fax_disabled = false;
 		$smarty_sms_disabled = false;

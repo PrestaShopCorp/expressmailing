@@ -54,6 +54,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 	public function setMedia()
 	{
+		parent::setMedia();
 		$this->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
 		$this->addJS(_PS_JS_DIR_.'tiny_mce/tiny_mce.js');
 		$this->addJqueryUI('ui.tabs');
@@ -79,7 +80,6 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		// And add our Tiny config
 		// -----------------------
 		$this->addJS(_PS_MODULE_DIR_.'expressmailing/views/js/tinymce.js');
-		parent::setMedia();
 	}
 
 	public function renderList()
@@ -398,7 +398,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			if ($pos = strpos($domain_name, ':'))
 				$domain_name = Tools::substr($domain_name, 0, $pos);
 
-			$this->context->smarty->assign('shop_name', Configuration::get('PS_SHOP_NAME'));
+			$this->context->smarty->assign('shop_name', Shop::getShops()[Shop::getCurrentShop()]['name']);
 			$this->context->smarty->assign('img_dir', Tools::str_replace_once(_PS_ROOT_DIR_, '', _PS_IMG_DIR_));
 			$this->context->smarty->assign('base_url', $base_url);
 			$this->context->smarty->assign('domain_name', $domain_name);

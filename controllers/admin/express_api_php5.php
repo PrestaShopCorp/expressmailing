@@ -157,7 +157,10 @@ class ExpressApi
 			$http_code = $match[1];
 			if ($http_code < 400 && $http_code >= 200)
 			{
-				$data = Tools::substr((string)$response, $pos_crlf + 4, false);
+				// this doesn't works in some cases
+				//$data = Tools::substr((string)$response, $pos_crlf + 4);
+				$data = substr($response, $pos_crlf + 4);
+
 				$return = $this->deserialize($data);
 				return true;
 			}

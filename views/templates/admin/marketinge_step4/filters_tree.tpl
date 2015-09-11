@@ -13,7 +13,21 @@
 
 <script type="text/javascript">
 	$(function () {
-		$('#categories-products-treeview').tree('expandAll');
+		function expandAll($element)
+		{
+			$element.find("label.tree-toggler").each(
+				function()
+				{
+					$(this).parent().children(".icon-folder-close")
+						.removeClass("icon-folder-close")
+						.addClass("icon-folder-open");
+					$(this).parent().parent().children("ul.tree").show();
+				}
+			);
+
+			return $($element);
+		}
+		expandAll($('#categories-products-treeview'));
 		$('#collapse-all-categories-products-treeview').show();
 		$('#expand-all-categories-products-treeview').hide();
 		$('.tree-panel-heading-controls').parent().css("padding-bottom", "0px").css("margin-bottom", "0px");
