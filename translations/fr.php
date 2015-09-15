@@ -1,6 +1,7 @@
 <?php
 
 global $_MODULE;
+global $test;
 $_MODULE = array();
 $_MODULE['<{expressmailing}prestashop>expressmailing_caad87feb79cbddeef6678fc2c8963d9'] = 'Axalone France';
 $_MODULE['<{expressmailing}prestashop>expressmailing_3872d27a6c14e6427dbc318a2bd6a574'] = 'Premier module de Marketing & Newsletter, totalement incorporé dans PrestaShop, incluant l\'emailing (9.000 envois gratuits par mois soit 300 email par jour) ainsi que l\'envoi de fax et de sms à petit prix.';
@@ -160,9 +161,9 @@ $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_a28447087678d25e
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_e3de9de5a374f845d5443408762421bb'] = 'Lier à Express-Mailing';
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_ca791472924717d84435580e2843c8b4'] = 'ci-dessous, vaut acceptation des présentes CGV.';
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_0557fa923dcee4d0f86b1409f5c2167f'] = 'Précédent';
-$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_c5edc9dee7bee5f442e79cb63a97aa87'] = 'https://www.express-mailing.com/actualites/cgv-email.php';
-$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_17b76c3853e4a6608f20df55008c5f9f'] = 'https://www.express-mailing.com/actualites/cgv-fax.php';
-$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_36a1270bb3b999d731259808e38feb12'] = 'https://www.express-mailing.com/actualites/cgv-sms.php';
+$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_ecc7ee3fe7fbaff1be2032200cc3dd35'] = 'https://www.express-mailing.com/actualites/cgv-email.php';
+$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_279ce97bd4d56d0e9f0ee4861b2e28ff'] = 'https://www.express-mailing.com/actualites/cgv-fax.php';
+$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_ff8705d825baf89429ae60a88cac9794'] = 'https://www.express-mailing.com/actualites/cgv-sms.php';
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_7cee7cafa482ec5b81e17d41ec46b15f'] = 'Télécharger nos Conditions Générales de Ventes';
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_07d176d51453b07375262239ec24f1b4'] = 'crédits fax';
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_bca53fde466a76b7bee3e18997e94a7a'] = '€';
@@ -261,7 +262,7 @@ $_MODULE['<{expressmailing}prestashop>em_tools_eeec033a2c4d56d7ba16b69358779091'
 $_MODULE['<{expressmailing}prestashop>em_tools_1fdc0f893412ce55f0d2811821b84d3b'] = ' ';
 $_MODULE['<{expressmailing}prestashop>em_tools_509fc3d34bd4069ea501a6b34c16c80a'] = '|d| |m| |Y|';
 $_MODULE['<{expressmailing}prestashop>session_api_36ed197b3f31618fdbadb3df86f804bd'] = '3320';
-$_MODULE['<{expressmailing}prestashop>configuration_5fdf99499534812c38d6f11d7fdcc6d9'] = 'config_fr.png';
+$_MODULE['<{expressmailing}prestashop>configuration_5fdf99499534812c38d6f11d7fdcc6d9'] = 'config_fr.gif';
 $_MODULE['<{expressmailing}prestashop>configuration_05f3041ad3c94f7ea3586510cce55423'] = 'Fort de %d années d\'expérience dans le marketing direct, nous vous proposons un outil idéal pour diffuser vos campagnes marketing (emailing, faxing et sms).';
 $_MODULE['<{expressmailing}prestashop>configuration_185a7a0e21534a20d69375182eddaf09'] = 'Totalement intégré à PrestaShop, le module Express-Mailing vous permettra de sélectionner vos contacts parmi vos clients et visiteurs PrestaShop selon divers filtres et de leur envoyer vos newsletters, vos offres promotionnelles, vos soldes et vos communications ‘corporate\'.';
 $_MODULE['<{expressmailing}prestashop>configuration_7ec637303c3e533b54c6efddc96f697f'] = 'Très simple d\'utilisation, vous pouvez envoyer votre mailing à plus de 200 ou 10.000 contacts en moins de 5 minutes.';
@@ -358,7 +359,7 @@ $_MODULE['<{expressmailing}prestashop>buy_step0_2d821ab549d6accf96b2f60d3af1662e
 $_MODULE['<{expressmailing}prestashop>buy_step0_c655199dd66af160ccf4aba8fe41f704'] = 'Dès %s € par page';
 $_MODULE['<{expressmailing}prestashop>buy_step0_19841e28896816e787651aa605a7f5ff'] = 'Sms';
 $_MODULE['<{expressmailing}prestashop>buy_step0_581d18c6b7b75d97412ea2b155283d09'] = 'Dès %s € par sms';
-$_MODULE['<{expressmailing}prestashop>marketing_step0_5fdf99499534812c38d6f11d7fdcc6d9'] = 'config_fr.png';
+$_MODULE['<{expressmailing}prestashop>marketing_step0_5fdf99499534812c38d6f11d7fdcc6d9'] = 'config_fr.gif';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_db1b13db2c40bb003aabc2ceb9a5a1d0'] = 'Vos crédits email';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_bca03136c09d091e4c13e73229ee6279'] = 'Créer un nouveau mailing email';
 $_MODULE['<{expressmailing}prestashop>marketing_step0_32fd162d9e286172a3c0967e6d36c887'] = 'Mes stats email';

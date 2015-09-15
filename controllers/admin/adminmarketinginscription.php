@@ -306,15 +306,15 @@ $this->module->l('Please fill this form to connect your Prestashop to the Expres
 		switch ($this->media)
 		{
 			case 'email':
-				$cgv_iframe = $this->module->l('https://www.express-mailing.com/actualites/cgv-email.php', 'adminmarketinginscription');
+				$cgv_iframe = $this->module->l('https://www.express-mailing.com/actualites/termsofuse-email.php', 'adminmarketinginscription');
 				break;
 
 			case 'fax':
-				$cgv_iframe = $this->module->l('https://www.express-mailing.com/actualites/cgv-fax.php', 'adminmarketinginscription');
+				$cgv_iframe = $this->module->l('https://www.express-mailing.com/actualites/termsofuse-fax.php', 'adminmarketinginscription');
 				break;
 
 			case 'sms':
-				$cgv_iframe = $this->module->l('https://www.express-mailing.com/actualites/cgv-sms.php', 'adminmarketinginscription');
+				$cgv_iframe = $this->module->l('https://www.express-mailing.com/actualites/termsofuse-sms.php', 'adminmarketinginscription');
 				break;
 		}
 

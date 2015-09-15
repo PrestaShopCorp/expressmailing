@@ -160,9 +160,9 @@ $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_a28447087678d25e
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_e3de9de5a374f845d5443408762421bb'] = 'Połącz z Express-Mailing';
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_ca791472924717d84435580e2843c8b4'] = 'oznacza zaakceptowanie powyższego regulaminu.';
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_0557fa923dcee4d0f86b1409f5c2167f'] = 'Wróć';
-$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_c5edc9dee7bee5f442e79cb63a97aa87'] = 'https://www.express-mailing.com/actualites/regulamin-email.php';
-$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_17b76c3853e4a6608f20df55008c5f9f'] = 'https://www.express-mailing.com/actualites/regulamin-fax.php';
-$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_36a1270bb3b999d731259808e38feb12'] = 'https://www.express-mailing.com/actualites/regulamin-sms.php';
+$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_ecc7ee3fe7fbaff1be2032200cc3dd35'] = 'https://www.express-mailing.com/actualites/regulamin-email.php';
+$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_279ce97bd4d56d0e9f0ee4861b2e28ff'] = 'https://www.express-mailing.com/actualites/regulamin-fax.php';
+$_MODULE['<{expressmailing}prestashop>adminmarketinginscription_ff8705d825baf89429ae60a88cac9794'] = 'https://www.express-mailing.com/actualites/regulamin-sms.php';
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_7cee7cafa482ec5b81e17d41ec46b15f'] = 'Pobierz Regulamin';
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_07d176d51453b07375262239ec24f1b4'] = 'stron fax';
 $_MODULE['<{expressmailing}prestashop>adminmarketinginscription_bca53fde466a76b7bee3e18997e94a7a'] = '€';
