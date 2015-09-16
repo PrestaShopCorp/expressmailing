@@ -14,13 +14,21 @@
 
 function upgrade_module_1_1_6($module)
 {
-	$return = Db::getInstance()->execute('ALTER TABLE `ps_expressmailing_email`
+	$return = Db::getInstance()->execute('ALTER TABLE `'._DB_PREFIX_.'expressmailing_email`
 		CHANGE COLUMN `campaign_optin` `campaign_optin` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\' AFTER `campaign_selected_recipients`,
 		CHANGE COLUMN `campaign_newsletter` `campaign_newsletter` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\' AFTER `campaign_optin`,
 		ADD COLUMN `campaign_guest` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\' AFTER `campaign_active`;');
 
-	$return &= Db::getInstance()->execute('ALTER TABLE `ps_expressmailing_email_recipients`
+	$return &= Db::getInstance()->execute('ALTER TABLE `'._DB_PREFIX_.'expressmailing_email_recipients`
 	ADD COLUMN `group_name` VARCHAR(32) NULL AFTER `source`;');
+
+	$return &= Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_shops_groups` (
+		`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+		`campaign_id` INT(10) UNSIGNED NOT NULL,
+		`shop_group_id` INT(10) UNSIGNED NOT NULL,
+		`shop_id` INT(10) UNSIGNED NOT NULL,
+		PRIMARY KEY (`id`)
+	) DEFAULT CHARSET=utf8');
 
 	return $return;
 }

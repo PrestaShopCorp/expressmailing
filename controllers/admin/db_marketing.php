@@ -177,28 +177,6 @@ class DBMarketing
 		return $req;
 	}
 
-	public static function getCustomersEmail($campaign_id,
-		$checked_langs, $checked_groups,
-		$checked_campaign_optin, $checked_campaign_newsletter, $checked_campaign_active,
-		$checked_products, $checked_categories, $checked_shops,
-		$paying_filters = array(), $extended = false,
-		$limit = 0, &$list_total = null)
-	{
-		$req = self::getCustomersEmailRequest($campaign_id,
-												$checked_langs, $checked_groups,
-												$checked_campaign_optin, $checked_campaign_newsletter, $checked_campaign_active,
-												$checked_products, $checked_categories, $checked_shops,
-												$paying_filters, $extended,
-												$limit, $list_total);
-
-		$customers_list = Db::getInstance()->executeS($req, true, false);
-
-		if (!is_null($list_total))
-			$list_total = Db::getInstance()->getValue('SELECT FOUND_ROWS()', false);
-
-		return $customers_list;
-	}
-
 	public static function getPayingFiltersEmailDB($campaign_id)
 	{
 		$paying_filters = array();
@@ -361,26 +339,6 @@ class DBMarketing
 			$req->limit($limit);
 
 		return $req;
-	}
-
-	public static function getCustomersSms($campaign_id,
-		$checked_langs, $checked_groups,
-		$checked_campaign_active,
-		$checked_products, $checked_categories,
-		$limit = 0, &$list_total = null)
-	{
-		$req = self::getCustomersSmsRequest($campaign_id,
-											$checked_langs, $checked_groups,
-											$checked_campaign_active,
-											$checked_products, $checked_categories,
-											$limit, $list_total);
-
-		$customers_list = Db::getInstance()->executeS($req, true, false);
-
-		if (!is_null($list_total))
-			$list_total = Db::getInstance()->getValue('SELECT FOUND_ROWS()', false);
-
-		return $customers_list;
 	}
 
 }
