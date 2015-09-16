@@ -398,7 +398,8 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			if ($pos = strpos($domain_name, ':'))
 				$domain_name = Tools::substr($domain_name, 0, $pos);
 
-			$this->context->smarty->assign('shop_name', Shop::getShops()[Shop::getCurrentShop()]['name']);
+			$shops = Shop::getShops();
+			$this->context->smarty->assign('shop_name', $shops[Shop::getCurrentShop()]['name']);
 			$this->context->smarty->assign('img_dir', Tools::str_replace_once(_PS_ROOT_DIR_, '', _PS_IMG_DIR_));
 			$this->context->smarty->assign('base_url', $base_url);
 			$this->context->smarty->assign('domain_name', $domain_name);
@@ -667,24 +668,16 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 	private function encodeURLs()
 	{
-		$images = $this->getImgTags($this->html_content);
-		$srcs = array_unique($images[2]);
+		$elements = $this->getImgTags($this->html_content);
+		foreach ($this->getLinkTags($this->html_content) as $key => $value)
+			$elements[$key] = array_merge($elements[$key], $value);
+
+		$srcs = array_unique($elements[2]);
 		foreach ($srcs as $key => $src)
 		{
 			$corrected_src = implode('/', array_map('rawurlencode', explode('/', $src)));
-			$corrected_src = str_replace('%3A//', '://', $corrected_src);
-			$corrected_src = str_replace('%23%23', '##', $corrected_src);
-			$this->html_content = str_replace($images[0][$key], $images[1][$key].$corrected_src.$images[3][$key], $this->html_content);
-		}
-
-		$links = $this->getLinkTags($this->html_content);
-		$hrefs = array_unique($links[2]);
-		foreach ($hrefs as $key => $href)
-		{
-			$corrected_link = implode('/', array_map('rawurlencode', explode('/', $href)));
-			$corrected_link = str_replace('%3A//', '://', $corrected_link);
-			$corrected_link = str_replace('%23%23', '##', $corrected_link);
-			$this->html_content = str_replace($links[0][$key], $links[1][$key].$corrected_link.$links[3][$key], $this->html_content);
+			$corrected_src = str_replace(array('%3A//', '%23%23'), array('://', '##'), $corrected_src);
+			$this->html_content = str_replace($elements[0][$key], $elements[1][$key].$corrected_src.$elements[3][$key], $this->html_content);
 		}
 	}
 
