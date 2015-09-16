@@ -542,11 +542,13 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 			if (!empty($image_url) && ($image_url = $this->copyFileToStorage($image_url, $filename)))
 			{
 				if (Configuration::get('PS_SSL_ENABLED') == 0)
-					$final_img_url = 'http://'.Configuration::get('PS_SHOP_DOMAIN');
+					$final_img_url = _PS_BASE_URL_.__PS_BASE_URI__;
 				else
-					$final_img_url = 'https://'.Configuration::get('PS_SHOP_DOMAIN_SSL');
+					$final_img_url = _PS_BASE_URL_SSL_.__PS_BASE_URI__;
 
-				$final_img_url .= '/modules/expressmailing/campaigns/'.$this->campaign_id.'/';
+				if (Tools::substr($final_img_url, -1) != '/')
+					$final_img_url .= '/';
+				$final_img_url .= 'modules/expressmailing/campaigns/'.$this->campaign_id.'/';
 					$final_img_url .= basename($image_url);
 
 				$final_tag = $before_src[$key].$final_img_url.$after_src[$key];
