@@ -47,7 +47,7 @@
 							<td class="commentcell">
 								{l s='Lowest price to Metropolitan France' mod='expressmailing'}
 								<b>&nbsp;-&nbsp;</b>
-								{capture assign="smarty_fax_lowest_price"}{$smarty_fax_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
+								{capture assign="smarty_fax_lowest_price"}{$smarty_fax_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'|escape:'htmlall':'UTF-8'}{/capture}
 								{capture assign="fprice"}{l s='From %s € per page' mod='expressmailing' sprintf=$smarty_fax_lowest_price}{/capture}
 								<a id="em_bying_link_fax2"{if $smarty_fax_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
 								{if !empty($smarty_fax_promotion)}
@@ -62,7 +62,7 @@
 							<td class="commentcell">
 								{l s='Lowest price to Metropolitan France' mod='expressmailing'}
 								<b>&nbsp;-&nbsp;</b>
-								{capture assign="smarty_sms_lowest_price"}{$smarty_sms_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
+								{capture assign="smarty_sms_lowest_price"}{$smarty_sms_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'|escape:'htmlall':'UTF-8'}{/capture}
 								{capture assign="fprice"}{l s='From %s € per sms' mod='expressmailing' sprintf=$smarty_sms_lowest_price}{/capture}
 								<a id="em_bying_link_sms2"{if $smarty_sms_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
 								{if !empty($smarty_sms_promotion)}

@@ -157,7 +157,10 @@ class ExpressApi
 			$http_code = $match[1];
 			if ($http_code < 400 && $http_code >= 200)
 			{
-				$data = Tools::substr((string)$response, $pos_crlf + 4, false);
+				// this doesn't works in some cases
+				//$data = Tools::substr((string)$response, $pos_crlf + 4);
+				$data = substr($response, $pos_crlf + 4);
+
 				$return = $this->deserialize($data);
 				return true;
 			}
@@ -325,6 +328,7 @@ class ExpressApi
 		20003 => 'SMS_ModificationDeCampagneImpossible',
 		20012 => 'SMS_ParametreIncorrect',
 		20015 => 'SMS_ActionImpossible',
+		20100 => 'SMS Too many tests',
 		30001 => 'AUD_ImpossibleDeCrerCampagne',
 		30002 => 'AUD_CampagneInexistante',
 		30003 => 'AUD_ModificationDeCampagneImpossible',

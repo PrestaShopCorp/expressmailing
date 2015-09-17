@@ -18,7 +18,7 @@
 class AdminMarketingEStep1Controller extends ModuleAdminController
 {
 	private $campaign_id = null;
-	private $default_max_daily = 400;
+	private $default_max_daily = 300;
 
 	public function __construct()
 	{
@@ -261,7 +261,10 @@ class AdminMarketingEStep1Controller extends ModuleAdminController
 			// -----------------------
 			$now = time();
 			$date_send = DateTime::createFromFormat('Y-m-d H:i:s', (string)Tools::getValue('campaign_date_send'));
-			$campaign_date_send = max($now, $date_send->getTimestamp());
+			if ($date_send !== false)
+				$campaign_date_send = max($now, $date_send->getTimestamp());
+			else
+				$campaign_date_send = $now;
 
 			$limit_week = '';
 			if (Tools::getValue('week_day_limit_L'))

@@ -22,7 +22,7 @@ class ExpressMailing extends Module
 	private $html_preview_folder = null;
 	private $ids_tabs = array ();
 
-	public $default_remaining_email = 400;
+	public $default_remaining_email = 300;
 	public $default_remaining_fax = 30;
 	public $default_remaining_sms = 5;
 
@@ -31,7 +31,7 @@ class ExpressMailing extends Module
 		$this->bootstrap = true;
 		$this->name = 'expressmailing';
 		$this->tab = 'emailing';
-		$this->version = '1.1.5';
+		$this->version = '1.1.6';
 		$this->author = 'Axalone France';
 		$this->need_instance = 0;
 		$this->limited_countries = array ('fr', 'pl');
@@ -40,11 +40,12 @@ class ExpressMailing extends Module
 
 		$this->author = $this->l('Axalone France');
 		$this->displayName = 'Express-Mailing';
-		$this->description = $this->l('First Marketing module fully integrated with the PrestaShop interface, including emailing with 10,000 free emails per month i.e. 400 per day, and the ability to send FAX and SMS at very low prices.');
+		$this->description = $this->l('First Marketing and Newletter module fully integrated with the PrestaShop interface, including emailing with 9,000 free emails per month i.e. 300 per day, and the ability to send FAX and SMS at very low prices.');
 		$this->confirmUninstall = $this->l('Are you sure you want to uninstall ?');
 		$this->html_preview_folder = _PS_MODULE_DIR_.'expressmailing'.DIRECTORY_SEPARATOR.'campaigns'.DIRECTORY_SEPARATOR;
 
 		$this->context->controller->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/icon-marketing.css');
+		$this->context->controller->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
 	}
 
 	public function reset()
@@ -112,9 +113,10 @@ class ExpressMailing extends Module
 					`campaign_api_validation` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
 					`campaign_last_tester` VARCHAR(255) NULL DEFAULT NULL,
 					`campaign_selected_recipients` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-					`campaign_optin` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
-					`campaign_newsletter` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					`campaign_optin` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
+					`campaign_newsletter` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
 					`campaign_active` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'1\',
+					`campaign_guest` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
 					`recipients_modified` ENUM(\'1\',\'0\') NOT NULL DEFAULT \'0\',
 					PRIMARY KEY (`campaign_id`),
 					INDEX `index_state` (`campaign_state`)
@@ -132,6 +134,7 @@ class ExpressMailing extends Module
 					`ip_address` TEXT NULL,
 					`last_connexion_date` INT UNSIGNED NULL DEFAULT NULL,
 					`source` VARCHAR(10) NULL,
+					`group_name` VARCHAR(32) NULL,
 					PRIMARY KEY (`id`),
 					INDEX `campaign_id` (`campaign_id`)
 				) DEFAULT CHARSET=utf8');
@@ -223,6 +226,15 @@ class ExpressMailing extends Module
 					`campaign_id` INT(10) UNSIGNED NOT NULL,
 					`promocode_type` VARCHAR(50) NOT NULL,
 					`promocode` VARCHAR(50) NULL DEFAULT NULL,
+					PRIMARY KEY (`id`)
+				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_email_shops_groups` (
+					`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+					`campaign_id` INT(10) UNSIGNED NOT NULL,
+					`shop_group_id` INT(10) UNSIGNED NOT NULL,
+					`shop_id` INT(10) UNSIGNED NOT NULL,
 					PRIMARY KEY (`id`)
 				) DEFAULT CHARSET=utf8');
 
@@ -586,8 +598,169 @@ class ExpressMailing extends Module
 
 	public function getContent()
 	{
-		Tools::redirectAdmin('index.php?controller=AdminMarketingX&token='.Tools::getAdminTokenLite('AdminMarketingX'));
-		exit;
+		$this->context->controller->addJqueryUI('ui.dialog');
+		$this->context->controller->addJqueryUI('ui.draggable');
+		$this->context->controller->addJqueryUI('ui.resizable');
+
+		$broadcast_max_daily = 300;
+		$smarty_email_disabled = false;
+		$smarty_fax_disabled = false;
+		$smarty_sms_disabled = false;
+
+		include _PS_MODULE_DIR_.$this->name.'/controllers/admin/session_api.php';
+		$this->session_api = new SessionApi();
+
+		if ($this->session_api->connectFromCredentials('email'))
+		{
+			$response_array = array();
+			$parameters = array('account_id' => $this->session_api->account_id);
+			if ($this->session_api->call('email', 'account', 'get_formula', $parameters, $response_array))
+			{
+				if (isset($response_array['broadcast_max_daily']))
+					$broadcast_max_daily = $response_array['broadcast_max_daily'];
+				if (isset($response_array['broadcast_restrictions']))
+					$smarty_email_disabled = $response_array['broadcast_restrictions'] == 'BLOCKED';
+			}
+		}
+		if ($this->session_api->connectFromCredentials('fax'))
+		{
+			$response_array = array();
+			$parameters = array('account_id' => array($this->session_api->account_id));
+			if ($this->session_api->call('fax', 'account', 'enum_credit_balances', $parameters, $response_array))
+			{
+				foreach ($response_array as $credit)
+				{
+					switch ((string)$credit['balance'])
+					{
+						case '0':
+							$smarty_fax_disabled = false;
+							break;
+						case '1':
+							$smarty_fax_disabled = false;
+							break;
+						default:
+							$smarty_fax_disabled = false;
+							break;
+					}
+				}
+			}
+		}
+		if ($this->session_api->connectFromCredentials('sms'))
+		{
+			$response_array = array();
+			$parameters = array('account_id' => $this->session_api->account_id);
+			if ($this->session_api->call('sms', 'account', 'enum_credit_balances', $parameters, $response_array))
+			{
+				foreach ($response_array as $credit)
+				{
+					switch ((string)$credit['balance'])
+					{
+						case '0':
+							$smarty_sms_disabled = false;
+							break;
+						case '1':
+							$smarty_sms_disabled = false;
+							break;
+						default:
+							$smarty_sms_disabled = false;
+							break;
+					}
+				}
+			}
+		}
+
+		// Lowest prices
+		$smarty_email_promotion = false;
+		$smarty_fax_promotion = false;
+		$smarty_sms_promotion = false;
+
+		$smarty_email_lowest_price = null;
+		$smarty_fax_lowest_price = null;
+		$smarty_sms_lowest_price = null;
+
+		$response_array = array();
+		$parameters = array(
+			'application_id' => $this->session_api->application_id,
+			'account_id' => $this->session_api->account_id
+		);
+
+		$prices = array();
+		if ($this->session_api->callExternal('http://www.express-mailing.com/api/cart/ws.php',
+											'common', 'account', 'enum_credits', $parameters, $prices))
+		{
+			if (isset($prices['email']))
+			{
+				foreach ($prices['email'] as $ticket)
+				{
+					$unit_price = null;
+					if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
+					{
+						$smarty_email_promotion = true;
+						if (isset($ticket['promo_price'], $ticket['product_units']))
+							$unit_price = $ticket['promo_price'] / $ticket['product_units'];
+					}
+					elseif (isset($ticket['normal_price'], $ticket['product_units']))
+						$unit_price = $ticket['normal_price'] / $ticket['product_units'];
+
+					if (!empty($unit_price) && ($smarty_email_lowest_price == null || $unit_price < $smarty_email_lowest_price))
+						$smarty_email_lowest_price = $unit_price;
+				}
+			}
+
+			if (isset($prices['fax']))
+			{
+				foreach ($prices['fax'] as $ticket)
+				{
+					$unit_price = null;
+					if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
+					{
+						$smarty_fax_promotion = true;
+						if (isset($ticket['promo_price'], $ticket['product_units']))
+							$unit_price = $ticket['promo_price'] / $ticket['product_units'];
+					}
+					elseif (isset($ticket['normal_price'], $ticket['product_units']))
+						$unit_price = $ticket['normal_price'] / $ticket['product_units'];
+
+					if (!empty($unit_price) && ($smarty_fax_lowest_price == null || $unit_price < $smarty_fax_lowest_price))
+						$smarty_fax_lowest_price = $unit_price;
+				}
+			}
+
+			if (isset($prices['sms']))
+			{
+				foreach ($prices['sms'] as $ticket)
+				{
+					$unit_price = null;
+					if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
+					{
+						$smarty_sms_promotion = true;
+						if (isset($ticket['promo_price'], $ticket['product_units']))
+							$unit_price = $ticket['promo_price'] / $ticket['product_units'];
+					}
+					elseif (isset($ticket['normal_price'], $ticket['product_units']))
+						$unit_price = $ticket['normal_price'] / $ticket['product_units'];
+
+					if (!empty($unit_price) && ($smarty_sms_lowest_price == null || $unit_price < $smarty_sms_lowest_price))
+						$smarty_sms_lowest_price = $unit_price;
+				}
+			}
+		}
+
+		$this->context->smarty->assign(array(
+			'broadcast_max_daily' => $broadcast_max_daily,
+			'smarty_email_disabled' => $smarty_email_disabled,
+			'smarty_email_lowest_price' => $smarty_email_lowest_price,
+			'smarty_fax_lowest_price' => $smarty_fax_lowest_price,
+			'smarty_fax_disabled' => $smarty_fax_disabled,
+			'smarty_sms_lowest_price' => $smarty_sms_lowest_price,
+			'smarty_sms_disabled' => $smarty_sms_disabled,
+			'smarty_email_promotion' => $smarty_email_promotion,
+			'smarty_fax_promotion' => $smarty_fax_promotion,
+			'smarty_sms_promotion' => $smarty_sms_promotion
+		));
+
+		$output = _PS_MODULE_DIR_.$this->name.'/views/templates/admin/configuration.tpl';
+		return $this->context->smarty->fetch($output);
 	}
 
 	public function getPreviewFolder()

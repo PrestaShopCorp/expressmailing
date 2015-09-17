@@ -19,6 +19,9 @@ jQuery(document).ready(function()
 	tinySetup = function(config)
 	{
 		tinyMCE.init(config);
+		$('.AdminMarketingEStep3 iframe').each(function(i, elem){
+			$(elem).css('height', '300px');
+		});
 	};
 
 	/* Config du TinyMCE pour Express-Mailing */
@@ -29,11 +32,11 @@ jQuery(document).ready(function()
 		selector : ".autoload_rte",
 		skin: "prestashop",
 
-		toolbar1 : "newdocument,|,cut,copy,paste,pasteword,|,undo,redo,|,searchreplace,|,bullist,numlist,|,outdent,indent,|,search,replace,|,table,|,insertdate,inserttime,|,hr,charmap",
+		toolbar1 : "save,|,newdocument,|,cut,copy,paste,pasteword,|,undo,redo,|,searchreplace,|,bullist,numlist,|,outdent,indent,|,search,replace,|,table,|,insertdate,inserttime,|,hr,charmap",
 		toolbar2 : "bold,italic,underline,strikethrough,|,superscript,subscript,blockquote,|,alignleft,aligncenter,alignright,alignjustify,rtl,|,link,unlink,anchor,image,emoticons,|,visualchars,visualblocks,|,preview,fullscreen,code",
         toolbar3 : "styleselect,|,formatselect,|,fontselect,|,fontsizeselect,|,colorpicker,forecolor",
 
-		plugins : "fullpage visualblocks preview tabfocus fullscreen visualchars directionality style searchreplace insertdatetime charmap hr colorpicker anchor code link autolink image paste table lists advlist contextmenu filemanager textcolor emoticons",
+		plugins : "fullpage visualblocks preview tabfocus fullscreen visualchars directionality style searchreplace insertdatetime charmap hr colorpicker anchor code link autolink image paste table lists advlist contextmenu filemanager textcolor emoticons save",
 
 		menubar : false,
 		statusbar : true,
@@ -45,21 +48,23 @@ jQuery(document).ready(function()
 
 		force_p_newlines : false,
 		force_br_newlines : true,
+		forced_root_block : false,
 		object_resizing : true,
 		visual : true,
 		custom_undo_redo_levels : 15,
 
-		convert_urls : false,
-		relative_urls : false,
+		convert_urls : true,	/* place an http front of each link */
+		relative_urls : false,	/* place an http front of each link */
 		remove_script_host : true,
 		fontsize_formats : "8pt 9pt 10pt 11pt 12pt 13pt 14pt 18pt 24pt",
 
 		entity_encoding : "raw",
 		image_advtab : true,
-		language : "fr",
+		language : tinyLanguage ? tinyLanguage : "en",
 
 		insertdatetime_formats: ["%A %d %B %Y", "%d/%m/%Y", "%Y.%m.%d", "%Hh%M", "%d/%m/%Y - %Hh%M"],
 
+		valid_elements : '*[*]',
 		extended_valid_elements : "img[id|dir|usemap|style|class|src|border|alt|title|hspace|vspace|width|height|align]",
 
 		menu: {

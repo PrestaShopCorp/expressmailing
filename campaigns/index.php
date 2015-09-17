@@ -40,7 +40,7 @@
 
 <body style="font-family: Verdana, Arial; font-size: 10pt">
 
-	<p align="center"><a href="http://www.express-mailing.com" target="_blank"><img style="width: 100%; max-width:600px" border="0" src="../img/config_en.png" alt="This site use Express-Mailing technology"></a></p>
+	<p align="center"><a href="http://www.express-mailing.com" target="_blank"><img style="width: 100%; max-width:600px" border="0" src="../views/img/config_en.png" alt="This site use Express-Mailing technology"></a></p>
 	<fieldset class="fieldset" lang="en">
 		<legend>This site uses the <i><b><font color="#1A3E7A">Express-</font><font color="#FEB202">Mailing</font></b></i> technology</legend>
 		<ul class="inline-list">

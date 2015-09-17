@@ -227,6 +227,11 @@ class AdminMarketingXController extends ModuleAdminController
 
 		if (!$api_connected)
 		{
+			$ajax = Tools::getValue('ajax');
+			if (!$ajax)
+				Tools::redirectAdmin('index.php?controller=AdminModules&token='.Tools::getAdminTokenLite('AdminModules').
+					'&configure=expressmailing&tab_module=emailing&module_name=expressmailing');
+
 			// Add default free credits
 			// ------------------------
 			$smarty_remaining_email_credits = sprintf($this->module->l('%d free credits per day', 'adminmarketingx'), $this->default_remaining_email);

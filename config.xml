@@ -2,8 +2,8 @@
 <module>
 	<name>expressmailing</name>
 	<displayName><![CDATA[Express-Mailing]]></displayName>
-	<version><![CDATA[1.1.5]]></version>
-	<description><![CDATA[Marketing Module from Express-Mailing, including e-mailing (100% free), sending faxes and sms at low price]]></description>
+	<version><![CDATA[1.1.6]]></version>
+	<description><![CDATA[First Newletter module fully integrated with the PrestaShop interface, including emailing with 9,000 free emails per month i.e. 300 per day, and the ability to send FAX and SMS at very low prices.]]></description>
 	<author><![CDATA[Axalone France]]></author>
 	<tab><![CDATA[emailing]]></tab>
 	<confirmUninstall><![CDATA[Are you sure you want to uninstall ?]]></confirmUninstall>

@@ -460,4 +460,133 @@ class EMTools
 		return str_replace('  ', ' ', $localized_time);
 	}
 
+	public static function removeAccents($string)
+	{
+		if (!preg_match('/[\x80-\xff<> &=]/', (string)$string))
+			return $string;
+
+		$chars = array(
+			// Table Latin-1
+			chr(195).chr(128) => 'a', chr(195).chr(129) => 'a',
+			chr(195).chr(130) => 'a', chr(195).chr(131) => 'a',
+			chr(195).chr(132) => 'a', chr(195).chr(133) => 'a',
+			chr(195).chr(135) => 'c', chr(195).chr(136) => 'e',
+			chr(195).chr(137) => 'e', chr(195).chr(138) => 'e',
+			chr(195).chr(139) => 'e', chr(195).chr(140) => 'i',
+			chr(195).chr(141) => 'i', chr(195).chr(142) => 'i',
+			chr(195).chr(143) => 'i', chr(195).chr(145) => 'n',
+			chr(195).chr(146) => 'o', chr(195).chr(147) => 'o',
+			chr(195).chr(148) => 'o', chr(195).chr(149) => 'o',
+			chr(195).chr(150) => 'o', chr(195).chr(153) => 'u',
+			chr(195).chr(154) => 'u', chr(195).chr(155) => 'u',
+			chr(195).chr(156) => 'u', chr(195).chr(157) => 'y',
+			chr(195).chr(159) => 's', chr(195).chr(160) => 'a',
+			chr(195).chr(161) => 'a', chr(195).chr(162) => 'a',
+			chr(195).chr(163) => 'a', chr(195).chr(164) => 'a',
+			chr(195).chr(165) => 'a', chr(195).chr(167) => 'c',
+			chr(195).chr(168) => 'e', chr(195).chr(169) => 'e',
+			chr(195).chr(170) => 'e', chr(195).chr(171) => 'e',
+			chr(195).chr(172) => 'i', chr(195).chr(173) => 'i',
+			chr(195).chr(174) => 'i', chr(195).chr(175) => 'i',
+			chr(195).chr(177) => 'n', chr(195).chr(178) => 'o',
+			chr(195).chr(179) => 'o', chr(195).chr(180) => 'o',
+			chr(195).chr(181) => 'o', chr(195).chr(182) => 'o',
+			chr(195).chr(182) => 'o', chr(195).chr(185) => 'u',
+			chr(195).chr(186) => 'u', chr(195).chr(187) => 'u',
+			chr(195).chr(188) => 'u', chr(195).chr(189) => 'y',
+			chr(195).chr(191) => 'y',
+			// Table Latin Extendue
+			chr(196).chr(128) => 'a', chr(196).chr(129) => 'a',
+			chr(196).chr(130) => 'a', chr(196).chr(131) => 'a',
+			chr(196).chr(132) => 'a', chr(196).chr(133) => 'a',
+			chr(196).chr(134) => 'c', chr(196).chr(135) => 'c',
+			chr(196).chr(136) => 'c', chr(196).chr(137) => 'c',
+			chr(196).chr(138) => 'c', chr(196).chr(139) => 'c',
+			chr(196).chr(140) => 'c', chr(196).chr(141) => 'c',
+			chr(196).chr(142) => 'd', chr(196).chr(143) => 'd',
+			chr(196).chr(144) => 'd', chr(196).chr(145) => 'd',
+			chr(196).chr(146) => 'e', chr(196).chr(147) => 'e',
+			chr(196).chr(148) => 'e', chr(196).chr(149) => 'e',
+			chr(196).chr(150) => 'e', chr(196).chr(151) => 'e',
+			chr(196).chr(152) => 'e', chr(196).chr(153) => 'e',
+			chr(196).chr(154) => 'e', chr(196).chr(155) => 'e',
+			chr(196).chr(156) => 'g', chr(196).chr(157) => 'g',
+			chr(196).chr(158) => 'g', chr(196).chr(159) => 'g',
+			chr(196).chr(160) => 'g', chr(196).chr(161) => 'g',
+			chr(196).chr(162) => 'g', chr(196).chr(163) => 'g',
+			chr(196).chr(164) => 'h', chr(196).chr(165) => 'h',
+			chr(196).chr(166) => 'h', chr(196).chr(167) => 'h',
+			chr(196).chr(168) => 'i', chr(196).chr(169) => 'i',
+			chr(196).chr(170) => 'i', chr(196).chr(171) => 'i',
+			chr(196).chr(172) => 'i', chr(196).chr(173) => 'i',
+			chr(196).chr(174) => 'i', chr(196).chr(175) => 'i',
+			chr(196).chr(176) => 'i', chr(196).chr(177) => 'i',
+			chr(196).chr(178) => 'ij', chr(196).chr(179) => 'ij',
+			chr(196).chr(180) => 'j', chr(196).chr(181) => 'j',
+			chr(196).chr(182) => 'k', chr(196).chr(183) => 'k',
+			chr(196).chr(184) => 'k', chr(196).chr(185) => 'l',
+			chr(196).chr(186) => 'l', chr(196).chr(187) => 'l',
+			chr(196).chr(188) => 'l', chr(196).chr(189) => 'l',
+			chr(196).chr(190) => 'l', chr(196).chr(191) => 'l',
+			chr(197).chr(128) => 'l', chr(197).chr(129) => 'l',
+			chr(197).chr(130) => 'l', chr(197).chr(131) => 'n',
+			chr(197).chr(132) => 'n', chr(197).chr(133) => 'n',
+			chr(197).chr(134) => 'n', chr(197).chr(135) => 'n',
+			chr(197).chr(136) => 'n', chr(197).chr(137) => 'n',
+			chr(197).chr(138) => 'n', chr(197).chr(139) => 'n',
+			chr(197).chr(140) => 'o', chr(197).chr(141) => 'o',
+			chr(197).chr(142) => 'o', chr(197).chr(143) => 'o',
+			chr(197).chr(144) => 'o', chr(197).chr(145) => 'o',
+			chr(197).chr(146) => 'oe', chr(197).chr(147) => 'oe',
+			chr(197).chr(148) => 'r', chr(197).chr(149) => 'r',
+			chr(197).chr(150) => 'r', chr(197).chr(151) => 'r',
+			chr(197).chr(152) => 'r', chr(197).chr(153) => 'r',
+			chr(197).chr(154) => 's', chr(197).chr(155) => 's',
+			chr(197).chr(156) => 's', chr(197).chr(157) => 's',
+			chr(197).chr(158) => 's', chr(197).chr(159) => 's',
+			chr(197).chr(160) => 's', chr(197).chr(161) => 's',
+			chr(197).chr(162) => 't', chr(197).chr(163) => 't',
+			chr(197).chr(164) => 't', chr(197).chr(165) => 't',
+			chr(197).chr(166) => 't', chr(197).chr(167) => 't',
+			chr(197).chr(168) => 'u', chr(197).chr(169) => 'u',
+			chr(197).chr(170) => 'u', chr(197).chr(171) => 'u',
+			chr(197).chr(172) => 'u', chr(197).chr(173) => 'u',
+			chr(197).chr(174) => 'u', chr(197).chr(175) => 'u',
+			chr(197).chr(176) => 'u', chr(197).chr(177) => 'u',
+			chr(197).chr(178) => 'u', chr(197).chr(179) => 'u',
+			chr(197).chr(180) => 'w', chr(197).chr(181) => 'w',
+			chr(197).chr(182) => 'y', chr(197).chr(183) => 'y',
+			chr(197).chr(184) => 'y', chr(197).chr(185) => 'z',
+			chr(197).chr(186) => 'z', chr(197).chr(187) => 'z',
+			chr(197).chr(188) => 'z', chr(197).chr(189) => 'z',
+			chr(197).chr(190) => 'z', chr(197).chr(191) => 's',
+			'<' => '', '>' => '', '&' => '',
+			' ' => '_', '=' => '_'
+		);
+
+		return strtr($string, $chars);
+	}
+
+	public static function getHtmlContent($url)
+	{
+		if (function_exists('curl_version'))
+		{
+			$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Mozilla/5.0';
+
+			$ch = curl_init((string)$url);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_CRLF, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			$raw = curl_exec($ch);
+
+			curl_close ($ch);
+			return $raw;
+		}
+		else
+			return Tools::file_get_contents($url);
+	}
+
 }
