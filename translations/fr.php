@@ -1,7 +1,6 @@
 <?php
 
 global $_MODULE;
-global $test;
 $_MODULE = array();
 $_MODULE['<{expressmailing}prestashop>expressmailing_caad87feb79cbddeef6678fc2c8963d9'] = 'Axalone France';
 $_MODULE['<{expressmailing}prestashop>expressmailing_3872d27a6c14e6427dbc318a2bd6a574'] = 'Premier module de Marketing & Newsletter, totalement incorporé dans PrestaShop, incluant l\'emailing (9.000 envois gratuits par mois soit 300 email par jour) ainsi que l\'envoi de fax et de sms à petit prix.';

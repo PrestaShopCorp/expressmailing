@@ -256,7 +256,7 @@ span.stat_value {
 }
 
 .em-fixed-col-lg {
-	z-index: 450;
+	z-index: 99;
 	position: fixed
 }
 @media screen and (max-width: 1199px) {
@@ -281,6 +281,37 @@ span.stat_value {
 .em-space-inline {
 	margin-right: 2em;
 	margin-left: 2em;
+}
+.em-maxw-100{
+	max-width: 100% !important;
+}
+.em-maxw-60em{
+	max-width: 60em;
+}
+.em-width-500px{
+	width: 500px;
+}
+.em-nomargin-top{
+	margin-top: 0px !important;
+}
+.em-padding-1em{
+	padding: 1em;
+}
+.em-inline-block{
+	display: inline-block;
+}
+.em-padding-r10px{
+	padding-right: 10px;
+}
+.em-fontsize-15px{
+	font-size: 15px;
+}
+
+#bying_dialog_fax > div, #bying_dialog_email > div, #bying_dialog_sms > div {
+	width: 100%;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center
 }
 
 .intro-left-blocs {
