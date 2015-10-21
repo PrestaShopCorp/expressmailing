@@ -92,10 +92,7 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 		$output = '';
 
 		if (Tools::isSubmit('ignoreImagesEmailingStep3') || (count($images_to_upload) == 0))
-		{
 			$output = $this->generateTabedImportForm();
-
-		}
 		elseif (count($images_to_upload) > 0)
 			$output .= $this->generateImagesUploadForm($images_to_upload);
 
@@ -392,16 +389,25 @@ class AdminMarketingEStep3Controller extends ModuleAdminController
 
 		if (empty($result['campaign_html']))
 		{
-			$base_url = Configuration::get('PS_SSL_ENABLED') == 0 ? Tools::getShopDomain(true, true) : Tools::getShopDomainSsl(true, true);
-			$domain_name = Tools::getShopDomain(false, true);
-
-			if ($pos = strpos($domain_name, ':'))
-				$domain_name = Tools::substr($domain_name, 0, $pos);
-
 			$shops = Shop::getShops();
-			$this->context->smarty->assign('shop_name', $shops[Shop::getCurrentShop()]['name']);
-			$this->context->smarty->assign('img_dir', Tools::str_replace_once(_PS_ROOT_DIR_, '', _PS_IMG_DIR_));
-			$this->context->smarty->assign('base_url', $base_url);
+			$current_shop = $shops[Shop::getCurrentShop()];
+
+			if (Configuration::get('PS_SSL_ENABLED'))
+			{
+				$domain_name = $current_shop['domain_ssl'];
+				$current_shop_url = 'https://'.$domain_name.$current_shop['uri'];
+			}
+			else
+			{
+				$domain_name = $current_shop['domain'];
+				$current_shop_url = 'http://'.$domain_name.$current_shop['uri'];
+			}
+
+			$img_dir = Tools::str_replace_once(_PS_ROOT_DIR_.'/', '', _PS_IMG_DIR_);
+
+			$this->context->smarty->assign('shop_name', $current_shop['name']);
+			$this->context->smarty->assign('img_dir', $img_dir);
+			$this->context->smarty->assign('base_url', $current_shop_url);
 			$this->context->smarty->assign('domain_name', $domain_name);
 			$this->context->smarty->assign('logo_name', Configuration::get('PS_LOGO'));
 			$this->context->smarty->assign('logo_width', Configuration::get('SHOP_LOGO_WIDTH'));
