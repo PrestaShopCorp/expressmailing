@@ -97,6 +97,10 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$display = $this->getTemplatePath().'marketinge_step4/marketinge_step4.tpl';
 		$output = $this->context->smarty->fetch($display);
 
+		// Retrive the selected recipients
+		// -------------------------------
+		$recipients = $this->getRecipientsDB();
+
 		// If no or empty search available, we display the default search (active=1)
 		// -------------------------------------------------------------------------
 		if (($this->list_total == 0) && !Tools::isSubmit('refreshEmailingStep4'))
@@ -104,11 +108,8 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 			$_POST['refreshEmailingStep4'] = 1;
 			$_POST['subscriptions_campaign_active'] = 1;
 			$this->storeSearchBD();
+			$recipients = $this->getRecipientsDB();
 		}
-
-		// Retrive the selected recipients
-		// -------------------------------
-		$recipients = $this->getRecipientsDB();
 
 		// 2nd panel : Recipients preview
 		// ------------------------------

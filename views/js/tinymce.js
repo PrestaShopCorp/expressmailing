@@ -53,7 +53,7 @@ jQuery(document).ready(function()
 		visual : true,
 		custom_undo_redo_levels : 15,
 
-		convert_urls : true,	/* place an http front of each link */
+		convert_urls : false,	/* place an http front of each link */
 		relative_urls : false,	/* place an http front of each link */
 		remove_script_host : true,
 		fontsize_formats : "8pt 9pt 10pt 11pt 12pt 13pt 14pt 18pt 24pt",

@@ -210,11 +210,9 @@
 												<div class="btn-group pull-right">
 													<span class="switch prestashop-switch fixed-width-lg">
 														<input type="hidden" name="personnal_redlist[]" id="personnal_redlist_value" value=""/>
-														<input type="radio"   name="personnal_redlist" id="personnal_redlist_authorize"{if {$use_personnal_redlist} == "False"} checked="checked"{/if}
-															   value="False" />
+														<input type="radio"   name="personnal_redlist" id="personnal_redlist_authorize"{if {$use_personnal_redlist|escape:'htmlall':'UTF-8'} == "False"} checked="checked"{/if} value="False" />
 														<label  for="personnal_redlist_authorize">{l s='Authorize' mod='expressmailing'}</label>
-														<input type="radio"  name="personnal_redlist" id="personnal_redlist_refuse"  {if {$use_personnal_redlist} == "True"} checked="checked"{/if}
-															   value="True"  />
+														<input type="radio"  name="personnal_redlist" id="personnal_redlist_refuse"  {if {$use_personnal_redlist|escape:'htmlall':'UTF-8'} == "True"} checked="checked"{/if} value="True"  />
 														<label  for="personnal_redlist_refuse">{l s='Refuse' mod='expressmailing'}</label>
 														<a class="slide-button btn"></a>
 													</span>
@@ -234,11 +232,9 @@
 												<div class="btn-group pull-right">
 													<span class="switch prestashop-switch fixed-width-lg">
 														<input type="hidden" name="noads_redlist[]" id="noads_redlist_value" value=""/>
-														<input type="radio"   name="noads_redlist" id="noads_redlist_authorize"{if {$use_noads_redlist} == "False"} checked="checked"{/if}
-															   value="False" />
+														<input type="radio"   name="noads_redlist" id="noads_redlist_authorize"{if {$use_noads_redlist|escape:'htmlall':'UTF-8'} == "False"} checked="checked"{/if} value="False" />
 														<label  for="noads_redlist_authorize">{l s='Authorize' mod='expressmailing'}</label>
-														<input type="radio"  name="noads_redlist" id="noads_redlist_refuse"  {if {$use_noads_redlist} == "True"} checked="checked"{/if}
-															   value="True"  />
+														<input type="radio"  name="noads_redlist" id="noads_redlist_refuse"  {if {$use_noads_redlist|escape:'htmlall':'UTF-8'} == "True"} checked="checked"{/if} value="True"  />
 														<label  for="noads_redlist_refuse">{l s='Refuse' mod='expressmailing'}</label>
 														<a class="slide-button btn"></a>
 													</span>
