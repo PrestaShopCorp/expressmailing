@@ -62,6 +62,7 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		include _PS_MODULE_DIR_.$this->module->name.'/controllers/admin/session_api.php';
 		$this->session_api = new SessionApi();
 
+		Db::getInstance()->execute('SET SQL_BIG_SELECTS=1');
 	}
 
 	public function initToolbarTitle()
