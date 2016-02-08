@@ -31,7 +31,7 @@ class ExpressMailing extends Module
 		$this->bootstrap = true;
 		$this->name = 'expressmailing';
 		$this->tab = 'emailing';
-		$this->version = '1.1.7';
+		$this->version = '1.1.8';
 		$this->author = 'Axalone France';
 		$this->need_instance = 0;
 		$this->limited_countries = array ('fr', 'pl');
@@ -46,6 +46,9 @@ class ExpressMailing extends Module
 
 		$this->context->controller->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/icon-marketing.css');
 		$this->context->controller->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
+		
+		// TODO : if(_PS_VERSION_ < '1.5.6')
+		// include bootstrap (css + js) ?
 	}
 
 	public function reset()

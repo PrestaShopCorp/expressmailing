@@ -51,10 +51,10 @@
 									</tr>
 									<tr>
 										{capture assign="site"}<a href="{$base_url|escape:'html':'UTF-8'}">{$domain_name|escape:'htmlall':'UTF-8'}</a>{/capture}
-										{capture assign="footer"}{l s='You are receiving this email because you have visited or ordered[br]on the website [www]' mod='expressmailing'}{/capture}
+										{capture assign="footer"}{l s='You are receiving this email because you have visited or ordered on [www][br]' mod='expressmailing'}{/capture}
 										<td align="center" colspan="2">
 											<font size="1">
-											{$footer|escape:'htmlall':'UTF-8'|replace:['[br]','[www]']:['<br/>',$site]}&nbsp;&nbsp;|&nbsp;&nbsp;<a href="##DESABONNEMENT##">{l s='Unsubscribe' mod='expressmailing'}</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="##AMI##">{l s='Forward to a friend' mod='expressmailing'}</a>
+											{$footer|escape:'htmlall':'UTF-8'|replace:['[br]','[www]']:['<br/>',$site]}<a href="##DESABONNEMENT##">{l s='Unsubscribe' mod='expressmailing'}</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="##AMI##">{l s='Forward to a friend' mod='expressmailing'}</a>
 											</font>
 										</td>
 									</tr>
