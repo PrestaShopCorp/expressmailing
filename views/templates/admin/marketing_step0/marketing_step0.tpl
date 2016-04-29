@@ -78,19 +78,19 @@
     </div>
 </form>
 
-<div id="bying_dialog_email" title="{l s='Increase capacity ?' mod='expressmailing'}">
-    <div style="width: 100%; margin-right: auto; margin-left: auto; text-align: center">
-        <br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />
+<div id="bying_dialog_email" title="{l s='Buy email tickets' mod='expressmailing'}">
+    <div style="height: 100%; width: 100%; padding: 0px">
+        <br/><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="loading" />
     </div>
 </div>
 <div id="bying_dialog_fax" title="{l s='Buy fax tickets' mod='expressmailing'}">
     <div style="width: 100%; margin-right: auto; margin-left: auto; text-align: center">
-        <br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />
+        <br/><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="loading" />
     </div>
 </div>
 <div id="bying_dialog_sms" title="{l s='Buy sms tickets' mod='expressmailing'}">
     <div style="width: 100%; margin-right: auto; margin-left: auto; text-align: center">
-        <br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />
+        <br/><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="loading" />
     </div>
 </div>
 
@@ -108,12 +108,10 @@
             position: 'center',
             modal: true,
             width: 820,
-            height: 450,
-            buttons: {
-                "{l s='Close' mod='expressmailing'}": function () {
-                    $(this).dialog("close");
-                }
-            }
+            height: 500,
+			close: function() {
+				location.href = url_base + url_token;
+			}
         };
 
         $('#bying_dialog_email').dialog(dialogByingConfig);

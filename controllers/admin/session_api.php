@@ -152,7 +152,7 @@ class SessionApi
 		return $return;
 	}
 
-	public function connectFromCredentials($media = 'all')
+	public function connectFromCredentials($media = 'all', &$ret_account = null)
 	{
 		$req = new DbQuery();
 		$req->select('*');
@@ -201,6 +201,7 @@ class SessionApi
 							// Le compte est toujours actif !
 							// ------------------------------
 							Configuration::updateValue('adminmarketing_session_api', $this->session_id);
+							$ret_account = $response_array;
 							return true;
 						}
 					}

@@ -412,8 +412,6 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$sql->where('campaign_id = '.$this->campaign_id);
 		$result = Db::getInstance()->getRow($sql);
 
-		if (_PS_MODE_DEV_)
-			echo '<!-- OK expressmailing_email -->';
 		$this->checked_campaign_optin = $result['campaign_optin'];
 		$this->checked_campaign_newsletter = $result['campaign_newsletter'];
 		$this->checked_campaign_active = $result['campaign_active'];
@@ -442,8 +440,6 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
 			foreach ($result as $row)
 				$this->checked_products[] = $row['product_id'];
-		if (_PS_MODE_DEV_)
-			echo '<!-- OK expressmailing_email_products -->';
 
 		// Retrieve selected categories
 		// ----------------------------
@@ -455,8 +451,6 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		if ($result = Db::getInstance()->ExecuteS($sql, true, false))
 			foreach ($result as $row)
 				$this->checked_categories[] = $row['category_id'];
-		if (_PS_MODE_DEV_)
-			echo '<!-- OK expressmailing_email_categories -->';
 	}
 
 	public function getGendersDB()
@@ -470,8 +464,6 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$req->groupby('gender.id_gender');
 
 		$gender_list = Db::getInstance()->executeS($req, true, false);
-		if (_PS_MODE_DEV_)
-			echo '<!-- OK getGendersDB -->';
 		return $gender_list;
 	}
 
@@ -486,8 +478,6 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$req->groupby('address.id_country');
 
 		$country_list = Db::getInstance()->executeS($req, true, false);
-		if (_PS_MODE_DEV_)
-			echo '<!-- OK getCountriesDB -->';
 		return $country_list;
 	}
 
@@ -502,8 +492,6 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$req->orderBy('used_on_id_cart DESC');
 
 		$cart_rules = Db::getInstance()->executeS($req, true, false);
-		if (_PS_MODE_DEV_)
-			echo '<!-- OK getCartRulesDB -->';
 		return $cart_rules;
 	}
 
@@ -520,8 +508,6 @@ class AdminMarketingEStep4Controller extends ModuleAdminController
 		$user_list = Db::getInstance()->executeS($req, true, false);
 
 		$this->list_total = Db::getInstance()->getValue('SELECT FOUND_ROWS()', false);
-		if (_PS_MODE_DEV_)
-			echo '<!-- OK getRecipientsDB ('.$this->list_total.') -->'."\r\n";
 		return $user_list;
 	}
 

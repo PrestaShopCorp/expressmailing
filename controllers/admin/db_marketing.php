@@ -341,4 +341,17 @@ class DBMarketing
 		return $req;
 	}
 
+	public static function getSMSPresetMessages($id = null)
+	{
+		$req = new DbQuery();
+		$req->select('preset_messages.id, preset_messages.name, preset_messages.content');
+		$req->from('expressmailing_sms_preset_messages', 'preset_messages');
+
+		if (!Tools::isEmpty($id))
+		{
+			$id = (int)$id;
+			$req->where("preset_messages.id = $id");
+		}
+		return Db::getInstance()->executeS($req, true, false);
+	}
 }

@@ -33,9 +33,9 @@
 							<td class="colorcell"><div class="greencell"></div></td>
 							<td class="linkcell">{l s='Emailing' mod='expressmailing'}</td>
 							<td class="commentcell">
-								{l s='Up to %d free email per day' mod='expressmailing' sprintf=$broadcast_max_daily}
-								<b>&nbsp;-&nbsp;{l s='ou' mod='expressmailing'}&nbsp;-&nbsp;</b>
-								<a id="em_bying_link_email2"{if $smarty_email_disabled} disabled="disabled"{/if}>{l s='Sign Up for a Premium Plan' mod='expressmailing' sprintf=$smarty_email_lowest_price}</a>
+								{capture assign="smarty_email_lowest_price"}{$smarty_email_lowest_price|string_format:"%.5f"|replace:'0.':'0,'|rtrim:'0'|escape:'htmlall':'UTF-8'}{/capture}
+								{capture assign="eprice"}{l s='From %s € per email' mod='expressmailing' sprintf=$smarty_email_lowest_price}{/capture}
+								<a id="em_bying_link_email2"{if $smarty_email_disabled} disabled="disabled"{/if}>{$eprice|escape:'html':'UTF-8'}</a>
 								{if !empty($smarty_email_promotion)}
 									<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
 								{/if}
@@ -45,9 +45,7 @@
 							<td class="colorcell"><div class="redcell"></div></td>
 							<td class="linkcell">{l s='Fax' mod='expressmailing'}</td>
 							<td class="commentcell">
-								{l s='Lowest price to Metropolitan France' mod='expressmailing'}
-								<b>&nbsp;-&nbsp;</b>
-								{capture assign="smarty_fax_lowest_price"}{$smarty_fax_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'|escape:'htmlall':'UTF-8'}{/capture}
+								{capture assign="smarty_fax_lowest_price"}{$smarty_fax_lowest_price|string_format:"%.5f"|replace:'0.':'0,'|rtrim:'0'|escape:'htmlall':'UTF-8'}{/capture}
 								{capture assign="fprice"}{l s='From %s € per page' mod='expressmailing' sprintf=$smarty_fax_lowest_price}{/capture}
 								<a id="em_bying_link_fax2"{if $smarty_fax_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
 								{if !empty($smarty_fax_promotion)}
@@ -60,9 +58,7 @@
 							<td class="colorcell"><div class="bluecell"></div></td>
 							<td class="linkcell">{l s='Sms' mod='expressmailing'}</td>
 							<td class="commentcell">
-								{l s='Lowest price to Metropolitan France' mod='expressmailing'}
-								<b>&nbsp;-&nbsp;</b>
-								{capture assign="smarty_sms_lowest_price"}{$smarty_sms_lowest_price|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'|escape:'htmlall':'UTF-8'}{/capture}
+								{capture assign="smarty_sms_lowest_price"}{$smarty_sms_lowest_price|string_format:"%.5f"|replace:'0.':'0,'|rtrim:'0'|escape:'htmlall':'UTF-8'}{/capture}
 								{capture assign="fprice"}{l s='From %s € per sms' mod='expressmailing' sprintf=$smarty_sms_lowest_price}{/capture}
 								<a id="em_bying_link_sms2"{if $smarty_sms_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
 								{if !empty($smarty_sms_promotion)}
