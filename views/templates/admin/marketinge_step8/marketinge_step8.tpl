@@ -108,6 +108,22 @@
                                                 {/if}
 											</label>
 										</div>
+										<div class="form-group">
+											<label class="control-label col-lg-6">
+												{l s='Available credits :' mod='expressmailing'}
+											</label>
+											<label class="control-label col-lg-2">
+												{$available_credits|escape:'html':'UTF-8'} {l s='credits' mod='expressmailing'}
+											</label>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-lg-6">
+												{l s='Required credits :' mod='expressmailing'}
+											</label>
+											<label class="control-label col-lg-2">
+												{$nb_to_send * $mail_cost|escape:'html':'UTF-8'} {l s='credits' mod='expressmailing'}
+											</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -120,7 +136,17 @@
 							</div>
 						</div>
 					</div>
-					{$footer_validation|unescape}
+					{if $formula == 'Tickets' && $available_credits < $nb_to_send * $mail_cost}
+						<div class='text-center'>
+							<div style='display: inline-block; border: 1px solid lightgray; padding: 1em; border-radius: 5px' class='text-center red bold'>
+								<span>{l s='Insufficient credits' mod='expressmailing'}</span><br/>
+								<span>{l s='In order to send this campaign, you need to refill your account' mod='expressmailing'}</span><br/><br/>
+								<a class="btn btn-default" id="em_bying_link_email"><i class="icon-shopping-cart"></i> &nbsp;{l s='Buy email credits' mod='expressmailing'}</a>
+							</div>
+						</div>
+					{else}
+						{$footer_validation|unescape}
+					{/if}
 				</div>
 			</form>
 
@@ -136,3 +162,39 @@
 		{/if}
     </div>
 </div>
+<div id="bying_dialog_email" title="{l s='Buy email credits' mod='expressmailing'}">
+    <div style="height: 100%; width: 100%; padding: 0px">
+        <br/><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="loading" />
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        var current_location = "index.php?controller=AdminMarketingEStep8";
+		var current_location_campaign = "&campaign_id={Tools::getValue('campaign_id')|escape:'html':'UTF-8'}";
+		var current_location_token = "&token={Tools::getAdminTokenLite('AdminMarketingEStep8')|escape:'html':'UTF-8'}";
+
+        var dialogByingConfig = {
+            autoOpen: false,
+            resizable: true,
+            position: 'center',
+            modal: true,
+            width: 820,
+            height: 500,
+			close: function() {
+				location.href = current_location + current_location_campaign + current_location_token;
+			}
+        };
+
+        $('#bying_dialog_email').dialog(dialogByingConfig);
+
+		var url_base = "index.php?controller=AdminMarketingX";
+        var url_ajax = "&ajax=true";
+        var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}";
+		
+        $('#em_bying_link_email').click(function () {
+            $('#bying_dialog_email').load(url_base + url_ajax + url_token + '&media=email').dialog('open');
+        });
+    });
+
+</script>

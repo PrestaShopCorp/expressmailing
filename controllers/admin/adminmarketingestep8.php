@@ -70,6 +70,9 @@ class AdminMarketingEStep8Controller extends ModuleAdminController
 	{
 		parent::setMedia();
 		$this->addJS(_PS_MODULE_DIR_.$this->module->name.'/views/js/emcharts_e_step8.js', 'all');
+		$this->addJqueryUI('ui.dialog');
+		$this->addJqueryUI('ui.draggable');
+		$this->addJqueryUI('ui.resizable');
 	}
 
 	public function renderList()
@@ -77,6 +80,7 @@ class AdminMarketingEStep8Controller extends ModuleAdminController
 		// On obtient les stats avant validation (donut)
 		// ---------------------------------------------
 		$validation_stats = $this->getValidationStatisticsAPI();
+		$formula = $this->getFormulaAPI();
 
 		$this->context->smarty->assign(array (
 			'campaign_id' => $this->campaign_id,
@@ -87,6 +91,8 @@ class AdminMarketingEStep8Controller extends ModuleAdminController
 			'nb_to_send' => $validation_stats['count_recipients_to_send'],
 			'mail_weight' => $this->humanFilesize($validation_stats['email_weight']),
 			'mail_cost' => $validation_stats['email_cost'],
+			'available_credits' => $formula['balance'],
+			'formula' => $formula['formula'],
 			'campaign_sended' => $this->campaign_sended
 		));
 
@@ -145,6 +151,20 @@ class AdminMarketingEStep8Controller extends ModuleAdminController
 		);
 
 		if ($this->session_api->call('email', 'campaign', 'get_validation_statistics', $parameters, $response_array))
+			return $response_array;
+
+		$this->errors[] = sprintf($this->module->l('Error during communication with Express-Mailing API : %s', 'adminmarketingestep8'),
+							$this->session_api->getError());
+		return false;
+	}
+
+	private function getFormulaAPI()
+	{
+		$response_array = array();
+		$parameters = array(
+			'account_id' => $this->session_api->account_id
+		);
+		if ($this->session_api->call('email', 'account', 'get_formula', $parameters, $response_array))
 			return $response_array;
 
 		$this->errors[] = sprintf($this->module->l('Error during communication with Express-Mailing API : %s', 'adminmarketingestep8'),

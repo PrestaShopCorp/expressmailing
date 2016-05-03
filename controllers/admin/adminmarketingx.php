@@ -268,69 +268,73 @@ class AdminMarketingXController extends ModuleAdminController
 
 		$response_array = array();
 		$parameters = array(
-			'application_id' => $this->session_api->application_id,
-			'account_id' => $this->session_api->account_id
+			'application_id' => 2,
+			'category_code' => 'email.prestashop'
 		);
-
-		$prices = array();
-		if ($this->session_api->callExternal('http://www.express-mailing.com/api/cart/ws.php',
-											'common', 'account', 'enum_credits', $parameters, $prices))
+		if ($this->session_api->call('email', 'billing', 'products_enum', $parameters, $response_array))
 		{
-			if (isset($prices['email']))
+			foreach ($response_array as $ticket)
 			{
-				foreach ($prices['email'] as $ticket)
+				$unit_price = null;
+				if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
 				{
-					$unit_price = null;
-					if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
-					{
-						$smarty_fax_promotion = true;
-						if (isset($ticket['promo_price'], $ticket['product_units']))
-							$unit_price = $ticket['promo_price'] / $ticket['product_units'];
-					}
-					elseif (isset($ticket['normal_price'], $ticket['product_units']))
-						$unit_price = $ticket['normal_price'] / $ticket['product_units'];
-
-					if (!empty($unit_price) && ($smarty_email_lowest_price == null || $unit_price < $smarty_email_lowest_price))
-						$smarty_email_lowest_price = $unit_price;
+					$smarty_fax_promotion = true;
+					if (isset($ticket['promo_price'], $ticket['product_units']))
+						$unit_price = $ticket['promo_price'] / $ticket['product_units'];
 				}
+				elseif (isset($ticket['normal_price'], $ticket['product_units']))
+					$unit_price = $ticket['normal_price'] / $ticket['product_units'];
+
+				if (!empty($unit_price) && ($smarty_email_lowest_price == null || $unit_price < $smarty_email_lowest_price))
+					$smarty_email_lowest_price = $unit_price;
 			}
+		}
 
-			if (isset($prices['fax']))
+		$response_array = array();
+		$parameters = array(
+			'application_id' => 2,
+			'category_code' => 'fax.tickets'
+		);
+		if ($this->session_api->call('email', 'billing', 'products_enum', $parameters, $response_array))
+		{
+			foreach ($response_array as $ticket)
 			{
-				foreach ($prices['fax'] as $ticket)
+				$unit_price = null;
+				if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
 				{
-					$unit_price = null;
-					if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
-					{
-						$smarty_fax_promotion = true;
-						if (isset($ticket['promo_price'], $ticket['product_units']))
-							$unit_price = $ticket['promo_price'] / $ticket['product_units'];
-					}
-					elseif (isset($ticket['normal_price'], $ticket['product_units']))
-						$unit_price = $ticket['normal_price'] / $ticket['product_units'];
-
-					if (!empty($unit_price) && ($smarty_fax_lowest_price == null || $unit_price < $smarty_fax_lowest_price))
-						$smarty_fax_lowest_price = $unit_price;
+					$smarty_fax_promotion = true;
+					if (isset($ticket['promo_price'], $ticket['product_units']))
+						$unit_price = $ticket['promo_price'] / $ticket['product_units'];
 				}
+				elseif (isset($ticket['normal_price'], $ticket['product_units']))
+					$unit_price = $ticket['normal_price'] / $ticket['product_units'];
+
+				if (!empty($unit_price) && ($smarty_fax_lowest_price == null || $unit_price < $smarty_fax_lowest_price))
+					$smarty_fax_lowest_price = $unit_price;
 			}
+		}
 
-			if (isset($prices['sms']))
+		$response_array = array();
+		$parameters = array(
+			'application_id' => 2,
+			'category_code' => 'sms.tickets'
+		);
+		if ($this->session_api->call('email', 'billing', 'products_enum', $parameters, $response_array))
+		{
+			foreach ($response_array as $ticket)
 			{
-				foreach ($prices['sms'] as $ticket)
+				$unit_price = null;
+				if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
 				{
-					$unit_price = null;
-					if (isset($ticket['promo_ending']) && $ticket['promo_ending'] > time())
-					{
-						$smarty_sms_promotion = true;
-						if (isset($ticket['promo_price'], $ticket['product_units']))
-							$unit_price = $ticket['promo_price'] / $ticket['product_units'];
-					}
-					elseif (isset($ticket['normal_price'], $ticket['product_units']))
-						$unit_price = $ticket['normal_price'] / $ticket['product_units'];
-
-					if (!empty($unit_price) && ($smarty_sms_lowest_price == null || $unit_price < $smarty_sms_lowest_price))
-						$smarty_sms_lowest_price = $unit_price;
+					$smarty_sms_promotion = true;
+					if (isset($ticket['promo_price'], $ticket['product_units']))
+						$unit_price = $ticket['promo_price'] / $ticket['product_units'];
 				}
+				elseif (isset($ticket['normal_price'], $ticket['product_units']))
+					$unit_price = $ticket['normal_price'] / $ticket['product_units'];
+
+				if (!empty($unit_price) && ($smarty_sms_lowest_price == null || $unit_price < $smarty_sms_lowest_price))
+					$smarty_sms_lowest_price = $unit_price;
 			}
 		}
 
@@ -451,7 +455,7 @@ class AdminMarketingXController extends ModuleAdminController
 					'campaign_lang' => Context::getContext()->country->iso_code,
 					'campaign_date_create' => date('Y-m-d H:i:s'),
 					'campaign_date_send' => date('Y-m-d H:i:00', time() + 60),
-					'campaign_day_limit' => $this->broadcast_max_daily * 75 / 100,
+					'campaign_day_limit' => $this->broadcast_max_daily,
 					'campaign_week_limit' => 'LMCJVS'
 				));
 
@@ -481,42 +485,86 @@ class AdminMarketingXController extends ModuleAdminController
 		switch ($media)
 		{
 			case 'email':
-				$category_code = 'email_daily';
+				$category_code = 'email.prestashop';
 				break;
 			case 'fax':
-				$category_code = 'fax_tickets';
+				$category_code = 'fax.prestashop';
 				break;
 			case 'sms':
-				$category_code = 'sms_tickets';
+				$category_code = 'sms.prestashop';
 				break;
 			default:
 				die(Tools::displayError($this->module->l('Unable to get product list', 'adminmarketingestep1'),
 						$this->session_api->getError()));
 		}
 
-		$response_array = null;
-		$parameters = array(
-			'application_id' => $this->session_api->application_id,
-			'category_code' => $category_code,
-			'module_version' => $this->module->version,
-			'prestashop_version' => _PS_VERSION_,
-			'language' => $this->context->language->iso_code
-		);
-
-		if ($this->session_api->connectFromCredentials('email'))
-			$parameters['account_id'] = $this->session_api->account_id;
-
-		if ($this->session_api->callExternal('http://www.express-mailing.com/api/cart/ws.php', 'common', 'order', 'get_products_tpl',
-			$parameters, $response_array))
+		if ($media == 'email' && $this->session_api->connectFromCredentials('email'))
 		{
-			if (isset($response_array['template']) && !empty($response_array['template']))
+			$response_array = array();
+			$parameters = array('account_id' => $this->session_api->account_id);
+
+			if ($this->session_api->call('email', 'account', 'get_formula', $parameters, $response_array))
 			{
-				$template_content = mb_convert_encoding($response_array['template'], 'UTF-8', 'BASE64');
-				die($this->context->smarty->fetch('string:'.$template_content));
+				$account_id = (int)$response_array['account_id'];
+				$account_login = $response_array['account_name'];
+				$employee_firstname = $this->context->employee->firstname;
+				$employee_lastname = $this->context->employee->lastname;
+				$employee_email = $this->context->employee->email;
+
+				$params = array(
+					'application_id' => 2,
+					'account_hier' => Tools::strtoupper($media).'-'.$account_id,
+					'login' => $account_login,
+					'cart_source' => $_SERVER['HTTP_HOST'],
+					'category_code' => $category_code,
+					'billing_email' => $employee_email,
+					'person_first_name' => $employee_firstname,
+					'person_last_name' => $employee_lastname,
+					'person_email' => $employee_email
+				);
+				$res_array = array();
+				if ($this->session_api->call('email', 'billing', 'session_initialize', $params, $res_array))
+				{
+					if (isset($res_array['market_url']))
+						die('<iframe src="'.$res_array['market_url'].'"><p>Votre navigateur ne supporte pas l\'ÃƒÂ©lÃƒÂ©ment iframe</p></iframe>');
+				}
+				else
+					die('Unable to reach express-mailing');
 			}
 		}
+		elseif (($media == 'fax' || $media == 'sms') && $this->session_api->connectFromCredentials('fax'))
+		{
+			$response_array = array();
+			$parameters = array('account_id' => $this->session_api->account_id);
 
-		die(Tools::displayError(sprintf($this->module->l('Unable to get product list : %s', 'adminmarketingestep1'),
-						$this->session_api->getError())));
+			if ($this->session_api->call('infrastructure', 'account', 'get_infos', $parameters, $response_array))
+			{
+				$account_id = (int)$response_array['account_id'];
+				$account_login = $response_array['login'];
+				$employee_firstname = $this->context->employee->firstname;
+				$employee_lastname = $this->context->employee->lastname;
+				$employee_email = $this->context->employee->email;
+
+				$params = array(
+					'application_id' => 2,
+					'account_hier' => Tools::strtoupper($media).'-'.$account_id,
+					'login' => $account_login,
+					'cart_source' => $_SERVER['HTTP_HOST'],
+					'category_code' => $category_code,
+					'billing_email' => $employee_email,
+					'person_first_name' => $employee_firstname,
+					'person_last_name' => $employee_lastname,
+					'person_email' => $employee_email
+				);
+				$res_array = array();
+				if ($this->session_api->call('email', 'billing', 'session_initialize', $params, $res_array))
+				{
+					if (isset($res_array['market_url']))
+						die('<iframe src="'.$res_array['market_url'].'"><p>Votre navigateur ne supporte pas l\'ÃƒÂ©lÃƒÂ©ment iframe</p></iframe>');
+				}
+				else
+					die('Unable to reach express-mailing');
+			}
+		}
 	}
 }

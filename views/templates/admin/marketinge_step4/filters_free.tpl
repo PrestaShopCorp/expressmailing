@@ -11,7 +11,7 @@
 * @license   http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
 *}
 
-<div class="panel" style="height: 430px; margin-bottom: 0px; padding-bottom: 0px">
+<div class="panel" style="height: 446px; margin-bottom: 0px; padding-bottom: 0px">
 	<div class="panel-heading">{l s='Customer filters' mod='expressmailing'}</div>
 	<div class="form-wrapper" style="overflow-x: hidden; overflow-y: auto; padding-left: 5px; margin: -12px -15px 3px -10px; height: 390px;">
 
@@ -26,7 +26,7 @@
 									<input type="checkbox" value="1" class="checkbox-inline" id="group_id[{$sharing_shop_group.id_shop_group|escape:'html':'UTF-8'}]" 
 										   name="group_id[{$sharing_shop_group.id_shop_group|escape:'html':'UTF-8'}]" {if in_array($sharing_shop_group.id_shop_group, $checked_groups_shops['shop_groups'])}checked="checked"{/if} onchange="checkChilds(this)"/>
 									<div style="display:inline-block;">
-										{$sharing_shop_group['shop_group_name']} :
+										{$sharing_shop_group['shop_group_name']|escape:'htmlall':'UTF-8'} :
 										{foreach from=$sharing_shop_group.shop_names key=shop_key item=shop_name}
 											<label for="shop_ids[{$sharing_shop_group.shop_ids.$shop_key|escape:'html':'UTF-8'}]">
 												<input type='hidden' name="groups_shops_ids[{$sharing_shop_group.id_shop_group|escape:'html':'UTF-8'}][{$sharing_shop_group.shop_ids.$shop_key|escape:'html':'UTF-8'}]" 

@@ -18,7 +18,7 @@
 class AdminMarketingEStep1Controller extends ModuleAdminController
 {
 	private $campaign_id = null;
-	private $default_max_daily = 300;
+	private $default_max_daily = 3000;
 
 	public function __construct()
 	{
@@ -339,8 +339,7 @@ class AdminMarketingEStep1Controller extends ModuleAdminController
 		$this->fields_value['campaign_tracking'] = $result['campaign_tracking'];
 		$this->fields_value['campaign_linking'] = $result['campaign_linking'];
 		$this->fields_value['campaign_redlist'] = $result['campaign_redlist'];
-		$this->fields_value['limit_daily'] = $this->generateSlider('limit_daily', 100, $this->default_max_daily, $result['campaign_day_limit'], 100)
-			.$this->generateByingLink();
+		$this->fields_value['limit_daily'] = $this->generateSlider('limit_daily', 100, $this->default_max_daily, $result['campaign_day_limit'], 100);
 		$this->fields_value['limit_max'] = $result['campaign_max_limit'];
 		$this->fields_value['week_day_limit_L'] = strpos($result['campaign_week_limit'], 'L') !== false ? 'on' : null;
 		$this->fields_value['week_day_limit_M'] = strpos($result['campaign_week_limit'], 'M') !== false ? 'on' : null;

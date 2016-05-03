@@ -30,7 +30,7 @@
 		expandAll($('#categories-products-treeview'));
 		$('#collapse-all-categories-products-treeview').show();
 		$('#expand-all-categories-products-treeview').hide();
-		$('.tree-panel-heading-controls').parent().css("padding-bottom", "0px").css("margin-bottom", "0px");
+		$('.tree-panel-heading-controls').parent().css("padding-bottom", "0px").css("margin-bottom", "0px").css("min-height", "446px");
 		$('.tree-panel-heading-controls').removeClass('tree-panel-heading-controls').addClass('panel-heading');
 		$('.tree-actions').hide();
 	});

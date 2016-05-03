@@ -307,11 +307,18 @@ span.stat_value {
 	font-size: 15px;
 }
 
-#bying_dialog_fax > div, #bying_dialog_email > div, #bying_dialog_sms > div {
+#bying_dialog_fax > iframe, 
+#bying_dialog_fax > div, 
+#bying_dialog_email > iframe, 
+#bying_dialog_email > div, 
+#bying_dialog_sms > iframe,
+#bying_dialog_sms > div {
 	width: 100%;
+	height: 95%;
 	margin-right: auto;
 	margin-left: auto;
-	text-align: center
+	text-align: center;
+	border: none;
 }
 
 .intro-left-blocs {

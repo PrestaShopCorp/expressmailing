@@ -31,7 +31,7 @@ class ExpressMailing extends Module
 		$this->bootstrap = true;
 		$this->name = 'expressmailing';
 		$this->tab = 'emailing';
-		$this->version = '1.1.8';
+		$this->version = '1.2.0';
 		$this->author = 'Axalone France';
 		$this->need_instance = 0;
 		$this->limited_countries = array ('fr', 'pl');
@@ -46,9 +46,29 @@ class ExpressMailing extends Module
 
 		$this->context->controller->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/icon-marketing.css');
 		$this->context->controller->addCSS(_PS_MODULE_DIR_.'expressmailing/views/css/expressmailing.css');
-		
+
+		$this->registerHook('AdminCustomers');
+		$this->registerHook('AdminOrder');
+
 		// TODO : if(_PS_VERSION_ < '1.5.6')
 		// include bootstrap (css + js) ?
+	}
+
+	public function hookDisplayAdminCustomers($params)
+	{
+		$this->context->controller->addJqueryUI('ui.dialog');
+		$this->context->controller->addJqueryUI('ui.draggable');
+		$this->context->controller->addJqueryUI('ui.resizable');
+		$output = _PS_MODULE_DIR_.$this->name.'/views/templates/admin/emsms/adminCustomer.tpl';
+		return $this->context->smarty->fetch($output);
+	}
+	public function hookDisplayAdminOrder($params)
+	{
+		$this->context->controller->addJqueryUI('ui.dialog');
+		$this->context->controller->addJqueryUI('ui.draggable');
+		$this->context->controller->addJqueryUI('ui.resizable');
+		$output = _PS_MODULE_DIR_.$this->name.'/views/templates/admin/emsms/adminOrder.tpl';
+		return $this->context->smarty->fetch($output);
 	}
 
 	public function reset()
@@ -421,6 +441,14 @@ class ExpressMailing extends Module
 					`campaign_id` INT(11) NULL DEFAULT NULL,
 					PRIMARY KEY (`order_session`)
 				) DEFAULT CHARSET=utf8');
+
+			$return &= Db::getInstance()->execute('
+				CREATE TABLE `'._DB_PREFIX_.'expressmailing_sms_preset_messages` (
+					`id` INT NOT NULL AUTO_INCREMENT,
+					`name` VARCHAR(100) NOT NULL,
+					`content` TEXT NOT NULL,
+					PRIMARY KEY (`id`)
+				) DEFAULT CHARSET=utf8');
 		}
 
 		return $return;
@@ -432,6 +460,7 @@ class ExpressMailing extends Module
 		{
 			return Db::getInstance()->execute(
 					'DROP TABLE IF EXISTS
+					`'._DB_PREFIX_.'expressmailing_sms_preset_messages`,
 					`'._DB_PREFIX_.'expressmailing_order_address`,
 					`'._DB_PREFIX_.'expressmailing_order_cart`,
 					`'._DB_PREFIX_.'expressmailing_sms_products`,
@@ -505,7 +534,9 @@ class ExpressMailing extends Module
 		&& $this->installAdminTab('AdminMarketingSList', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
 		&& $this->installAdminTab('AdminMarketingEStats', false, $this->l('E-Mailing'), 'AdminMarketingE')
 		&& $this->installAdminTab('AdminMarketingFStats', false, $this->l('Fax-Mailing'), 'AdminMarketingF')
-		&& $this->installAdminTab('AdminMarketingSStats', false, $this->l('Sms-Mailing'), 'AdminMarketingS');
+		&& $this->installAdminTab('AdminMarketingSStats', false, $this->l('Sms-Mailing'), 'AdminMarketingS')
+		/* Add unit sms controller */
+		&& $this->installAdminTab('AdminEmsms', false, $this->l('Sms-Mailing'), 'AdminMarketingS');
 	}
 
 	public function uninstallAdminTabs()
