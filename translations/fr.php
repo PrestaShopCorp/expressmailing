@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{expressmailing}prestashop>expressmailing_caad87feb79cbddeef6678fc2c8963d9'] = 'Axalone France';
-$_MODULE['<{expressmailing}prestashop>expressmailing_3872d27a6c14e6427dbc318a2bd6a574'] = 'Premier module de Marketing & Newsletter, totalement incorporé dans PrestaShop, incluant l\'emailing (9.000 envois gratuits par mois soit 300 email par jour) ainsi que l\'envoi de fax et de sms à petit prix.';
+$_MODULE['<{expressmailing}prestashop>expressmailing_d5ea4331516835ef8d904f8f45ce0694'] = 'Premier module de Marketing & Newsletter, totalement incorporé dans PrestaShop, incluant l\'emailing, l\'envoi de fax et de sms (à l\'ouverture : 2500 emails offerts + 30 fax et 5 sms offerts).';
 $_MODULE['<{expressmailing}prestashop>expressmailing_44d7b2036166452a10240ddf1d7e93b0'] = 'Êtes-vous sûr de vouloir désinstaller le module Express-Mailing et toutes ses fonctionnalités (emailing, fax, sms, audio) ?';
 $_MODULE['<{expressmailing}prestashop>expressmailing_edbbd7a718f49f7dd5328a8a83ebfb8e'] = 'Inscription';
 $_MODULE['<{expressmailing}prestashop>expressmailing_a85eba4c6c699122b2bb1387ea4813ad'] = 'Panier d\'achat';
@@ -268,6 +268,7 @@ $_MODULE['<{expressmailing}prestashop>adminmarketingx_0bbf800422058ba88549898c59
 $_MODULE['<{expressmailing}prestashop>adminmarketingx_0a047f719374170dbcd6a306c9bceeb9'] = 'Compte sms :';
 $_MODULE['<{expressmailing}prestashop>adminmarketingx_4d2bbee6d59d5f0d050fbf4783ec0bcd'] = 'Votre compte est désactivé';
 $_MODULE['<{expressmailing}prestashop>adminmarketingx_de0d079814594c9a07785c5433b7830f'] = 'Impossible de charger la liste des prix';
+$_MODULE['<{expressmailing}prestashop>adminmarketingx_36ed197b3f31618fdbadb3df86f804bd'] = '3320';
 $_MODULE['<{expressmailing}prestashop>em_tools_627fcdb6cc9a5e16d657ca6cdef0a6bb'] = 'er';
 $_MODULE['<{expressmailing}prestashop>em_tools_a69913f66f2cfd4bd3f8ea75954ac476'] = ' ';
 $_MODULE['<{expressmailing}prestashop>em_tools_eeec033a2c4d56d7ba16b69358779091'] = ' ';
@@ -284,9 +285,8 @@ $_MODULE['<{expressmailing}prestashop>configuration_e454e48d681c8caa6504550ee120
 $_MODULE['<{expressmailing}prestashop>configuration_65836ab64ab84f5165813ec55aaf9d0d'] = 'tel_en.gif';
 $_MODULE['<{expressmailing}prestashop>configuration_33a41081f62764dee5221b206da96f3d'] = 'Information sur nos prix';
 $_MODULE['<{expressmailing}prestashop>configuration_efc8a7596230dcab9239c327f304fec4'] = 'Emailing';
-$_MODULE['<{expressmailing}prestashop>configuration_561f56bd350788f73823d8ff10b978ae'] = 'Jusqu\'à %d email gratuits par jour';
-$_MODULE['<{expressmailing}prestashop>configuration_e81c4e4f2b7b93b481e13a8553c2ae1b'] = 'ou';
-$_MODULE['<{expressmailing}prestashop>configuration_e34b397b200d38bfe7720116a2daf63b'] = 'Formule Premium dès %d € par mois';
+$_MODULE['<{expressmailing}prestashop>configuration_13f5e3a5ca5014256ec30d986f6365fb'] = 'Prix le plus bas';
+$_MODULE['<{expressmailing}prestashop>configuration_c2a73dd5779c8ae99cb1a9684b46a41f'] = 'Dès %s € par email';
 $_MODULE['<{expressmailing}prestashop>configuration_104d9898c04874d0fbac36e125fa1369'] = 'Promotion';
 $_MODULE['<{expressmailing}prestashop>configuration_9810aa2b9f44401be4bf73188ef2b67d'] = 'Fax';
 $_MODULE['<{expressmailing}prestashop>configuration_2d821ab549d6accf96b2f60d3af1662e'] = 'Prix le plus bas vers la France Métropolitaine';
@@ -296,8 +296,7 @@ $_MODULE['<{expressmailing}prestashop>configuration_581d18c6b7b75d97412ea2b15528
 $_MODULE['<{expressmailing}prestashop>configuration_787ad0b7a17de4ad6b1711bbf8d79fcb'] = 'Inscription';
 $_MODULE['<{expressmailing}prestashop>configuration_36a567c87345a5a4002f775fe01c36e8'] = 'Ouvrez votre compte';
 $_MODULE['<{expressmailing}prestashop>configuration_87c0654b004d159442b96d7cc8d94f7b'] = 'Et recevez :';
-$_MODULE['<{expressmailing}prestashop>configuration_44c6edf8d7049e5fcd52251d6454fb0c'] = '300 emails gratuits';
-$_MODULE['<{expressmailing}prestashop>configuration_69df69bdd390b71849284a34c77687b1'] = 'par jour';
+$_MODULE['<{expressmailing}prestashop>configuration_4f7d6b7492760929a5b0074b07939a18'] = '2500 Email gratuits';
 $_MODULE['<{expressmailing}prestashop>configuration_4cb610f50dfbd4ed386a68e35489793b'] = '5 Sms gratuits';
 $_MODULE['<{expressmailing}prestashop>configuration_0e15493fe481ade58d08d6cea8602793'] = '30 Fax gratuits';
 $_MODULE['<{expressmailing}prestashop>configuration_e73a363011b6c0a6963d5411ef121070'] = 'Nos avantages';
@@ -315,10 +314,6 @@ $_MODULE['<{expressmailing}prestashop>configuration_71f032bbc5e36d1ce9123a02ea18
 $_MODULE['<{expressmailing}prestashop>configuration_1624f80c13b44c0987bbaddcd3664b13'] = 'Filtrage fin des destinataires';
 $_MODULE['<{expressmailing}prestashop>configuration_bbf7b4341970989c3e6df224f7b11c28'] = 'Tests avant envoi';
 $_MODULE['<{expressmailing}prestashop>configuration_8d72c8f9b6aa27b10d4d140d8cc1e3be'] = 'Conseils et assistance téléphonique inclus';
-$_MODULE['<{expressmailing}prestashop>configuration_a40e54d3bb95c30d5f9e66421a76bde6'] = 'Besoin de plus de capacité ?';
-$_MODULE['<{expressmailing}prestashop>configuration_efc7d8bbdea857bf89afd4a4fdea6bd1'] = 'Achat de tickets fax';
-$_MODULE['<{expressmailing}prestashop>configuration_475009ed61b4dc8fa1d3de26f1bea927'] = 'Achat de tickets sms';
-$_MODULE['<{expressmailing}prestashop>configuration_d3d2e617335f08df83599665eef8a418'] = 'Fermer';
 $_MODULE['<{expressmailing}prestashop>csv_column_selector_2c82fe56925da684f656fea1bf8e889e'] = 'Sélecteur de colonne %s';
 $_MODULE['<{expressmailing}prestashop>csv_column_selector_d9948bbf768963e0b83a38fd13ba9507'] = 'Merci de sélectionner la colonne « %s »';
 $_MODULE['<{expressmailing}prestashop>csv_column_selector_dfff8d9282fa1247c7bf03a05466ce95'] = 'contenant les numéros de %s de vos destinataires :';

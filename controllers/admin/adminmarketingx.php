@@ -268,7 +268,7 @@ class AdminMarketingXController extends ModuleAdminController
 
 		$response_array = array();
 		$parameters = array(
-			'application_id' => 2,
+			'application_id' => $this->l('3320'),
 			'category_code' => 'email.prestashop'
 		);
 		if ($this->session_api->call('email', 'billing', 'products_enum', $parameters, $response_array))
@@ -292,8 +292,8 @@ class AdminMarketingXController extends ModuleAdminController
 
 		$response_array = array();
 		$parameters = array(
-			'application_id' => 2,
-			'category_code' => 'fax.tickets'
+			'application_id' => $this->l('3320'),
+			'category_code' => 'fax.prestashop'
 		);
 		if ($this->session_api->call('email', 'billing', 'products_enum', $parameters, $response_array))
 		{
@@ -316,8 +316,8 @@ class AdminMarketingXController extends ModuleAdminController
 
 		$response_array = array();
 		$parameters = array(
-			'application_id' => 2,
-			'category_code' => 'sms.tickets'
+			'application_id' => $this->l('3320'),
+			'category_code' => 'sms.prestashop'
 		);
 		if ($this->session_api->call('email', 'billing', 'products_enum', $parameters, $response_array))
 		{
@@ -512,7 +512,7 @@ class AdminMarketingXController extends ModuleAdminController
 				$employee_email = $this->context->employee->email;
 
 				$params = array(
-					'application_id' => 2,
+					'application_id' => $this->l('3320'),
 					'account_hier' => Tools::strtoupper($media).'-'.$account_id,
 					'login' => $account_login,
 					'cart_source' => $_SERVER['HTTP_HOST'],
@@ -546,7 +546,7 @@ class AdminMarketingXController extends ModuleAdminController
 				$employee_email = $this->context->employee->email;
 
 				$params = array(
-					'application_id' => 2,
+					'application_id' => $this->l('3320'),
 					'account_hier' => Tools::strtoupper($media).'-'.$account_id,
 					'login' => $account_login,
 					'cart_source' => $_SERVER['HTTP_HOST'],

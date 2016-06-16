@@ -35,12 +35,13 @@ class ExpressMailing extends Module
 		$this->author = 'Axalone France';
 		$this->need_instance = 0;
 		$this->limited_countries = array ('fr', 'pl');
+		$this->module_key = 'ea6ca9d8983f4d3e20fde3830769c2e5';
 
 		parent::__construct();
 
 		$this->author = $this->l('Axalone France');
 		$this->displayName = 'Express-Mailing';
-		$this->description = $this->l('First Marketing and Newletter module fully integrated with the PrestaShop interface, including emailing with 9,000 free emails per month i.e. 300 per day, and the ability to send FAX and SMS at very low prices.');
+		$this->description = $this->l('First Marketing and Newletter module fully integrated with the PrestaShop interface, including the ability to send EMAIL, FAX and SMS emailing (2500 free emails + 30 free fax and 5 free sms).');
 		$this->confirmUninstall = $this->l('Are you sure you want to uninstall ?');
 		$this->html_preview_folder = _PS_MODULE_DIR_.'expressmailing'.DIRECTORY_SEPARATOR.'campaigns'.DIRECTORY_SEPARATOR;
 
@@ -443,7 +444,7 @@ class ExpressMailing extends Module
 				) DEFAULT CHARSET=utf8');
 
 			$return &= Db::getInstance()->execute('
-				CREATE TABLE `'._DB_PREFIX_.'expressmailing_sms_preset_messages` (
+				CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'expressmailing_sms_preset_messages` (
 					`id` INT NOT NULL AUTO_INCREMENT,
 					`name` VARCHAR(100) NOT NULL,
 					`content` TEXT NOT NULL,

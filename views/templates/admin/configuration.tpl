@@ -49,9 +49,11 @@
 							<td class="colorcell"><div class="greencell"></div></td>
 							<td class="linkcell">{l s='Emailing' mod='expressmailing'}</td>
 							<td class="commentcell">
-								{l s='Up to %d free email per day' mod='expressmailing' sprintf=$broadcast_max_daily}
-								<b>&nbsp;-&nbsp;{l s='or' mod='expressmailing'}&nbsp;-&nbsp;</b>
-								<a id="em_bying_link_email2"{if $smarty_email_disabled} disabled="disabled"{/if}>{l s='Sign Up for a Premium Plan' mod='expressmailing' sprintf=$smarty_email_lowest_price}</a>
+								{l s='Lowest price' mod='expressmailing'}
+								<b>&nbsp;:&nbsp;</b>
+								{capture assign="smarty_email_lowest_price"}{$smarty_email_lowest_price|escape:'htmlall':'UTF-8'|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
+								{capture assign="eprice"}{l s='From %s € per email' mod='expressmailing' sprintf=$smarty_email_lowest_price}{/capture}
+								{$eprice|escape:'html':'UTF-8'}
 								{if !empty($smarty_email_promotion)}
 									<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
 								{/if}
@@ -62,10 +64,10 @@
 							<td class="linkcell">{l s='Fax' mod='expressmailing'}</td>
 							<td class="commentcell">
 								{l s='Lowest price to Metropolitan France' mod='expressmailing'}
-								<b>&nbsp;-&nbsp;</b>
+								<b>&nbsp;:&nbsp;</b>
 								{capture assign="smarty_fax_lowest_price"}{$smarty_fax_lowest_price|escape:'htmlall':'UTF-8'|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
 								{capture assign="fprice"}{l s='From %s € per page' mod='expressmailing' sprintf=$smarty_fax_lowest_price}{/capture}
-								<a id="em_bying_link_fax2"{if $smarty_fax_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
+								{$fprice|escape:'html':'UTF-8'}
 								{if !empty($smarty_fax_promotion)}
 									<b>&nbsp;-&nbsp;</b>
 									<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
@@ -77,10 +79,10 @@
 							<td class="linkcell">{l s='Sms' mod='expressmailing'}</td>
 							<td class="commentcell">
 								{l s='Lowest price to Metropolitan France' mod='expressmailing'}
-								<b>&nbsp;-&nbsp;</b>
+								<b>&nbsp;:&nbsp;</b>
 								{capture assign="smarty_sms_lowest_price"}{$smarty_sms_lowest_price|escape:'htmlall':'UTF-8'|string_format:"%.3f"|replace:'0.':'0,'|rtrim:'0'}{/capture}
 								{capture assign="fprice"}{l s='From %s € per sms' mod='expressmailing' sprintf=$smarty_sms_lowest_price}{/capture}
-								<a id="em_bying_link_sms2"{if $smarty_sms_disabled} disabled="disabled"{/if}>{$fprice|escape:'html':'UTF-8'}</a>
+								{$fprice|escape:'html':'UTF-8'}
 								{if !empty($smarty_sms_promotion)}
 									<b>&nbsp;-&nbsp;</b>
 									<span class="badge"><i class="icon-star"></i> <small>{l s='Discount' mod='expressmailing'}</small></span>
@@ -100,7 +102,7 @@
 						<div class="em-padding-1em">
 							<span class="text-primary text-left em-inline-block text em-fontsize-15px">
 								<span>{l s='And receive :' mod='expressmailing'}</span><br/>
-								+ <b>{l s='300 free Email' mod='expressmailing'}</b> <u>{l s='per day' mod='expressmailing'}</u><br/>
+								+ <b>{l s='2500 free Email' mod='expressmailing'}</b><br/>
 								+ <b>{l s='5 free Sms' mod='expressmailing'}</b><br/>
 								+ <b>{l s='30 free Fax' mod='expressmailing'}</b>
 							</span>
@@ -134,58 +136,3 @@
 		</div>
 	</div>
 </div>
-
-<div id="bying_dialog_email" title="{l s='Increase capacity ?' mod='expressmailing'}">
-    <div>
-        <br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />
-    </div>
-</div>
-<div id="bying_dialog_fax" title="{l s='Buy fax tickets' mod='expressmailing'}">
-    <div>
-        <br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />
-    </div>
-</div>
-<div id="bying_dialog_sms" title="{l s='Buy sms tickets' mod='expressmailing'}">
-    <div>
-        <br><img src="../modules/expressmailing/views/img/progress-bar.gif" alt="" />
-    </div>
-</div>
-
-<script type="text/javascript">
-
-    $(function ()
-    {
-        var url_base = "index.php?controller=AdminMarketingX";
-        var url_ajax = "&ajax=true";
-        var url_token = "&token={Tools::getAdminTokenLite('AdminMarketingX')|escape:'html':'UTF-8'}";
-
-        var dialogByingConfig = {
-            autoOpen: false,
-            resizable: true,
-            position: 'center',
-            modal: true,
-            width: 820,
-            height: 450,
-            buttons: {
-                "{l s='Close' mod='expressmailing'}": function () {
-                    $(this).dialog("close");
-                }
-            }
-        };
-
-        $('#bying_dialog_email').dialog(dialogByingConfig);
-        $('#bying_dialog_fax').dialog(dialogByingConfig);
-        $('#bying_dialog_sms').dialog(dialogByingConfig);
-
-        $('#em_bying_link_email, #em_bying_link_email2').click(function () {
-            $('#bying_dialog_email').load(url_base + url_ajax + url_token + '&media=email').dialog('open');
-        });
-        $('#em_bying_link_fax, #em_bying_link_fax2').click(function () {
-            $('#bying_dialog_fax').load(url_base + url_ajax + url_token + '&media=fax').dialog('open');
-        });
-        $('#em_bying_link_sms, #em_bying_link_sms2').click(function () {
-            $('#bying_dialog_sms').load(url_base + url_ajax + url_token + '&media=sms').dialog('open');
-        });
-
-    });
-</script>
